@@ -11,7 +11,7 @@ func (s *Store) GetUsers() ([]model.User, error) {
 	err := s.db.Model(&users).Select()
 
 	if err != nil {
-		return users, constants.ErrUsersGetDbError
+		return nil, constants.ErrUsersGetDbError
 	}
 
 	return users, nil

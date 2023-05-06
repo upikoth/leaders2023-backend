@@ -41,6 +41,8 @@ var (
 	ErrSessionPostNoPassword     = errors.New("1702")
 	ErrSessionPostUserNotExist   = errors.New("1703")
 	ErrSessionPostCreateJwtToken = errors.New("1704")
+
+	ErrMetroStationsGetDbError = errors.New("1800")
 )
 
 //nolint:gochecknoglobals // Пока добавил в игнор.
@@ -81,4 +83,6 @@ var ErrDescriptionByCode = map[error]string{
 	ErrSessionPostNoPassword:     "Не передан пароль пользователя",
 	ErrSessionPostUserNotExist:   "Пользователя с такими email и пароль не существует",
 	ErrSessionPostCreateJwtToken: "Ошибка при входе в систему, попробуйте позже",
+
+	ErrMetroStationsGetDbError: "Не удалось получить список станций метро",
 }
