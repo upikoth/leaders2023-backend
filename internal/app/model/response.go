@@ -1,10 +1,9 @@
 package model
 
 type ResponseErrorField struct {
-	Code               string `json:"code"`
-	Description        string `json:"description"`
-	Details            string `json:"details,omitempty"`
-	DetailsDescription string `json:"detailsDescription,omitempty"`
+	Code        string `json:"code"`
+	Description string `json:"description"`
+	Details     string `json:"details,omitempty"`
 }
 
 type ResponseSuccess struct {

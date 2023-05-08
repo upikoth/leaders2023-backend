@@ -61,16 +61,21 @@ func formatResponse() gin.HandlerFunc {
 		data, isDataExist := c.Get("responseData")
 		errorCode, isErorrCodeExist := c.Get("responseErrorCode")
 		errorDetails, isErorrDetailsExist := c.Get("responseErrorDetails")
+		description := ""
 
-		detailsDescription := ""
-
-		_, err := strconv.Atoi(fmt.Sprintf("%v", errorDetails))
-
-		if err == nil {
-			detailsDescription = constants.ErrDescriptionByCode[errorDetails.(error)]
+		if isErorrCodeExist {
+			description = constants.ErrDescriptionByCode[errorCode.(error)]
 		}
 
 		if !isErorrDetailsExist {
+			errorDetails = ""
+		}
+
+		_, err := strconv.Atoi(fmt.Sprintf("%v", errorDetails))
+
+		if err == nil && errorDetails != "" {
+			errorCode, _ = errorDetails.(error)
+			description = constants.ErrDescriptionByCode[errorDetails.(error)]
 			errorDetails = ""
 		}
 
@@ -86,10 +91,9 @@ func formatResponse() gin.HandlerFunc {
 			response := model.ResponseError{}
 			response.Success = false
 			response.Error = &model.ResponseErrorField{
-				Code:               fmt.Sprintf("%v", errorCode),
-				Description:        constants.ErrDescriptionByCode[errorCode.(error)],
-				Details:            fmt.Sprintf("%v", errorDetails),
-				DetailsDescription: detailsDescription,
+				Code:        fmt.Sprintf("%v", errorCode),
+				Description: description,
+				Details:     fmt.Sprintf("%v", errorDetails),
 			}
 			c.JSON(code.(int), response)
 		} else {
