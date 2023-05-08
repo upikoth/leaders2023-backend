@@ -23,7 +23,8 @@ func (h *HandlerV1) GetUsers(c *gin.Context) {
 	users, err := h.store.GetUsers()
 
 	if err != nil {
-		c.Set("responseErrorCode", err)
+		c.Set("responseErrorCode", constants.ErrUsersGetDbError)
+		c.Set("responseErrorDetails", err)
 		return
 	}
 
@@ -44,13 +45,15 @@ func (h *HandlerV1) GetUser(c *gin.Context) {
 	if err != nil {
 		c.Set("responseCode", http.StatusBadRequest)
 		c.Set("responseErrorCode", constants.ErrUserGetNotValidRequestData)
+		c.Set("responseErrorDetails", err)
 		return
 	}
 
 	user, err := h.store.GetUserById(reqData.Id)
 
 	if err != nil {
-		c.Set("responseErrorCode", err)
+		c.Set("responseErrorCode", constants.ErrUserGetDbError)
+		c.Set("responseErrorDetails", err)
 		return
 	}
 
@@ -72,6 +75,7 @@ func (h *HandlerV1) CreateUser(c *gin.Context) {
 	if err != nil {
 		c.Set("responseCode", http.StatusBadRequest)
 		c.Set("responseErrorCode", constants.ErrUserPostNotValidRequestData)
+		c.Set("responseErrorDetails", err)
 		return
 	}
 
@@ -80,6 +84,7 @@ func (h *HandlerV1) CreateUser(c *gin.Context) {
 
 	if err != nil {
 		c.Set("responseErrorCode", constants.ErrUserPostCreateHash)
+		c.Set("responseErrorDetails", err)
 		return
 	}
 
@@ -91,7 +96,8 @@ func (h *HandlerV1) CreateUser(c *gin.Context) {
 	createdUser, err := h.store.CreateUser(user)
 
 	if err != nil {
-		c.Set("responseErrorCode", err)
+		c.Set("responseErrorCode", constants.ErrUserPostDbError)
+		c.Set("responseErrorDetails", err)
 		return
 	}
 
@@ -114,6 +120,7 @@ func (h *HandlerV1) PatchUser(c *gin.Context) {
 	if err != nil {
 		c.Set("responseCode", http.StatusBadRequest)
 		c.Set("responseErrorCode", constants.ErrUserPatchNotValidRequestData)
+		c.Set("responseErrorDetails", err)
 		return
 	}
 
@@ -125,7 +132,8 @@ func (h *HandlerV1) PatchUser(c *gin.Context) {
 	updatedUser, err := h.store.PatchUser(user)
 
 	if err != nil {
-		c.Set("responseErrorCode", err)
+		c.Set("responseErrorCode", constants.ErrUserPatchDbError)
+		c.Set("responseErrorDetails", err)
 		return
 	}
 
@@ -147,13 +155,15 @@ func (h *HandlerV1) DeleteUser(c *gin.Context) {
 	if err != nil {
 		c.Set("responseCode", http.StatusBadRequest)
 		c.Set("responseErrorCode", constants.ErrUserDeleteNotValidRequestData)
+		c.Set("responseErrorDetails", err)
 		return
 	}
 
 	err = h.store.DeleteUser(reqData.Id)
 
 	if err != nil {
-		c.Set("responseErrorCode", err)
+		c.Set("responseErrorCode", constants.ErrUserDeleteDbError)
+		c.Set("responseErrorDetails", err)
 		return
 	}
 }

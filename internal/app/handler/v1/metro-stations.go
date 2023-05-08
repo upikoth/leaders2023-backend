@@ -2,6 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/upikoth/leaders2023-backend/internal/app/constants"
 	"github.com/upikoth/leaders2023-backend/internal/app/handler/v1/responses"
 )
 
@@ -16,7 +17,8 @@ func (h *HandlerV1) GetMetroStations(c *gin.Context) {
 	metroStations, err := h.store.GetMetroStations()
 
 	if err != nil {
-		c.Set("responseErrorCode", err)
+		c.Set("responseErrorCode", constants.ErrMetroStationsGetDbError)
+		c.Set("responseErrorDetails", err)
 		return
 	}
 

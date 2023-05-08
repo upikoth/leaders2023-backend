@@ -26,6 +26,8 @@ func (h *HandlerV1) CreateSession(c *gin.Context) {
 	if err != nil {
 		c.Set("responseCode", http.StatusBadRequest)
 		c.Set("responseErrorCode", constants.ErrSessionPostNotValidRequestData)
+		c.Set("responseErrorDetails", err)
+		return
 	}
 
 	user, err := h.store.GetUserByEmail(reqData.Email)
@@ -54,6 +56,7 @@ func (h *HandlerV1) CreateSession(c *gin.Context) {
 
 	if err != nil {
 		c.Set("responseErrorCode", constants.ErrSessionPostCreateJwtToken)
+		c.Set("responseErrorDetails", err)
 		return
 	}
 

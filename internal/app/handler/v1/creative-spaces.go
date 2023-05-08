@@ -26,6 +26,8 @@ func (h *HandlerV1) CreateCreativeSpace(c *gin.Context) {
 	if err != nil || !isClaimsValid {
 		c.Set("responseCode", http.StatusBadRequest)
 		c.Set("responseErrorCode", constants.ErrCreativeSpacePostNotValidRequestData)
+		c.Set("responseErrorDetails", err)
+		return
 	}
 
 	creativeSpace := store.CreativeSpace{
@@ -53,6 +55,8 @@ func (h *HandlerV1) CreateCreativeSpace(c *gin.Context) {
 	if storeErr != nil {
 		c.Set("responseCode", http.StatusBadRequest)
 		c.Set("responseErrorCode", constants.ErrCreativeSpacePostDbError)
+		c.Set("responseErrorDetails", storeErr)
+		return
 	}
 
 	responseData := responses.CreateCreativeSpaceResponseFromStoreData(creativeSpaceId)

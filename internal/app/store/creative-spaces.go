@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/go-pg/pg/v10"
-	"github.com/upikoth/leaders2023-backend/internal/app/constants"
 )
 
 type CreativeSpace struct {
@@ -38,7 +37,7 @@ func (s *Store) CreateCreativeSpace(
 			Insert()
 
 		if creativeSpaceErr != nil || result.RowsAffected() == 0 {
-			return constants.ErrCreativeSpacePostDbError
+			return creativeSpaceErr
 		}
 
 		for i := range creativeSpaceMetroStations {
@@ -51,7 +50,7 @@ func (s *Store) CreateCreativeSpace(
 			Insert()
 
 		if creativeSpaceMetroStationErr != nil || result.RowsAffected() == 0 {
-			return constants.ErrCreativeSpacePostDbError
+			return creativeSpaceMetroStationErr
 		}
 
 		return nil

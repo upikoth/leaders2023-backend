@@ -17,7 +17,7 @@ func (s *Store) GetUsers() ([]User, error) {
 	err := s.db.Model(&users).Select()
 
 	if err != nil {
-		return nil, constants.ErrUsersGetDbError
+		return nil, err
 	}
 
 	return users, nil
@@ -35,7 +35,7 @@ func (s *Store) GetUserById(id int) (User, error) {
 	}
 
 	if err != nil {
-		return User{}, constants.ErrUserGetDbError
+		return User{}, err
 	}
 
 	return user, nil
@@ -49,7 +49,7 @@ func (s *Store) CreateUser(user User) (User, error) {
 	}
 
 	if err != nil {
-		return User{}, constants.ErrUserPostDbError
+		return User{}, err
 	}
 
 	return user, nil
@@ -67,7 +67,7 @@ func (s *Store) DeleteUser(id int) error {
 	}
 
 	if err != nil {
-		return constants.ErrUserDeleteDbError
+		return err
 	}
 
 	return nil
@@ -77,7 +77,7 @@ func (s *Store) PatchUser(user User) (User, error) {
 	count, err := s.db.Model(&user).WherePK().Count()
 
 	if err != nil {
-		return User{}, constants.ErrUserPatchDbError
+		return User{}, err
 	}
 
 	if count == 0 {
@@ -91,7 +91,7 @@ func (s *Store) PatchUser(user User) (User, error) {
 	}
 
 	if err != nil {
-		return User{}, constants.ErrUserPatchDbError
+		return User{}, err
 	}
 
 	return user, nil

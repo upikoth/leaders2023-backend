@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
@@ -59,6 +60,19 @@ func formatResponse() gin.HandlerFunc {
 		code, isCodeExist := c.Get("responseCode")
 		data, isDataExist := c.Get("responseData")
 		errorCode, isErorrCodeExist := c.Get("responseErrorCode")
+		errorDetails, isErorrDetailsExist := c.Get("responseErrorDetails")
+
+		detailsDescription := ""
+
+		_, err := strconv.Atoi(fmt.Sprintf("%v", errorDetails))
+
+		if err == nil {
+			detailsDescription = constants.ErrDescriptionByCode[errorDetails.(error)]
+		}
+
+		if !isErorrDetailsExist {
+			errorDetails = ""
+		}
 
 		if !isCodeExist {
 			code = http.StatusOK
@@ -72,8 +86,10 @@ func formatResponse() gin.HandlerFunc {
 			response := model.ResponseError{}
 			response.Success = false
 			response.Error = &model.ResponseErrorField{
-				Code:        fmt.Sprintf("%v", errorCode),
-				Description: constants.ErrDescriptionByCode[errorCode.(error)],
+				Code:               fmt.Sprintf("%v", errorCode),
+				Description:        constants.ErrDescriptionByCode[errorCode.(error)],
+				Details:            fmt.Sprintf("%v", errorDetails),
+				DetailsDescription: detailsDescription,
 			}
 			c.JSON(code.(int), response)
 		} else {

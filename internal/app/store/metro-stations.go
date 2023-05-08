@@ -1,9 +1,5 @@
 package store
 
-import (
-	"github.com/upikoth/leaders2023-backend/internal/app/constants"
-)
-
 type MetroStation struct {
 	tableName struct{} `pg:"metro_stations"` //nolint:unused // Имя таблицы
 	Id        int      `pg:"id"`
@@ -17,7 +13,7 @@ func (s *Store) GetMetroStations() ([]MetroStation, error) {
 	err := s.db.Model(&metroStations).Order("name").Select()
 
 	if err != nil {
-		return nil, constants.ErrMetroStationsGetDbError
+		return nil, err
 	}
 
 	return metroStations, nil
