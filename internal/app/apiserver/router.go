@@ -11,7 +11,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/upikoth/leaders2023-backend/docs"
 	"github.com/upikoth/leaders2023-backend/internal/app/constants"
-	"github.com/upikoth/leaders2023-backend/internal/app/model"
+	modelCommon "github.com/upikoth/leaders2023-backend/internal/app/model/common"
 )
 
 func (s *ApiServer) initRoutes() {
@@ -43,6 +43,8 @@ func (s *ApiServer) initRoutes() {
 
 	authorized.GET("/api/v1/metro-stations", s.handler.V1.GetMetroStations)
 
+	authorized.POST("/api/v1/creativeSpace", s.handler.V1.CreateUser)
+
 	s.router.NoRoute(func(c *gin.Context) {
 		c.Set("responseCode", http.StatusNotFound)
 		c.Set("responseErrorCode", constants.ErrRouteNotFound)
@@ -66,15 +68,15 @@ func formatResponse() gin.HandlerFunc {
 		}
 
 		if isErorrCodeExist {
-			response := model.ResponseError{}
+			response := modelCommon.ResponseError{}
 			response.Success = false
-			response.Error = &model.ResponseErrorField{
+			response.Error = &modelCommon.ResponseErrorField{
 				Code:        fmt.Sprintf("%v", errorCode),
 				Description: constants.ErrDescriptionByCode[errorCode.(error)],
 			}
 			c.JSON(code.(int), response)
 		} else {
-			response := model.ResponseSuccess{}
+			response := modelCommon.ResponseSuccess{}
 			response.Success = true
 			response.Data = data
 			c.JSON(code.(int), response)

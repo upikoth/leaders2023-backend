@@ -29,6 +29,49 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/api/v1/metro-stations": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Возвращает полный список станций метро",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.ResponseSuccess"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.getMetroStationsResponseData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Коды ошибок: [1100]",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/session": {
             "get": {
                 "summary": "Получение сессии",
@@ -62,7 +105,7 @@ const docTemplate_swagger = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/v1.createSessionRequestBody"
+                            "$ref": "#/definitions/requests.createSessionRequestData"
                         }
                     }
                 ],
@@ -78,17 +121,11 @@ const docTemplate_swagger = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/v1.createSessionResponseData"
+                                            "$ref": "#/definitions/responses.createSessionResponseData"
                                         }
                                     }
                                 }
                             ]
-                        }
-                    },
-                    "2001": {
-                        "description": "Коды ошибок: [1700, 1701, 1702, 1703, 1704]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
                         }
                     }
                 }
@@ -127,7 +164,7 @@ const docTemplate_swagger = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/v1.createUserRequestBody"
+                            "$ref": "#/definitions/requests.createUserRequestData"
                         }
                     }
                 ],
@@ -143,17 +180,11 @@ const docTemplate_swagger = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/v1.createUserResponseData"
+                                            "$ref": "#/definitions/responses.createUserResponseData"
                                         }
                                     }
                                 }
                             ]
-                        }
-                    },
-                    "2001": {
-                        "description": "Коды ошибок: [1400, 1401, 1402, 1403, 1404, 1405]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
                         }
                     },
                     "403": {
@@ -192,17 +223,11 @@ const docTemplate_swagger = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/v1.getUserResponseData"
+                                            "$ref": "#/definitions/responses.getUserResponseData"
                                         }
                                     }
                                 }
                             ]
-                        }
-                    },
-                    "2001": {
-                        "description": "Коды ошибок: [1300, 1301, 1302, 1303, 1304, 1305]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
                         }
                     },
                     "403": {
@@ -237,12 +262,6 @@ const docTemplate_swagger = `{
                             "$ref": "#/definitions/model.ResponseSuccess"
                         }
                     },
-                    "2001": {
-                        "description": "Коды ошибок: [1500, 1501, 1502, 1503]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    },
                     "403": {
                         "description": "Коды ошибок: [1100]",
                         "schema": {
@@ -273,7 +292,7 @@ const docTemplate_swagger = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/v1.patchUserRequestBody"
+                            "$ref": "#/definitions/requests.patchUserRequestData"
                         }
                     }
                 ],
@@ -289,17 +308,11 @@ const docTemplate_swagger = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/v1.patchUserResponseData"
+                                            "$ref": "#/definitions/responses.patchUserResponseData"
                                         }
                                     }
                                 }
                             ]
-                        }
-                    },
-                    "2001": {
-                        "description": "Коды ошибок: [1600, 1601, 1602, 1603, 1604, 1605]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
                         }
                     },
                     "403": {
@@ -341,17 +354,11 @@ const docTemplate_swagger = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/v1.getUsersResponseData"
+                                            "$ref": "#/definitions/responses.getUsersResponseData"
                                         }
                                     }
                                 }
                             ]
-                        }
-                    },
-                    "2001": {
-                        "description": "Коды ошибок: [1200]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
                         }
                     },
                     "403": {
@@ -398,7 +405,37 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "model.User": {
+        "requests.createSessionRequestData": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.createUserRequestData": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.patchUserRequestData": {
             "type": "object",
             "properties": {
                 "email": {
@@ -409,76 +446,126 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "v1.createSessionRequestBody": {
+        "responses.createSessionResponseData": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "$ref": "#/definitions/responses.createSessionResponseUser"
+                }
+            }
+        },
+        "responses.createSessionResponseUser": {
             "type": "object",
             "properties": {
                 "email": {
                     "type": "string"
                 },
-                "password": {
-                    "type": "string"
+                "id": {
+                    "type": "integer"
                 }
             }
         },
-        "v1.createSessionResponseData": {
+        "responses.createUserResponseData": {
             "type": "object",
             "properties": {
                 "user": {
-                    "$ref": "#/definitions/model.User"
+                    "$ref": "#/definitions/responses.createUserResponseUser"
                 }
             }
         },
-        "v1.createUserRequestBody": {
+        "responses.createUserResponseUser": {
             "type": "object",
             "properties": {
                 "email": {
                     "type": "string"
                 },
-                "password": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "responses.getMetroStationsResponseData": {
+            "type": "object",
+            "properties": {
+                "metroStations": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.getMetroStationsResponseMetroStation"
+                    }
+                }
+            }
+        },
+        "responses.getMetroStationsResponseMetroStation": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
                     "type": "string"
                 }
             }
         },
-        "v1.createUserResponseData": {
+        "responses.getUserResponseData": {
             "type": "object",
             "properties": {
                 "user": {
-                    "$ref": "#/definitions/model.User"
+                    "$ref": "#/definitions/responses.getUserResponseUser"
                 }
             }
         },
-        "v1.getUserResponseData": {
+        "responses.getUserResponseUser": {
             "type": "object",
             "properties": {
-                "user": {
-                    "$ref": "#/definitions/model.User"
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
                 }
             }
         },
-        "v1.getUsersResponseData": {
+        "responses.getUsersResponseData": {
             "type": "object",
             "properties": {
                 "users": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/model.User"
+                        "$ref": "#/definitions/responses.getUsersResponseUser"
                     }
                 }
             }
         },
-        "v1.patchUserRequestBody": {
+        "responses.getUsersResponseUser": {
             "type": "object",
             "properties": {
                 "email": {
                     "type": "string"
+                },
+                "id": {
+                    "type": "integer"
                 }
             }
         },
-        "v1.patchUserResponseData": {
+        "responses.patchUserResponseData": {
             "type": "object",
             "properties": {
                 "user": {
-                    "$ref": "#/definitions/model.User"
+                    "$ref": "#/definitions/responses.patchUserResponseUser"
+                }
+            }
+        },
+        "responses.patchUserResponseUser": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
                 }
             }
         }
@@ -488,7 +575,7 @@ const docTemplate_swagger = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "",
-	Host:             "localhost:8080",
+	Host:             "localhost:8080.",
 	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "Starter API",

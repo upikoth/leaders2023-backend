@@ -21,60 +21,112 @@ definitions:
         default: true
         type: boolean
     type: object
-  model.User:
+  requests.createSessionRequestData:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  requests.createUserRequestData:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  requests.patchUserRequestData:
     properties:
       email:
         type: string
       id:
         type: integer
     type: object
-  v1.createSessionRequestBody:
+  responses.createSessionResponseData:
+    properties:
+      user:
+        $ref: '#/definitions/responses.createSessionResponseUser'
+    type: object
+  responses.createSessionResponseUser:
     properties:
       email:
         type: string
-      password:
-        type: string
+      id:
+        type: integer
     type: object
-  v1.createSessionResponseData:
+  responses.createUserResponseData:
     properties:
       user:
-        $ref: '#/definitions/model.User'
+        $ref: '#/definitions/responses.createUserResponseUser'
     type: object
-  v1.createUserRequestBody:
+  responses.createUserResponseUser:
     properties:
       email:
         type: string
-      password:
+      id:
+        type: integer
+    type: object
+  responses.getMetroStationsResponseData:
+    properties:
+      metroStations:
+        items:
+          $ref: '#/definitions/responses.getMetroStationsResponseMetroStation'
+        type: array
+    type: object
+  responses.getMetroStationsResponseMetroStation:
+    properties:
+      color:
+        type: string
+      id:
+        type: integer
+      name:
         type: string
     type: object
-  v1.createUserResponseData:
+  responses.getUserResponseData:
     properties:
       user:
-        $ref: '#/definitions/model.User'
+        $ref: '#/definitions/responses.getUserResponseUser'
     type: object
-  v1.getUserResponseData:
+  responses.getUserResponseUser:
     properties:
-      user:
-        $ref: '#/definitions/model.User'
+      email:
+        type: string
+      id:
+        type: integer
     type: object
-  v1.getUsersResponseData:
+  responses.getUsersResponseData:
     properties:
       users:
         items:
-          $ref: '#/definitions/model.User'
+          $ref: '#/definitions/responses.getUsersResponseUser'
         type: array
     type: object
-  v1.patchUserRequestBody:
+  responses.getUsersResponseUser:
     properties:
       email:
         type: string
+      id:
+        type: integer
     type: object
-  v1.patchUserResponseData:
+  responses.patchUserResponseData:
     properties:
       user:
-        $ref: '#/definitions/model.User'
+        $ref: '#/definitions/responses.patchUserResponseUser'
     type: object
-host: localhost:8080
+  responses.patchUserResponseUser:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+    type: object
+host: localhost:8080.
 info:
   contact: {}
   title: Starter API
@@ -87,6 +139,31 @@ paths:
           schema:
             $ref: '#/definitions/model.ResponseSuccess'
       summary: Проверка работоспособности сервера
+  /api/v1/metro-stations:
+    get:
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.ResponseSuccess'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.getMetroStationsResponseData'
+              type: object
+        "403":
+          description: 'Коды ошибок: [1100]'
+          schema:
+            $ref: '#/definitions/model.ResponseError'
+      summary: Возвращает полный список станций метро
   /api/v1/session:
     delete:
       responses:
@@ -119,7 +196,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/v1.createSessionRequestBody'
+          $ref: '#/definitions/requests.createSessionRequestData'
       produces:
       - application/json
       responses:
@@ -130,12 +207,8 @@ paths:
             - $ref: '#/definitions/model.ResponseSuccess'
             - properties:
                 data:
-                  $ref: '#/definitions/v1.createSessionResponseData'
+                  $ref: '#/definitions/responses.createSessionResponseData'
               type: object
-        "2001":
-          description: 'Коды ошибок: [1700, 1701, 1702, 1703, 1704]'
-          schema:
-            $ref: '#/definitions/model.ResponseError'
       summary: Создание сессии пользователя
   /api/v1/user:
     post:
@@ -147,7 +220,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/v1.createUserRequestBody'
+          $ref: '#/definitions/requests.createUserRequestData'
       produces:
       - application/json
       responses:
@@ -158,14 +231,10 @@ paths:
             - $ref: '#/definitions/model.ResponseSuccess'
             - properties:
                 data:
-                  $ref: '#/definitions/v1.createUserResponseData'
+                  $ref: '#/definitions/responses.createUserResponseData'
               type: object
         "403":
           description: 'Коды ошибок: [1100]'
-          schema:
-            $ref: '#/definitions/model.ResponseError'
-        "2001":
-          description: 'Коды ошибок: [1400, 1401, 1402, 1403, 1404, 1405]'
           schema:
             $ref: '#/definitions/model.ResponseError'
       summary: Создание пользователя
@@ -190,10 +259,6 @@ paths:
           description: 'Коды ошибок: [1100]'
           schema:
             $ref: '#/definitions/model.ResponseError'
-        "2001":
-          description: 'Коды ошибок: [1500, 1501, 1502, 1503]'
-          schema:
-            $ref: '#/definitions/model.ResponseError'
       summary: Удаление информации о пользователе
     get:
       parameters:
@@ -212,14 +277,10 @@ paths:
             - $ref: '#/definitions/model.ResponseSuccess'
             - properties:
                 data:
-                  $ref: '#/definitions/v1.getUserResponseData'
+                  $ref: '#/definitions/responses.getUserResponseData'
               type: object
         "403":
           description: 'Коды ошибок: [1100]'
-          schema:
-            $ref: '#/definitions/model.ResponseError'
-        "2001":
-          description: 'Коды ошибок: [1300, 1301, 1302, 1303, 1304, 1305]'
           schema:
             $ref: '#/definitions/model.ResponseError'
       summary: Возвращает информацию о пользователе
@@ -237,7 +298,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/v1.patchUserRequestBody'
+          $ref: '#/definitions/requests.patchUserRequestData'
       produces:
       - application/json
       responses:
@@ -248,14 +309,10 @@ paths:
             - $ref: '#/definitions/model.ResponseSuccess'
             - properties:
                 data:
-                  $ref: '#/definitions/v1.patchUserResponseData'
+                  $ref: '#/definitions/responses.patchUserResponseData'
               type: object
         "403":
           description: 'Коды ошибок: [1100]'
-          schema:
-            $ref: '#/definitions/model.ResponseError'
-        "2001":
-          description: 'Коды ошибок: [1600, 1601, 1602, 1603, 1604, 1605]'
           schema:
             $ref: '#/definitions/model.ResponseError'
       summary: Обновление информации о пользователе
@@ -279,14 +336,10 @@ paths:
             - $ref: '#/definitions/model.ResponseSuccess'
             - properties:
                 data:
-                  $ref: '#/definitions/v1.getUsersResponseData'
+                  $ref: '#/definitions/responses.getUsersResponseData'
               type: object
         "403":
           description: 'Коды ошибок: [1100]'
-          schema:
-            $ref: '#/definitions/model.ResponseError'
-        "2001":
-          description: 'Коды ошибок: [1200]'
           schema:
             $ref: '#/definitions/model.ResponseError'
       summary: Возвращает список пользователей

@@ -5,8 +5,8 @@ CREATE TABLE creative_spaces (
 	price_per_hour integer not null,
 	latitude real not null,
 	longitude real not null,
-	working_hours_start_at varchar(10)[] not null,
-	working_hours_end_at varchar(10)[] not null,
+	working_hours_start_at varchar(10) not null,
+	working_hours_end_at varchar(10) not null,
 	description varchar(1000) not null,
 	constraint fk_landlord
 		foreign key(landlord_id) 

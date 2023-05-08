@@ -2,11 +2,11 @@ package store
 
 import (
 	"github.com/upikoth/leaders2023-backend/internal/app/constants"
-	"github.com/upikoth/leaders2023-backend/internal/app/model"
+	modelStore "github.com/upikoth/leaders2023-backend/internal/app/model/store"
 )
 
-func (s *Store) GetUsers() ([]model.User, error) {
-	users := []model.User{}
+func (s *Store) GetUsers() ([]modelStore.User, error) {
+	users := []modelStore.User{}
 
 	err := s.db.Model(&users).Select()
 
@@ -17,40 +17,40 @@ func (s *Store) GetUsers() ([]model.User, error) {
 	return users, nil
 }
 
-func (s *Store) GetUserById(id int) (model.User, error) {
-	user := model.User{
+func (s *Store) GetUserById(id int) (modelStore.User, error) {
+	user := modelStore.User{
 		Id: id,
 	}
 
 	count, err := s.db.Model(&user).WherePK().SelectAndCount()
 
 	if count == 0 {
-		return model.User{}, constants.ErrUserGetNotFoundById
+		return modelStore.User{}, constants.ErrUserGetNotFoundById
 	}
 
 	if err != nil {
-		return model.User{}, constants.ErrUserGetDbError
+		return modelStore.User{}, constants.ErrUserGetDbError
 	}
 
 	return user, nil
 }
 
-func (s *Store) CreateUser(user model.User) (model.User, error) {
+func (s *Store) CreateUser(user modelStore.User) (modelStore.User, error) {
 	result, err := s.db.Model(&user).OnConflict("DO NOTHING").Insert()
 
 	if result.RowsAffected() == 0 {
-		return model.User{}, constants.ErrUserPostEmailExist
+		return modelStore.User{}, constants.ErrUserPostEmailExist
 	}
 
 	if err != nil {
-		return model.User{}, constants.ErrUserPostDbError
+		return modelStore.User{}, constants.ErrUserPostDbError
 	}
 
 	return user, nil
 }
 
 func (s *Store) DeleteUser(id int) error {
-	user := model.User{
+	user := modelStore.User{
 		Id: id,
 	}
 
@@ -67,43 +67,43 @@ func (s *Store) DeleteUser(id int) error {
 	return nil
 }
 
-func (s *Store) PatchUser(user model.User) (model.User, error) {
+func (s *Store) PatchUser(user modelStore.User) (modelStore.User, error) {
 	count, err := s.db.Model(&user).WherePK().Count()
 
 	if err != nil {
-		return model.User{}, constants.ErrUserPatchDbError
+		return modelStore.User{}, constants.ErrUserPatchDbError
 	}
 
 	if count == 0 {
-		return model.User{}, constants.ErrUserPatchNotFoundById
+		return modelStore.User{}, constants.ErrUserPatchNotFoundById
 	}
 
-	result, err := s.db.Model(&user).WherePK().OnConflict("DO NOTHING").Update()
+	result, err := s.db.Model(&user).WherePK().OnConflict("DO NOTHING").UpdateNotZero()
 
 	if result == nil {
-		return model.User{}, constants.ErrUserPatchEmailExist
+		return modelStore.User{}, constants.ErrUserPatchEmailExist
 	}
 
 	if err != nil {
-		return model.User{}, constants.ErrUserPatchDbError
+		return modelStore.User{}, constants.ErrUserPatchDbError
 	}
 
 	return user, nil
 }
 
-func (s *Store) GetUserByEmail(email string) (model.User, error) {
-	user := model.User{
+func (s *Store) GetUserByEmail(email string) (modelStore.User, error) {
+	user := modelStore.User{
 		Email: email,
 	}
 
 	count, err := s.db.Model(&user).Where("email = ?", user.Email).SelectAndCount()
 
 	if err != nil {
-		return model.User{}, constants.ErrUserGetByEmailDbError
+		return modelStore.User{}, constants.ErrUserGetByEmailDbError
 	}
 
 	if count == 0 {
-		return model.User{}, constants.ErrUserGetByEmailUserNotExist
+		return modelStore.User{}, constants.ErrUserGetByEmailUserNotExist
 	}
 
 	return user, err

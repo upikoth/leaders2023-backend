@@ -7,56 +7,34 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/upikoth/leaders2023-backend/internal/app/constants"
-	"github.com/upikoth/leaders2023-backend/internal/app/model"
+	"github.com/upikoth/leaders2023-backend/internal/app/handler/v1/requests"
+	"github.com/upikoth/leaders2023-backend/internal/app/handler/v1/responses"
 	"golang.org/x/crypto/bcrypt"
 )
-
-type createSessionRequestBody struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
-type createSessionResponseData struct {
-	User model.User `json:"user"`
-}
 
 // CreateSession godoc
 // @Summary      Создание сессии пользователя
 // @Accept       json
 // @Produce      json
-// @Param        body body  createSessionRequestBody true "Параметры запроса"
-// @Success      200  {object}  model.ResponseSuccess{data=createSessionResponseData}
-// @Failure      2001 {object}  model.ResponseError "Коды ошибок: [1700, 1701, 1702, 1703, 1704]"
+// @Param        body body  requests.createSessionRequestData true "Параметры запроса"
+// @Success      200  {object}  model.ResponseSuccess{data=responses.createSessionResponseData}
 // @Router       /api/v1/session [post].
 func (h *HandlerV1) CreateSession(c *gin.Context) {
-	requestBody := createSessionRequestBody{}
-	err := c.BindJSON(&requestBody)
+	reqData, err := requests.CreateSessionDataFromRequest(c)
 
 	if err != nil {
 		c.Set("responseCode", http.StatusBadRequest)
-		c.Set("responseErrorCode", constants.ErrSessionPostNoValidJson)
+		c.Set("responseErrorCode", constants.ErrSessionPostNotValidRequestData)
 	}
 
-	if requestBody.Email == "" {
-		c.Set("responseCode", http.StatusBadRequest)
-		c.Set("responseErrorCode", constants.ErrSessionPostNoEmail)
-		return
-	}
-
-	if requestBody.Password == "" {
-		c.Set("responseCode", http.StatusBadRequest)
-		c.Set("responseErrorCode", constants.ErrSessionPostNoPassword)
-		return
-	}
-
-	user, err := h.store.GetUserByEmail(requestBody.Email)
+	user, err := h.store.GetUserByEmail(reqData.Email)
 
 	if err != nil {
 		c.Set("responseErrorCode", constants.ErrSessionPostUserNotExist)
 		return
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(requestBody.Password))
+	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(reqData.Password))
 
 	if err != nil {
 		c.Set("responseErrorCode", constants.ErrSessionPostUserNotExist)
@@ -74,7 +52,7 @@ func (h *HandlerV1) CreateSession(c *gin.Context) {
 		return
 	}
 
-	responseData := createSessionResponseData{User: user}
+	responseData := responses.CreateSessionResponseFromStoreData(user)
 	c.Set("responseData", responseData)
 	c.SetCookie("Authorization", jwtToken, int(constants.Month/time.Second), "", "", true, true)
 }

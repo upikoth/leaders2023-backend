@@ -2,11 +2,11 @@ package store
 
 import (
 	"github.com/upikoth/leaders2023-backend/internal/app/constants"
-	"github.com/upikoth/leaders2023-backend/internal/app/model"
+	modelStore "github.com/upikoth/leaders2023-backend/internal/app/model/store"
 )
 
-func (s *Store) GetMetroStations() ([]model.MetroStation, error) {
-	metroStations := []model.MetroStation{}
+func (s *Store) GetMetroStations() ([]modelStore.MetroStation, error) {
+	metroStations := []modelStore.MetroStation{}
 
 	err := s.db.Model(&metroStations).Order("name").Select()
 

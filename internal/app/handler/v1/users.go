@@ -2,26 +2,22 @@ package v1
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/upikoth/leaders2023-backend/internal/app/constants"
-	"github.com/upikoth/leaders2023-backend/internal/app/model"
+	"github.com/upikoth/leaders2023-backend/internal/app/handler/v1/requests"
+	"github.com/upikoth/leaders2023-backend/internal/app/handler/v1/responses"
+	modelStore "github.com/upikoth/leaders2023-backend/internal/app/model/store"
 	"golang.org/x/crypto/bcrypt"
 )
-
-type getUsersResponseData struct {
-	Users []model.User `json:"users"`
-}
 
 // GetUsers godoc
 // @Summary      Возвращает список пользователей
 // @Accept       json
 // @Produce      json
 // @Param        Authorization  header  string  true  "Authentication header"
-// @Success      200  {object}  model.ResponseSuccess{data=getUsersResponseData}
+// @Success      200  {object}  model.ResponseSuccess{data=responses.getUsersResponseData}
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
-// @Failure      2001 {object}  model.ResponseError "Коды ошибок: [1200]"
 // @Router       /api/v1/users [get].
 func (h *HandlerV1) GetUsers(c *gin.Context) {
 	users, err := h.store.GetUsers()
@@ -31,90 +27,55 @@ func (h *HandlerV1) GetUsers(c *gin.Context) {
 		return
 	}
 
-	responseData := getUsersResponseData{users}
+	responseData := responses.GetUsersResponseFromStoreData(users)
 	c.Set("responseData", responseData)
-}
-
-type getUserResponseData struct {
-	User model.User `json:"user"`
 }
 
 // GetUser godoc
 // @Summary      Возвращает информацию о пользователе
 // @Produce      json
 // @Param        id  path  string  true  "Id пользователя"
-// @Success      200  {object}  model.ResponseSuccess{data=getUserResponseData}
+// @Success      200  {object}  model.ResponseSuccess{data=responses.getUserResponseData}
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
-// @Failure      2001 {object}  model.ResponseError "Коды ошибок: [1300, 1301, 1302, 1303, 1304, 1305]"
 // @Router       /api/v1/user/:id [get].
 func (h *HandlerV1) GetUser(c *gin.Context) {
-	userId, isIdExist := c.Params.Get("id")
-
-	if !isIdExist {
-		c.Set("responseCode", http.StatusBadRequest)
-		c.Set("responseErrorCode", constants.ErrUserGetIdNotExistInRequest)
-		return
-	}
-
-	userIdParsed, err := strconv.Atoi(userId)
+	reqData, err := requests.GetUserDataFromRequest(c)
 
 	if err != nil {
 		c.Set("responseCode", http.StatusBadRequest)
-		c.Set("responseErrorCode", constants.ErrUserGetIdNotNumber)
+		c.Set("responseErrorCode", constants.ErrUserGetNotValidRequestData)
 		return
 	}
 
-	user, err := h.store.GetUserById(userIdParsed)
+	user, err := h.store.GetUserById(reqData.Id)
 
 	if err != nil {
 		c.Set("responseErrorCode", err)
 		return
 	}
 
-	responseData := getUserResponseData{user}
+	responseData := responses.GetUserResponseFromStoreData(user)
 	c.Set("responseData", responseData)
-}
-
-type createUserRequestBody struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
-type createUserResponseData struct {
-	User model.User `json:"user"`
 }
 
 // CreateUser godoc
 // @Summary      Создание пользователя
 // @Accept       json
 // @Produce      json
-// @Param        body body  createUserRequestBody true "Параметры запроса"
-// @Success      200  {object}  model.ResponseSuccess{data=createUserResponseData}
+// @Param        body body  requests.createUserRequestData true "Параметры запроса"
+// @Success      200  {object}  model.ResponseSuccess{data=responses.createUserResponseData}
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
-// @Failure      2001 {object}  model.ResponseError "Коды ошибок: [1400, 1401, 1402, 1403, 1404, 1405]"
 // @Router       /api/v1/user [post].
 func (h *HandlerV1) CreateUser(c *gin.Context) {
-	requestBody := createUserRequestBody{}
-	err := c.BindJSON(&requestBody)
+	reqData, err := requests.CreateUserDataFromRequest(c)
 
 	if err != nil {
 		c.Set("responseCode", http.StatusBadRequest)
-		c.Set("responseErrorCode", constants.ErrUserPostNoValidJson)
-	}
-
-	if requestBody.Email == "" {
-		c.Set("responseCode", http.StatusBadRequest)
-		c.Set("responseErrorCode", constants.ErrUserPostNoEmail)
+		c.Set("responseErrorCode", constants.ErrUserPostNotValidRequestData)
 		return
 	}
 
-	if requestBody.Password == "" {
-		c.Set("responseCode", http.StatusBadRequest)
-		c.Set("responseErrorCode", constants.ErrUserPostNoPassword)
-		return
-	}
-
-	saltedBytes := []byte(requestBody.Password)
+	saltedBytes := []byte(reqData.Password)
 	hashedBytes, err := bcrypt.GenerateFromPassword(saltedBytes, bcrypt.DefaultCost)
 
 	if err != nil {
@@ -122,8 +83,8 @@ func (h *HandlerV1) CreateUser(c *gin.Context) {
 		return
 	}
 
-	user := model.User{
-		Email:        requestBody.Email,
+	user := modelStore.User{
+		Email:        reqData.Email,
 		PasswordHash: string(hashedBytes),
 	}
 
@@ -134,16 +95,8 @@ func (h *HandlerV1) CreateUser(c *gin.Context) {
 		return
 	}
 
-	responseData := createUserResponseData{User: createdUser}
+	responseData := responses.CreateUserResponseFromStoreData(createdUser)
 	c.Set("responseData", responseData)
-}
-
-type patchUserRequestBody struct {
-	Email string `json:"email"`
-}
-
-type patchUserResponseData struct {
-	User model.User `json:"user"`
 }
 
 // PatchUser godoc
@@ -151,42 +104,22 @@ type patchUserResponseData struct {
 // @Accept       json
 // @Produce      json
 // @Param        id  path  string  true  "Id пользователя"
-// @Param        body body  patchUserRequestBody true "Параметры запроса"
-// @Success      200  {object}  model.ResponseSuccess{data=patchUserResponseData}
+// @Param        body body  requests.patchUserRequestData true "Параметры запроса"
+// @Success      200  {object}  model.ResponseSuccess{data=responses.patchUserResponseData}
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
-// @Failure      2001 {object}  model.ResponseError "Коды ошибок: [1600, 1601, 1602, 1603, 1604, 1605]"
 // @Router       /api/v1/user/:id [patch].
 func (h *HandlerV1) PatchUser(c *gin.Context) {
-	userId, isIdExist := c.Params.Get("id")
-
-	if !isIdExist {
-		c.Set("responseCode", http.StatusBadRequest)
-		c.Set("responseErrorCode", constants.ErrUserPatchIdNotExistInRequest)
-		return
-	}
-
-	userIdParsed, err := strconv.Atoi(userId)
+	reqData, err := requests.PatchUserDataFromRequest(c)
 
 	if err != nil {
 		c.Set("responseCode", http.StatusBadRequest)
-		c.Set("responseErrorCode", constants.ErrUserPatchIdNotNumber)
+		c.Set("responseErrorCode", constants.ErrUserPatchNotValidRequestData)
 		return
 	}
 
-	requestBody := patchUserRequestBody{}
-	err = c.BindJSON(&requestBody)
-
-	if err != nil {
-		c.Set("responseCode", http.StatusBadRequest)
-		c.Set("responseErrorCode", constants.ErrUserPatchNoValidJson)
-	}
-
-	user := model.User{
-		Id: userIdParsed,
-	}
-
-	if requestBody.Email != "" {
-		user.Email = requestBody.Email
+	user := modelStore.User{
+		Id:    reqData.Id,
+		Email: reqData.Email,
 	}
 
 	updatedUser, err := h.store.PatchUser(user)
@@ -196,7 +129,7 @@ func (h *HandlerV1) PatchUser(c *gin.Context) {
 		return
 	}
 
-	responseData := patchUserResponseData{User: updatedUser}
+	responseData := responses.PatchUserResponseFromStoreData(updatedUser)
 	c.Set("responseData", responseData)
 }
 
@@ -207,28 +140,20 @@ func (h *HandlerV1) PatchUser(c *gin.Context) {
 // @Param        id  path  string  true  "Id пользователя"
 // @Success      200  {object}  model.ResponseSuccess
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
-// @Failure      2001 {object}  model.ResponseError "Коды ошибок: [1500, 1501, 1502, 1503]"
 // @Router       /api/v1/user/:id [delete].
 func (h *HandlerV1) DeleteUser(c *gin.Context) {
-	userId, isIdExist := c.Params.Get("id")
-
-	if !isIdExist {
-		c.Set("responseCode", http.StatusBadRequest)
-		c.Set("responseErrorCode", constants.ErrUserDeleteIdNotExistInRequest)
-		return
-	}
-
-	userIdParsed, err := strconv.Atoi(userId)
+	reqData, err := requests.DeleteUserDataFromRequest(c)
 
 	if err != nil {
 		c.Set("responseCode", http.StatusBadRequest)
-		c.Set("responseErrorCode", constants.ErrUserDeleteIdNotNumber)
+		c.Set("responseErrorCode", constants.ErrUserDeleteNotValidRequestData)
 		return
 	}
 
-	err = h.store.DeleteUser(userIdParsed)
+	err = h.store.DeleteUser(reqData.Id)
 
 	if err != nil {
 		c.Set("responseErrorCode", err)
+		return
 	}
 }
