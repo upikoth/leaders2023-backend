@@ -16,6 +16,54 @@ const docTemplate_swagger = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/creative-space": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Создание креативной площадки",
+                "parameters": [
+                    {
+                        "description": "Параметры запроса",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.createCreativeSpaceRequestData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.ResponseSuccess"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.createCreativeSpaceResponseData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Коды ошибок: [1100]",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/health": {
             "get": {
                 "summary": "Проверка работоспособности сервера",
@@ -405,6 +453,88 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "requests.createCreativeSpaceRequestCoordinate": {
+            "type": "object",
+            "required": [
+                "latitude",
+                "longitude"
+            ],
+            "properties": {
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
+                }
+            }
+        },
+        "requests.createCreativeSpaceRequestData": {
+            "type": "object",
+            "required": [
+                "coordinate",
+                "description",
+                "metroStations",
+                "photos",
+                "pricePerHour",
+                "workingHours"
+            ],
+            "properties": {
+                "coordinate": {
+                    "$ref": "#/definitions/requests.createCreativeSpaceRequestCoordinate"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "metroStations": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/requests.createCreativeSpaceRequestMetroStation"
+                    }
+                },
+                "photos": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "pricePerHour": {
+                    "type": "integer"
+                },
+                "workingHours": {
+                    "$ref": "#/definitions/requests.createCreativeSpaceRequestWorkingHours"
+                }
+            }
+        },
+        "requests.createCreativeSpaceRequestMetroStation": {
+            "type": "object",
+            "required": [
+                "distanceInMinutes",
+                "id"
+            ],
+            "properties": {
+                "distanceInMinutes": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "requests.createCreativeSpaceRequestWorkingHours": {
+            "type": "object",
+            "required": [
+                "endAt",
+                "startAt"
+            ],
+            "properties": {
+                "endAt": {
+                    "type": "string"
+                },
+                "startAt": {
+                    "type": "string"
+                }
+            }
+        },
         "requests.createSessionRequestData": {
             "type": "object",
             "required": [
@@ -446,6 +576,22 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "responses.createCreativeSpaceResponseCreativeSpace": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "responses.createCreativeSpaceResponseData": {
+            "type": "object",
+            "properties": {
+                "creativeSpace": {
+                    "$ref": "#/definitions/responses.createCreativeSpaceResponseCreativeSpace"
+                }
+            }
+        },
         "responses.createSessionResponseData": {
             "type": "object",
             "properties": {
@@ -476,9 +622,6 @@ const docTemplate_swagger = `{
         "responses.createUserResponseUser": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "integer"
                 }
@@ -561,9 +704,6 @@ const docTemplate_swagger = `{
         "responses.patchUserResponseUser": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "integer"
                 }

@@ -1,8 +1,6 @@
 package responses
 
-import (
-	modelStore "github.com/upikoth/leaders2023-backend/internal/app/model/store"
-)
+import "github.com/upikoth/leaders2023-backend/internal/app/store"
 
 type getUsersResponseUser struct {
 	Id    int    `json:"id"`
@@ -13,7 +11,7 @@ type getUsersResponseData struct {
 	Users []getUsersResponseUser `json:"users"`
 }
 
-func GetUsersResponseFromStoreData(users []modelStore.User) getUsersResponseData {
+func GetUsersResponseFromStoreData(users []store.User) getUsersResponseData {
 	res := getUsersResponseData{}
 
 	for _, user := range users {
@@ -37,7 +35,7 @@ type getUserResponseData struct {
 	User getUserResponseUser `json:"user"`
 }
 
-func GetUserResponseFromStoreData(user modelStore.User) getUserResponseData {
+func GetUserResponseFromStoreData(user store.User) getUserResponseData {
 	res := getUserResponseData{}
 
 	res.User = getUserResponseUser{
@@ -49,40 +47,36 @@ func GetUserResponseFromStoreData(user modelStore.User) getUserResponseData {
 }
 
 type createUserResponseUser struct {
-	Id    int    `json:"id"`
-	Email string `json:"email"`
+	Id int `json:"id"`
 }
 
 type createUserResponseData struct {
 	User createUserResponseUser `json:"user"`
 }
 
-func CreateUserResponseFromStoreData(user modelStore.User) createUserResponseData {
+func CreateUserResponseFromStoreData(user store.User) createUserResponseData {
 	res := createUserResponseData{}
 
 	res.User = createUserResponseUser{
-		Id:    user.Id,
-		Email: user.Email,
+		Id: user.Id,
 	}
 
 	return res
 }
 
 type patchUserResponseUser struct {
-	Id    int    `json:"id"`
-	Email string `json:"email"`
+	Id int `json:"id"`
 }
 
 type patchUserResponseData struct {
 	User patchUserResponseUser `json:"user"`
 }
 
-func PatchUserResponseFromStoreData(user modelStore.User) patchUserResponseData {
+func PatchUserResponseFromStoreData(user store.User) patchUserResponseData {
 	res := patchUserResponseData{}
 
 	res.User = patchUserResponseUser{
-		Id:    user.Id,
-		Email: user.Email,
+		Id: user.Id,
 	}
 
 	return res

@@ -9,6 +9,7 @@ import (
 	"github.com/upikoth/leaders2023-backend/internal/app/constants"
 	"github.com/upikoth/leaders2023-backend/internal/app/handler/v1/requests"
 	"github.com/upikoth/leaders2023-backend/internal/app/handler/v1/responses"
+	"github.com/upikoth/leaders2023-backend/internal/app/model"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -41,8 +42,12 @@ func (h *HandlerV1) CreateSession(c *gin.Context) {
 		return
 	}
 
+	tokenUserData := model.JwtTokenUserData{
+		UserId: user.Id,
+	}
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"userId": user.Id,
+		"userData": tokenUserData,
 	})
 
 	jwtToken, err := token.SignedString(h.jwtSecret)

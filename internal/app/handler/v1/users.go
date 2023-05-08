@@ -7,7 +7,7 @@ import (
 	"github.com/upikoth/leaders2023-backend/internal/app/constants"
 	"github.com/upikoth/leaders2023-backend/internal/app/handler/v1/requests"
 	"github.com/upikoth/leaders2023-backend/internal/app/handler/v1/responses"
-	modelStore "github.com/upikoth/leaders2023-backend/internal/app/model/store"
+	"github.com/upikoth/leaders2023-backend/internal/app/store"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -83,7 +83,7 @@ func (h *HandlerV1) CreateUser(c *gin.Context) {
 		return
 	}
 
-	user := modelStore.User{
+	user := store.User{
 		Email:        reqData.Email,
 		PasswordHash: string(hashedBytes),
 	}
@@ -117,7 +117,7 @@ func (h *HandlerV1) PatchUser(c *gin.Context) {
 		return
 	}
 
-	user := modelStore.User{
+	user := store.User{
 		Id:    reqData.Id,
 		Email: reqData.Email,
 	}

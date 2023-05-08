@@ -21,6 +21,62 @@ definitions:
         default: true
         type: boolean
     type: object
+  requests.createCreativeSpaceRequestCoordinate:
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+    required:
+    - latitude
+    - longitude
+    type: object
+  requests.createCreativeSpaceRequestData:
+    properties:
+      coordinate:
+        $ref: '#/definitions/requests.createCreativeSpaceRequestCoordinate'
+      description:
+        type: string
+      metroStations:
+        items:
+          $ref: '#/definitions/requests.createCreativeSpaceRequestMetroStation'
+        type: array
+      photos:
+        items:
+          type: string
+        type: array
+      pricePerHour:
+        type: integer
+      workingHours:
+        $ref: '#/definitions/requests.createCreativeSpaceRequestWorkingHours'
+    required:
+    - coordinate
+    - description
+    - metroStations
+    - photos
+    - pricePerHour
+    - workingHours
+    type: object
+  requests.createCreativeSpaceRequestMetroStation:
+    properties:
+      distanceInMinutes:
+        type: integer
+      id:
+        type: integer
+    required:
+    - distanceInMinutes
+    - id
+    type: object
+  requests.createCreativeSpaceRequestWorkingHours:
+    properties:
+      endAt:
+        type: string
+      startAt:
+        type: string
+    required:
+    - endAt
+    - startAt
+    type: object
   requests.createSessionRequestData:
     properties:
       email:
@@ -48,6 +104,16 @@ definitions:
       id:
         type: integer
     type: object
+  responses.createCreativeSpaceResponseCreativeSpace:
+    properties:
+      id:
+        type: integer
+    type: object
+  responses.createCreativeSpaceResponseData:
+    properties:
+      creativeSpace:
+        $ref: '#/definitions/responses.createCreativeSpaceResponseCreativeSpace'
+    type: object
   responses.createSessionResponseData:
     properties:
       user:
@@ -67,8 +133,6 @@ definitions:
     type: object
   responses.createUserResponseUser:
     properties:
-      email:
-        type: string
       id:
         type: integer
     type: object
@@ -121,8 +185,6 @@ definitions:
     type: object
   responses.patchUserResponseUser:
     properties:
-      email:
-        type: string
       id:
         type: integer
     type: object
@@ -131,6 +193,34 @@ info:
   contact: {}
   title: Starter API
 paths:
+  /api/v1/creative-space:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Параметры запроса
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.createCreativeSpaceRequestData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.ResponseSuccess'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.createCreativeSpaceResponseData'
+              type: object
+        "403":
+          description: 'Коды ошибок: [1100]'
+          schema:
+            $ref: '#/definitions/model.ResponseError'
+      summary: Создание креативной площадки
   /api/v1/health:
     get:
       responses:

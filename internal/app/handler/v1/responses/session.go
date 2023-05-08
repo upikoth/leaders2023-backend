@@ -1,6 +1,6 @@
 package responses
 
-import modelStore "github.com/upikoth/leaders2023-backend/internal/app/model/store"
+import "github.com/upikoth/leaders2023-backend/internal/app/store"
 
 type createSessionResponseUser struct {
 	Id    int    `json:"id"`
@@ -11,7 +11,7 @@ type createSessionResponseData struct {
 	User createSessionResponseUser `json:"user"`
 }
 
-func CreateSessionResponseFromStoreData(user modelStore.User) createSessionResponseData {
+func CreateSessionResponseFromStoreData(user store.User) createSessionResponseData {
 	res := createSessionResponseData{}
 
 	res.User = createSessionResponseUser{

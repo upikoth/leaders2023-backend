@@ -1,8 +1,6 @@
 package responses
 
-import (
-	modelStore "github.com/upikoth/leaders2023-backend/internal/app/model/store"
-)
+import "github.com/upikoth/leaders2023-backend/internal/app/store"
 
 type getMetroStationsResponseMetroStation struct {
 	Id    int    `json:"id"`
@@ -14,7 +12,7 @@ type getMetroStationsResponseData struct {
 	MetroStations []getMetroStationsResponseMetroStation `json:"metroStations"`
 }
 
-func GetMetroStationsResponseFromStoreData(metroStations []modelStore.MetroStation) getMetroStationsResponseData {
+func GetMetroStationsResponseFromStoreData(metroStations []store.MetroStation) getMetroStationsResponseData {
 	res := getMetroStationsResponseData{}
 
 	for _, station := range metroStations {

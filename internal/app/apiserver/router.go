@@ -11,7 +11,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/upikoth/leaders2023-backend/docs"
 	"github.com/upikoth/leaders2023-backend/internal/app/constants"
-	modelCommon "github.com/upikoth/leaders2023-backend/internal/app/model/common"
+	"github.com/upikoth/leaders2023-backend/internal/app/model"
 )
 
 func (s *ApiServer) initRoutes() {
@@ -33,6 +33,7 @@ func (s *ApiServer) initRoutes() {
 	authorized := s.router.Use(checkAuthorization(s.config.JwtSecret))
 
 	authorized.GET("/api/v1/session", s.handler.V1.GetSession)
+	authorized.DELETE("/api/v1/session", s.handler.V1.GetSession)
 
 	authorized.GET("/api/v1/users", s.handler.V1.GetUsers)
 
@@ -43,7 +44,7 @@ func (s *ApiServer) initRoutes() {
 
 	authorized.GET("/api/v1/metro-stations", s.handler.V1.GetMetroStations)
 
-	authorized.POST("/api/v1/creativeSpace", s.handler.V1.CreateUser)
+	authorized.POST("/api/v1/creativeSpace", s.handler.V1.CreateCreativeSpace)
 
 	s.router.NoRoute(func(c *gin.Context) {
 		c.Set("responseCode", http.StatusNotFound)
@@ -68,15 +69,15 @@ func formatResponse() gin.HandlerFunc {
 		}
 
 		if isErorrCodeExist {
-			response := modelCommon.ResponseError{}
+			response := model.ResponseError{}
 			response.Success = false
-			response.Error = &modelCommon.ResponseErrorField{
+			response.Error = &model.ResponseErrorField{
 				Code:        fmt.Sprintf("%v", errorCode),
 				Description: constants.ErrDescriptionByCode[errorCode.(error)],
 			}
 			c.JSON(code.(int), response)
 		} else {
-			response := modelCommon.ResponseSuccess{}
+			response := model.ResponseSuccess{}
 			response.Success = true
 			response.Data = data
 			c.JSON(code.(int), response)
@@ -95,21 +96,26 @@ func checkAuthorization(jwtSecret []byte) gin.HandlerFunc {
 			return
 		}
 
-		token, err := jwt.Parse(jwtToken, func(token *jwt.Token) (interface{}, error) {
-			if _, err := token.Method.(*jwt.SigningMethodHMAC); !err {
-				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
-			}
+		token, err := jwt.ParseWithClaims(
+			jwtToken, &model.JwtTokenClaims{},
+			func(token *jwt.Token) (interface{}, error) {
+				if _, err := token.Method.(*jwt.SigningMethodHMAC); !err {
+					return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+				}
 
-			return jwtSecret, nil
-		})
+				return jwtSecret, nil
+			})
 
-		if err != nil || !token.Valid {
+		claims, isClaimsValid := token.Claims.(*model.JwtTokenClaims)
+
+		if err != nil || !isClaimsValid || !token.Valid {
 			c.Set("responseCode", http.StatusForbidden)
 			c.Set("responseErrorCode", constants.ErrUserNotAuthorized)
 			c.Abort()
 			return
 		}
 
+		c.Set("userData", claims.UserData)
 		c.Next()
 	}
 }
