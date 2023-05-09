@@ -80,7 +80,11 @@ func (s *Store) CreateCreativeSpace(
 			OnConflict("DO NOTHING").
 			Insert()
 
-		if creativeSpaceErr != nil || result.RowsAffected() == 0 {
+		if result.RowsAffected() == 0 {
+			return constants.ErrCreativeSpacePostDbError
+		}
+
+		if creativeSpaceErr != nil {
 			return creativeSpaceErr
 		}
 
@@ -97,7 +101,11 @@ func (s *Store) CreateCreativeSpace(
 			OnConflict("DO NOTHING").
 			Insert()
 
-		if creativeSpaceMetroStationErr != nil || result.RowsAffected() == 0 {
+		if result.RowsAffected() == 0 {
+			return constants.ErrCreativeSpacePostDbError
+		}
+
+		if creativeSpaceMetroStationErr != nil {
 			return creativeSpaceMetroStationErr
 		}
 
@@ -109,4 +117,46 @@ func (s *Store) CreateCreativeSpace(
 	}
 
 	return creativeSpace.Id, nil
+}
+
+func (s *Store) DeleteCreativeSpace(id int) error {
+	creativeSpace := CreativeSpace{
+		Id: id,
+	}
+
+	creativeSpaceMetroStation := CreativeSpaceMetroStation{
+		CreativeSpaceId: id,
+	}
+
+	storeErr := s.db.RunInTransaction(context.Background(), func(tx *pg.Tx) error {
+		_, err := s.db.
+			Model(&creativeSpaceMetroStation).
+			Where("creative_space_id = ?", creativeSpaceMetroStation.CreativeSpaceId).
+			Delete()
+
+		if err != nil {
+			return err
+		}
+
+		result, err := s.db.
+			Model(&creativeSpace).
+			WherePK().
+			Delete()
+
+		if result.RowsAffected() == 0 {
+			return constants.ErrCreativeSpaceDeleteNotFoundById
+		}
+
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	if storeErr != nil {
+		return storeErr
+	}
+
+	return nil
 }

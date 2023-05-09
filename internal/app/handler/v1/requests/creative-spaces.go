@@ -53,3 +53,19 @@ func CreateCreativeSpaceDataFromRequest(c *gin.Context) (createCreativeSpaceRequ
 
 	return data, nil
 }
+
+type deleteCreativeSpaceRequestData struct {
+	Id int `json:"id" uri:"id" binding:"required"`
+}
+
+func DeleteCreativeSpaceDataFromRequest(c *gin.Context) (deleteCreativeSpaceRequestData, error) {
+	data := deleteCreativeSpaceRequestData{}
+
+	err := c.BindUri(&data)
+
+	if err != nil {
+		return deleteCreativeSpaceRequestData{}, err
+	}
+
+	return data, nil
+}

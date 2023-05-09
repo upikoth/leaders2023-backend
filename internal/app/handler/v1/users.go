@@ -38,7 +38,7 @@ func (h *HandlerV1) GetUsers(c *gin.Context) {
 // @Param        id  path  string  true  "Id пользователя"
 // @Success      200  {object}  model.ResponseSuccess{data=responses.getUserResponseData}
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
-// @Router       /api/v1/user/:id [get].
+// @Router       /api/v1/users/:id [get].
 func (h *HandlerV1) GetUser(c *gin.Context) {
 	reqData, err := requests.GetUserDataFromRequest(c)
 
@@ -113,7 +113,7 @@ func (h *HandlerV1) CreateUser(c *gin.Context) {
 // @Param        body body  requests.patchUserRequestData true "Параметры запроса"
 // @Success      200  {object}  model.ResponseSuccess{data=responses.patchUserResponseData}
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
-// @Router       /api/v1/user/:id [patch].
+// @Router       /api/v1/users/:id [patch].
 func (h *HandlerV1) PatchUser(c *gin.Context) {
 	reqData, err := requests.PatchUserDataFromRequest(c)
 
@@ -148,7 +148,7 @@ func (h *HandlerV1) PatchUser(c *gin.Context) {
 // @Param        id  path  string  true  "Id пользователя"
 // @Success      200  {object}  model.ResponseSuccess
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
-// @Router       /api/v1/user/:id [delete].
+// @Router       /api/v1/users/:id [delete].
 func (h *HandlerV1) DeleteUser(c *gin.Context) {
 	reqData, err := requests.DeleteUserDataFromRequest(c)
 

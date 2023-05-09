@@ -41,9 +41,13 @@ var (
 
 	ErrCreativeSpacesGetDbError = errors.New("2000")
 
-	ErrCreativeSpaceGetNotValidRequestData = errors.New("1300")
-	ErrCreativeSpaceGetNotFoundById        = errors.New("1301")
-	ErrCreativeSpaceGetDbError             = errors.New("1302")
+	ErrCreativeSpaceGetNotValidRequestData = errors.New("2100")
+	ErrCreativeSpaceGetNotFoundById        = errors.New("2101")
+	ErrCreativeSpaceGetDbError             = errors.New("2102")
+
+	ErrCreativeSpaceDeleteNotValidRequestData = errors.New("2200")
+	ErrCreativeSpaceDeleteNotFoundById        = errors.New("2201")
+	ErrCreativeSpaceDeleteDbError             = errors.New("2202")
 )
 
 //nolint:gochecknoglobals // Пока добавил в игнор.
@@ -85,6 +89,10 @@ var ErrDescriptionByCode = map[error]string{
 	ErrCreativeSpacesGetDbError: "Не удалось получить список креативных пространств",
 
 	ErrCreativeSpaceGetNotValidRequestData: "Ошбика при валидации параметров запроса",
-	ErrCreativeSpaceGetNotFoundById:        "Креативное пространство с указанным id не найдет",
+	ErrCreativeSpaceGetNotFoundById:        "Креативное пространство с указанным id не найдено",
 	ErrCreativeSpaceGetDbError:             "Не удалось получить информацию о креативной площадке",
+
+	ErrCreativeSpaceDeleteNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrCreativeSpaceDeleteNotFoundById:        "Креативное пространство с указанным id не найдено",
+	ErrCreativeSpaceDeleteDbError:             "Не удалось удалить информацию о креативной площадке",
 }

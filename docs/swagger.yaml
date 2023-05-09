@@ -358,6 +358,27 @@ paths:
             $ref: '#/definitions/model.ResponseError'
       summary: Возвращает список креативных площадок
   /api/v1/creativeSpaces/:id:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Id креативной площадки
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "403":
+          description: 'Коды ошибок: [1100]'
+          schema:
+            $ref: '#/definitions/model.ResponseError'
+      summary: Удаление информации о креативной площадке
     get:
       parameters:
       - description: Id креативной площадки
@@ -489,7 +510,34 @@ paths:
           schema:
             $ref: '#/definitions/model.ResponseError'
       summary: Создание пользователя
-  /api/v1/user/:id:
+  /api/v1/users:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.ResponseSuccess'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.getUsersResponseData'
+              type: object
+        "403":
+          description: 'Коды ошибок: [1100]'
+          schema:
+            $ref: '#/definitions/model.ResponseError'
+      summary: Возвращает список пользователей
+  /api/v1/users/:id:
     delete:
       consumes:
       - application/json
@@ -567,31 +615,4 @@ paths:
           schema:
             $ref: '#/definitions/model.ResponseError'
       summary: Обновление информации о пользователе
-  /api/v1/users:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: Authentication header
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.ResponseSuccess'
-            - properties:
-                data:
-                  $ref: '#/definitions/responses.getUsersResponseData'
-              type: object
-        "403":
-          description: 'Коды ошибок: [1100]'
-          schema:
-            $ref: '#/definitions/model.ResponseError'
-      summary: Возвращает список пользователей
 swagger: "2.0"

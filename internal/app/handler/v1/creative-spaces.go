@@ -112,3 +112,30 @@ func (h *HandlerV1) CreateCreativeSpace(c *gin.Context) {
 	responseData := responses.CreateCreativeSpaceResponseFromStoreData(creativeSpaceId)
 	c.Set("responseData", responseData)
 }
+
+// DeleteCreativeSpace godoc
+// @Summary      Удаление информации о креативной площадке
+// @Accept       json
+// @Produce      json
+// @Param        id  path  string  true  "Id креативной площадки"
+// @Success      200  {object}  model.ResponseSuccess
+// @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
+// @Router       /api/v1/creativeSpaces/:id [delete].
+func (h *HandlerV1) DeleteCreativeSpace(c *gin.Context) {
+	reqData, err := requests.DeleteCreativeSpaceDataFromRequest(c)
+
+	if err != nil {
+		c.Set("responseCode", http.StatusBadRequest)
+		c.Set("responseErrorCode", constants.ErrCreativeSpaceDeleteNotValidRequestData)
+		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	err = h.store.DeleteCreativeSpace(reqData.Id)
+
+	if err != nil {
+		c.Set("responseErrorCode", constants.ErrCreativeSpaceDeleteDbError)
+		c.Set("responseErrorDetails", err)
+		return
+	}
+}
