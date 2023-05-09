@@ -18,7 +18,7 @@ import (
 // @Param        Authorization  header  string  true  "Authentication header"
 // @Success      200  {object}  model.ResponseSuccess{data=responses.getCreativeSpacesResponseData}
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
-// @Router       /api/v1/creative-spaces [get].
+// @Router       /api/v1/creativeSpaces [get].
 func (h *HandlerV1) GetCreativeSpaces(c *gin.Context) {
 	creativeSpaces, err := h.store.GetCreativeSpaces()
 
@@ -32,6 +32,35 @@ func (h *HandlerV1) GetCreativeSpaces(c *gin.Context) {
 	c.Set("responseData", responseData)
 }
 
+// GetUser godoc
+// @Summary      Возвращает информацию о пользователе
+// @Produce      json
+// @Param        id  path  string  true  "Id креативной площадки"
+// @Success      200  {object}  model.ResponseSuccess{data=responses.getCreativeSpaceResponseData}
+// @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
+// @Router       /api/v1/creativeSpaces/:id [get].
+func (h *HandlerV1) GetCreativeSpace(c *gin.Context) {
+	reqData, err := requests.GetCreativeSpaceDataFromRequest(c)
+
+	if err != nil {
+		c.Set("responseCode", http.StatusBadRequest)
+		c.Set("responseErrorCode", constants.ErrCreativeSpaceGetNotValidRequestData)
+		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	creativeSpace, err := h.store.GetCreativeSpaceById(reqData.Id)
+
+	if err != nil {
+		c.Set("responseErrorCode", constants.ErrCreativeSpaceGetDbError)
+		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	responseData := responses.GetCreativeSpaceResponseFromStoreData(creativeSpace)
+	c.Set("responseData", responseData)
+}
+
 // CreateCreativeSpace godoc
 // @Summary      Создание креативной площадки
 // @Accept       json
@@ -39,7 +68,7 @@ func (h *HandlerV1) GetCreativeSpaces(c *gin.Context) {
 // @Param        body body  requests.createCreativeSpaceRequestData true "Параметры запроса"
 // @Success      200  {object}  model.ResponseSuccess{data=responses.createCreativeSpaceResponseData}
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
-// @Router       /api/v1/creative-space [post].
+// @Router       /api/v1/creativeSpace [post].
 func (h *HandlerV1) CreateCreativeSpace(c *gin.Context) {
 	reqData, err := requests.CreateCreativeSpaceDataFromRequest(c)
 	userData, isClaimsValid := c.MustGet("userData").(model.JwtTokenUserData)

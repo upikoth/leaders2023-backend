@@ -16,7 +16,7 @@ const docTemplate_swagger = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/creative-space": {
+        "/api/v1/creativeSpace": {
             "post": {
                 "consumes": [
                     "application/json"
@@ -64,7 +64,7 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "/api/v1/creative-spaces": {
+        "/api/v1/creativeSpaces": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -110,6 +110,49 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/api/v1/creativeSpaces/:id": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Возвращает информацию о пользователе",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Id креативной площадки",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.ResponseSuccess"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.getCreativeSpaceResponseData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Коды ошибок: [1100]",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/health": {
             "get": {
                 "summary": "Проверка работоспособности сервера",
@@ -123,7 +166,7 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "/api/v1/metro-stations": {
+        "/api/v1/metroStations": {
             "get": {
                 "produces": [
                     "application/json"
@@ -522,7 +565,6 @@ const docTemplate_swagger = `{
             "required": [
                 "coordinate",
                 "description",
-                "metroStations",
                 "photos",
                 "pricePerHour",
                 "workingHours"
@@ -625,17 +667,6 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "responses.createCreativeSpaceResponseCoordinate": {
-            "type": "object",
-            "properties": {
-                "latitude": {
-                    "type": "number"
-                },
-                "longitude": {
-                    "type": "number"
-                }
-            }
-        },
         "responses.createCreativeSpaceResponseCreativeSpace": {
             "type": "object",
             "properties": {
@@ -649,28 +680,6 @@ const docTemplate_swagger = `{
             "properties": {
                 "creativeSpace": {
                     "$ref": "#/definitions/responses.createCreativeSpaceResponseCreativeSpace"
-                }
-            }
-        },
-        "responses.createCreativeSpaceResponseMetroStation": {
-            "type": "object",
-            "properties": {
-                "distanceInMinutes": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "responses.createCreativeSpaceResponseWorkingHours": {
-            "type": "object",
-            "properties": {
-                "endAt": {
-                    "type": "string"
-                },
-                "startAt": {
-                    "type": "string"
                 }
             }
         },
@@ -709,11 +718,22 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "responses.getCreativeSpacesResponseCreativeSpace": {
+        "responses.getCreativeSpaceResponseCoordinate": {
+            "type": "object",
+            "properties": {
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
+                }
+            }
+        },
+        "responses.getCreativeSpaceResponseCreativeSpace": {
             "type": "object",
             "properties": {
                 "coordinate": {
-                    "$ref": "#/definitions/responses.createCreativeSpaceResponseCoordinate"
+                    "$ref": "#/definitions/responses.getCreativeSpaceResponseCoordinate"
                 },
                 "description": {
                     "type": "string"
@@ -727,7 +747,7 @@ const docTemplate_swagger = `{
                 "metroStations": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/responses.createCreativeSpaceResponseMetroStation"
+                        "$ref": "#/definitions/responses.getCreativeSpaceResponseMetroStation"
                     }
                 },
                 "photos": {
@@ -740,7 +760,89 @@ const docTemplate_swagger = `{
                     "type": "integer"
                 },
                 "workingHours": {
-                    "$ref": "#/definitions/responses.createCreativeSpaceResponseWorkingHours"
+                    "$ref": "#/definitions/responses.getCreativeSpaceResponseWorkingHours"
+                }
+            }
+        },
+        "responses.getCreativeSpaceResponseData": {
+            "type": "object",
+            "properties": {
+                "creativeSpace": {
+                    "$ref": "#/definitions/responses.getCreativeSpaceResponseCreativeSpace"
+                }
+            }
+        },
+        "responses.getCreativeSpaceResponseMetroStation": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "distanceInMinutes": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.getCreativeSpaceResponseWorkingHours": {
+            "type": "object",
+            "properties": {
+                "endAt": {
+                    "type": "string"
+                },
+                "startAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.getCreativeSpacesResponseCoordinate": {
+            "type": "object",
+            "properties": {
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
+                }
+            }
+        },
+        "responses.getCreativeSpacesResponseCreativeSpace": {
+            "type": "object",
+            "properties": {
+                "coordinate": {
+                    "$ref": "#/definitions/responses.getCreativeSpacesResponseCoordinate"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "landlordId": {
+                    "type": "integer"
+                },
+                "metroStations": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.getCreativeSpacesResponseMetroStation"
+                    }
+                },
+                "photos": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "pricePerHour": {
+                    "type": "integer"
+                },
+                "workingHours": {
+                    "$ref": "#/definitions/responses.getCreativeSpacesResponseWorkingHours"
                 }
             }
         },
@@ -752,6 +854,34 @@ const docTemplate_swagger = `{
                     "items": {
                         "$ref": "#/definitions/responses.getCreativeSpacesResponseCreativeSpace"
                     }
+                }
+            }
+        },
+        "responses.getCreativeSpacesResponseMetroStation": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "distanceInMinutes": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.getCreativeSpacesResponseWorkingHours": {
+            "type": "object",
+            "properties": {
+                "endAt": {
+                    "type": "string"
+                },
+                "startAt": {
+                    "type": "string"
                 }
             }
         },

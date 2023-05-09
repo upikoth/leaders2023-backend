@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/go-pg/pg/v10"
+	"github.com/upikoth/leaders2023-backend/internal/app/constants"
 )
 
 type CreativeSpace struct {
@@ -43,6 +44,30 @@ func (s *Store) GetCreativeSpaces() ([]CreativeSpace, error) {
 	}
 
 	return creativeSpaces, nil
+}
+
+func (s *Store) GetCreativeSpaceById(id int) (CreativeSpace, error) {
+	creativeSpace := CreativeSpace{
+		Id: id,
+	}
+
+	count, err := s.db.
+		Model(&creativeSpace).
+		WherePK().
+		Relation("MetroStations", func(q *pg.Query) (*pg.Query, error) {
+			return q.Relation("MetroStation"), nil
+		}).
+		SelectAndCount()
+
+	if count == 0 {
+		return CreativeSpace{}, constants.ErrCreativeSpaceGetNotFoundById
+	}
+
+	if err != nil {
+		return CreativeSpace{}, err
+	}
+
+	return creativeSpace, nil
 }
 
 func (s *Store) CreateCreativeSpace(

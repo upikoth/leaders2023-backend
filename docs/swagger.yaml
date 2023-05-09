@@ -54,7 +54,6 @@ definitions:
     required:
     - coordinate
     - description
-    - metroStations
     - photos
     - pricePerHour
     - workingHours
@@ -106,13 +105,6 @@ definitions:
       id:
         type: integer
     type: object
-  responses.createCreativeSpaceResponseCoordinate:
-    properties:
-      latitude:
-        type: number
-      longitude:
-        type: number
-    type: object
   responses.createCreativeSpaceResponseCreativeSpace:
     properties:
       id:
@@ -122,20 +114,6 @@ definitions:
     properties:
       creativeSpace:
         $ref: '#/definitions/responses.createCreativeSpaceResponseCreativeSpace'
-    type: object
-  responses.createCreativeSpaceResponseMetroStation:
-    properties:
-      distanceInMinutes:
-        type: integer
-      id:
-        type: integer
-    type: object
-  responses.createCreativeSpaceResponseWorkingHours:
-    properties:
-      endAt:
-        type: string
-      startAt:
-        type: string
     type: object
   responses.createSessionResponseData:
     properties:
@@ -159,10 +137,17 @@ definitions:
       id:
         type: integer
     type: object
-  responses.getCreativeSpacesResponseCreativeSpace:
+  responses.getCreativeSpaceResponseCoordinate:
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+    type: object
+  responses.getCreativeSpaceResponseCreativeSpace:
     properties:
       coordinate:
-        $ref: '#/definitions/responses.createCreativeSpaceResponseCoordinate'
+        $ref: '#/definitions/responses.getCreativeSpaceResponseCoordinate'
       description:
         type: string
       id:
@@ -171,7 +156,7 @@ definitions:
         type: integer
       metroStations:
         items:
-          $ref: '#/definitions/responses.createCreativeSpaceResponseMetroStation'
+          $ref: '#/definitions/responses.getCreativeSpaceResponseMetroStation'
         type: array
       photos:
         items:
@@ -180,7 +165,60 @@ definitions:
       pricePerHour:
         type: integer
       workingHours:
-        $ref: '#/definitions/responses.createCreativeSpaceResponseWorkingHours'
+        $ref: '#/definitions/responses.getCreativeSpaceResponseWorkingHours'
+    type: object
+  responses.getCreativeSpaceResponseData:
+    properties:
+      creativeSpace:
+        $ref: '#/definitions/responses.getCreativeSpaceResponseCreativeSpace'
+    type: object
+  responses.getCreativeSpaceResponseMetroStation:
+    properties:
+      color:
+        type: string
+      distanceInMinutes:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  responses.getCreativeSpaceResponseWorkingHours:
+    properties:
+      endAt:
+        type: string
+      startAt:
+        type: string
+    type: object
+  responses.getCreativeSpacesResponseCoordinate:
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+    type: object
+  responses.getCreativeSpacesResponseCreativeSpace:
+    properties:
+      coordinate:
+        $ref: '#/definitions/responses.getCreativeSpacesResponseCoordinate'
+      description:
+        type: string
+      id:
+        type: integer
+      landlordId:
+        type: integer
+      metroStations:
+        items:
+          $ref: '#/definitions/responses.getCreativeSpacesResponseMetroStation'
+        type: array
+      photos:
+        items:
+          type: string
+        type: array
+      pricePerHour:
+        type: integer
+      workingHours:
+        $ref: '#/definitions/responses.getCreativeSpacesResponseWorkingHours'
     type: object
   responses.getCreativeSpacesResponseData:
     properties:
@@ -188,6 +226,24 @@ definitions:
         items:
           $ref: '#/definitions/responses.getCreativeSpacesResponseCreativeSpace'
         type: array
+    type: object
+  responses.getCreativeSpacesResponseMetroStation:
+    properties:
+      color:
+        type: string
+      distanceInMinutes:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  responses.getCreativeSpacesResponseWorkingHours:
+    properties:
+      endAt:
+        type: string
+      startAt:
+        type: string
     type: object
   responses.getMetroStationsResponseData:
     properties:
@@ -246,7 +302,7 @@ info:
   contact: {}
   title: Starter API
 paths:
-  /api/v1/creative-space:
+  /api/v1/creativeSpace:
     post:
       consumes:
       - application/json
@@ -274,7 +330,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ResponseError'
       summary: Создание креативной площадки
-  /api/v1/creative-spaces:
+  /api/v1/creativeSpaces:
     get:
       consumes:
       - application/json
@@ -301,6 +357,31 @@ paths:
           schema:
             $ref: '#/definitions/model.ResponseError'
       summary: Возвращает список креативных площадок
+  /api/v1/creativeSpaces/:id:
+    get:
+      parameters:
+      - description: Id креативной площадки
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.ResponseSuccess'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.getCreativeSpaceResponseData'
+              type: object
+        "403":
+          description: 'Коды ошибок: [1100]'
+          schema:
+            $ref: '#/definitions/model.ResponseError'
+      summary: Возвращает информацию о пользователе
   /api/v1/health:
     get:
       responses:
@@ -309,7 +390,7 @@ paths:
           schema:
             $ref: '#/definitions/model.ResponseSuccess'
       summary: Проверка работоспособности сервера
-  /api/v1/metro-stations:
+  /api/v1/metroStations:
     get:
       parameters:
       - description: Authentication header

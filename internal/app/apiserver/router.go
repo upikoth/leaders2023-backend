@@ -38,15 +38,16 @@ func (s *ApiServer) initRoutes() {
 
 	authorized.GET("/api/v1/users", s.handler.V1.GetUsers)
 
-	authorized.POST("/api/v1/user", s.handler.V1.CreateUser)
 	authorized.GET("/api/v1/users/:id", s.handler.V1.GetUser)
-	authorized.DELETE("/api/v1/users/:id", s.handler.V1.DeleteUser)
+	authorized.POST("/api/v1/user", s.handler.V1.CreateUser)
 	authorized.PATCH("/api/v1/users/:id", s.handler.V1.PatchUser)
+	authorized.DELETE("/api/v1/users/:id", s.handler.V1.DeleteUser)
 
 	authorized.GET("/api/v1/metroStations", s.handler.V1.GetMetroStations)
 
 	authorized.GET("/api/v1/creativeSpaces", s.handler.V1.GetCreativeSpaces)
 
+	authorized.GET("/api/v1/creativeSpaces/:id", s.handler.V1.GetCreativeSpace)
 	authorized.POST("/api/v1/creativeSpace", s.handler.V1.CreateCreativeSpace)
 
 	s.router.NoRoute(func(c *gin.Context) {

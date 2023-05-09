@@ -12,7 +12,7 @@ import (
 // @Param        Authorization  header  string  true  "Authentication header"
 // @Success      200  {object}  model.ResponseSuccess{data=responses.getMetroStationsResponseData}
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
-// @Router       /api/v1/metro-stations [get].
+// @Router       /api/v1/metroStations [get].
 func (h *HandlerV1) GetMetroStations(c *gin.Context) {
 	metroStations, err := h.store.GetMetroStations()
 

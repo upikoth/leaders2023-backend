@@ -2,6 +2,22 @@ package requests
 
 import "github.com/gin-gonic/gin"
 
+type getCreativeSpaceRequestData struct {
+	Id int `json:"id" uri:"id" binding:"required"`
+}
+
+func GetCreativeSpaceDataFromRequest(c *gin.Context) (getCreativeSpaceRequestData, error) {
+	data := getCreativeSpaceRequestData{}
+
+	err := c.BindUri(&data)
+
+	if err != nil {
+		return getCreativeSpaceRequestData{}, err
+	}
+
+	return data, nil
+}
+
 type createCreativeSpaceRequestWorkingHours struct {
 	StartAt string `json:"startAt" binding:"required"`
 	EndAt   string `json:"endAt" binding:"required"`
