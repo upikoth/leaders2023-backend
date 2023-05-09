@@ -13,8 +13,10 @@ type createCreativeSpaceResponseCoordinate struct {
 }
 
 type createCreativeSpaceResponseMetroStation struct {
-	Id                int `json:"id"`
-	DistanceInMinutes int `json:"distanceInMinutes"`
+	Id                int    `json:"id"`
+	Name              string `json:"name"`
+	Color             string `json:"color"`
+	DistanceInMinutes int    `json:"distanceInMinutes"`
 }
 
 type getCreativeSpacesResponseCreativeSpace struct {
@@ -41,6 +43,8 @@ func GetCreativeSpacesResponseFromStoreData(creativeSpaces []store.CreativeSpace
 		for _, metroStation := range creativeSpace.MetroStations {
 			resMetroStations = append(resMetroStations, createCreativeSpaceResponseMetroStation{
 				Id:                metroStation.MetroStationId,
+				Name:              metroStation.MetroStation.Name,
+				Color:             metroStation.MetroStation.Color,
 				DistanceInMinutes: metroStation.DistanceInMinutes,
 			})
 		}
