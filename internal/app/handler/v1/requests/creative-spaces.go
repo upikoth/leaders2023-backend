@@ -21,7 +21,7 @@ type createCreativeSpaceRequestData struct {
 	Description   string                                   `json:"description" binding:"required"`
 	Photos        []string                                 `json:"photos" binding:"required"`
 	PricePerHour  int                                      `json:"pricePerHour" binding:"required"`
-	MetroStations []createCreativeSpaceRequestMetroStation `json:"metroStations" binding:"required"`
+	MetroStations []createCreativeSpaceRequestMetroStation `json:"metroStations"`
 	Coordinate    createCreativeSpaceRequestCoordinate     `json:"coordinate" binding:"required"`
 	WorkingHours  createCreativeSpaceRequestWorkingHours   `json:"workingHours" binding:"required"`
 }

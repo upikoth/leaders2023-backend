@@ -64,6 +64,52 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/api/v1/creative-spaces": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Возвращает список креативных площадок",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.ResponseSuccess"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.getCreativeSpacesResponseData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Коды ошибок: [1100]",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/health": {
             "get": {
                 "summary": "Проверка работоспособности сервера",
@@ -440,6 +486,9 @@ const docTemplate_swagger = `{
                 },
                 "description": {
                     "type": "string"
+                },
+                "details": {
+                    "type": "string"
                 }
             }
         },
@@ -576,6 +625,17 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "responses.createCreativeSpaceResponseCoordinate": {
+            "type": "object",
+            "properties": {
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
+                }
+            }
+        },
         "responses.createCreativeSpaceResponseCreativeSpace": {
             "type": "object",
             "properties": {
@@ -589,6 +649,28 @@ const docTemplate_swagger = `{
             "properties": {
                 "creativeSpace": {
                     "$ref": "#/definitions/responses.createCreativeSpaceResponseCreativeSpace"
+                }
+            }
+        },
+        "responses.createCreativeSpaceResponseMetroStation": {
+            "type": "object",
+            "properties": {
+                "distanceInMinutes": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "responses.createCreativeSpaceResponseWorkingHours": {
+            "type": "object",
+            "properties": {
+                "endAt": {
+                    "type": "string"
+                },
+                "startAt": {
+                    "type": "string"
                 }
             }
         },
@@ -624,6 +706,52 @@ const docTemplate_swagger = `{
             "properties": {
                 "id": {
                     "type": "integer"
+                }
+            }
+        },
+        "responses.getCreativeSpacesResponseCreativeSpace": {
+            "type": "object",
+            "properties": {
+                "coordinate": {
+                    "$ref": "#/definitions/responses.createCreativeSpaceResponseCoordinate"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "landlordId": {
+                    "type": "integer"
+                },
+                "metroStations": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.createCreativeSpaceResponseMetroStation"
+                    }
+                },
+                "photos": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "pricePerHour": {
+                    "type": "integer"
+                },
+                "workingHours": {
+                    "$ref": "#/definitions/responses.createCreativeSpaceResponseWorkingHours"
+                }
+            }
+        },
+        "responses.getCreativeSpacesResponseData": {
+            "type": "object",
+            "properties": {
+                "creativeSpaces": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.getCreativeSpacesResponseCreativeSpace"
+                    }
                 }
             }
         },

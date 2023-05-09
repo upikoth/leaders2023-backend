@@ -43,7 +43,9 @@ func (s *ApiServer) initRoutes() {
 	authorized.DELETE("/api/v1/users/:id", s.handler.V1.DeleteUser)
 	authorized.PATCH("/api/v1/users/:id", s.handler.V1.PatchUser)
 
-	authorized.GET("/api/v1/metro-stations", s.handler.V1.GetMetroStations)
+	authorized.GET("/api/v1/metroStations", s.handler.V1.GetMetroStations)
+
+	authorized.GET("/api/v1/creativeSpaces", s.handler.V1.GetCreativeSpaces)
 
 	authorized.POST("/api/v1/creativeSpace", s.handler.V1.CreateCreativeSpace)
 

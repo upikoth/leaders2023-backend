@@ -11,6 +11,27 @@ import (
 	"github.com/upikoth/leaders2023-backend/internal/app/store"
 )
 
+// GetCreativeSpaces godoc
+// @Summary      Возвращает список креативных площадок
+// @Accept       json
+// @Produce      json
+// @Param        Authorization  header  string  true  "Authentication header"
+// @Success      200  {object}  model.ResponseSuccess{data=responses.getCreativeSpacesResponseData}
+// @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
+// @Router       /api/v1/creative-spaces [get].
+func (h *HandlerV1) GetCreativeSpaces(c *gin.Context) {
+	creativeSpaces, err := h.store.GetCreativeSpaces()
+
+	if err != nil {
+		c.Set("responseErrorCode", constants.ErrCreativeSpacesGetDbError)
+		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	responseData := responses.GetCreativeSpacesResponseFromStoreData(creativeSpaces)
+	c.Set("responseData", responseData)
+}
+
 // CreateCreativeSpace godoc
 // @Summary      Создание креативной площадки
 // @Accept       json

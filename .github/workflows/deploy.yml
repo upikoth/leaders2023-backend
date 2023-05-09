@@ -70,6 +70,7 @@ jobs:
             echo ${{ secrets.UPIKOTH_PACKAGES_READ }} | docker login ghcr.io --username upikoth --password-stdin
             docker pull ghcr.io/upikoth/leaders2023-backend:main
             docker stop $(docker ps -f name=uniq-container-name-2 -a -q)
+            docker rm $(docker ps -f name=uniq-container-name-2 -a -q)
             docker run \
               --name uniq-container-name-2 \
               -d \
