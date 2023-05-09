@@ -32,7 +32,7 @@ func (h *HandlerV1) GetCreativeSpaces(c *gin.Context) {
 	c.Set("responseData", responseData)
 }
 
-// GetUser godoc
+// GetCreativeSpace godoc
 // @Summary      Возвращает информацию о пользователе
 // @Produce      json
 // @Param        id  path  string  true  "Id креативной площадки"
@@ -111,6 +111,55 @@ func (h *HandlerV1) CreateCreativeSpace(c *gin.Context) {
 
 	responseData := responses.CreateCreativeSpaceResponseFromStoreData(creativeSpaceId)
 	c.Set("responseData", responseData)
+}
+
+// PatchCreativeSpace godoc
+// @Summary      Обновление информации о креативном пространстве
+// @Accept       json
+// @Produce      json
+// @Param        id  path  string  true  "Id креативного пространства"
+// @Param        body body  requests.patchCreativeSpaceRequestData true "Параметры запроса"
+// @Success      200  {object}  model.ResponseSuccess
+// @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
+// @Router       /api/v1/creativeSpaces/:id [patch].
+func (h *HandlerV1) PatchCreativeSpace(c *gin.Context) {
+	reqData, err := requests.PatchCreativeSpaceDataFromRequest(c)
+
+	if err != nil {
+		c.Set("responseCode", http.StatusBadRequest)
+		c.Set("responseErrorCode", constants.ErrCreativeSpacePatchNotValidRequestData)
+		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	creativeSpace := store.CreativeSpace{
+		Id:                  reqData.Id,
+		Photos:              reqData.Photos,
+		PricePerHour:        reqData.PricePerHour,
+		Latitude:            reqData.Coordinate.Latitude,
+		Longitude:           reqData.Coordinate.Longitude,
+		WorkingHoursStartAt: reqData.WorkingHours.StartAt,
+		WorkingHoursEndAt:   reqData.WorkingHours.EndAt,
+		Description:         reqData.Description,
+	}
+
+	creativeSpaceMetroStations := []store.CreativeSpaceMetroStation{}
+
+	for _, station := range reqData.MetroStations {
+		creativeSpaceMetroStations = append(creativeSpaceMetroStations, store.CreativeSpaceMetroStation{
+			CreativeSpaceId:   creativeSpace.Id,
+			MetroStationId:    station.Id,
+			DistanceInMinutes: station.DistanceInMinutes,
+		})
+	}
+
+	storeErr := h.store.PatchCreativeSpace(creativeSpace, creativeSpaceMetroStations)
+
+	if storeErr != nil {
+		c.Set("responseErrorCode", constants.ErrCreativeSpacePatchDbError)
+		c.Set("responseErrorDetails", storeErr)
+		return
+	}
 }
 
 // DeleteCreativeSpace godoc

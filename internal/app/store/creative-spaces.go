@@ -119,6 +119,66 @@ func (s *Store) CreateCreativeSpace(
 	return creativeSpace.Id, nil
 }
 
+func (s *Store) PatchCreativeSpace(
+	creativeSpace CreativeSpace,
+	creativeSpaceMetroStations []CreativeSpaceMetroStation,
+) error {
+	count, err := s.db.
+		Model(&creativeSpace).
+		WherePK().
+		Count()
+
+	if err != nil {
+		return err
+	}
+
+	if count == 0 {
+		return constants.ErrCreativeSpacePatchNotFoundById
+	}
+
+	storeErr := s.db.RunInTransaction(context.Background(), func(tx *pg.Tx) error {
+		_, creativeSpaceUpdateErr := tx.
+			Model(&creativeSpace).
+			WherePK().
+			OnConflict("DO NOTHING").
+			UpdateNotZero()
+
+		if creativeSpaceUpdateErr != nil {
+			return creativeSpaceUpdateErr
+		}
+
+		_, creativeSpaceMetroStationsDeleteErr := tx.
+			Model(&CreativeSpaceMetroStation{}).
+			Where("creative_space_id = ?", creativeSpace.Id).
+			Delete()
+
+		if creativeSpaceMetroStationsDeleteErr != nil {
+			return creativeSpaceMetroStationsDeleteErr
+		}
+
+		if len(creativeSpaceMetroStations) == 0 {
+			return nil
+		}
+
+		_, creativeSpaceMetroStationsInsertErr := tx.
+			Model(&creativeSpaceMetroStations).
+			OnConflict("DO NOTHING").
+			Insert()
+
+		if creativeSpaceMetroStationsInsertErr != nil {
+			return creativeSpaceMetroStationsInsertErr
+		}
+
+		return nil
+	})
+
+	if storeErr != nil {
+		return storeErr
+	}
+
+	return nil
+}
+
 func (s *Store) DeleteCreativeSpace(id int) error {
 	creativeSpace := CreativeSpace{
 		Id: id,
@@ -129,7 +189,7 @@ func (s *Store) DeleteCreativeSpace(id int) error {
 	}
 
 	storeErr := s.db.RunInTransaction(context.Background(), func(tx *pg.Tx) error {
-		_, err := s.db.
+		_, err := tx.
 			Model(&creativeSpaceMetroStation).
 			Where("creative_space_id = ?", creativeSpaceMetroStation.CreativeSpaceId).
 			Delete()
@@ -138,7 +198,7 @@ func (s *Store) DeleteCreativeSpace(id int) error {
 			return err
 		}
 
-		result, err := s.db.
+		result, err := tx.
 			Model(&creativeSpace).
 			WherePK().
 			Delete()

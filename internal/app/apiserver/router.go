@@ -49,6 +49,7 @@ func (s *ApiServer) initRoutes() {
 
 	authorized.GET("/api/v1/creativeSpaces/:id", s.handler.V1.GetCreativeSpace)
 	authorized.POST("/api/v1/creativeSpace", s.handler.V1.CreateCreativeSpace)
+	authorized.PATCH("/api/v1/creativeSpaces/:id", s.handler.V1.PatchCreativeSpace)
 	authorized.DELETE("/api/v1/creativeSpaces/:id", s.handler.V1.DeleteCreativeSpace)
 
 	s.router.NoRoute(func(c *gin.Context) {

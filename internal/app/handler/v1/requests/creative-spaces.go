@@ -54,6 +54,74 @@ func CreateCreativeSpaceDataFromRequest(c *gin.Context) (createCreativeSpaceRequ
 	return data, nil
 }
 
+type patchCreativeSpaceRequestWorkingHours struct {
+	StartAt string `json:"startAt"`
+	EndAt   string `json:"endAt"`
+}
+
+type patchCreativeSpaceRequestCoordinate struct {
+	Latitude  float32 `json:"latitude"`
+	Longitude float32 `json:"longitude"`
+}
+
+type patchCreativeSpaceRequestMetroStation struct {
+	Id                int `json:"id"`
+	DistanceInMinutes int `json:"distanceInMinutes"`
+}
+
+type patchCreativeSpaceRequestUri struct {
+	Id int `json:"id" uri:"id" binding:"required"`
+}
+
+type patchCreativeSpaceRequestBody struct {
+	Description   string                                  `json:"description"`
+	Photos        []string                                `json:"photos"`
+	PricePerHour  int                                     `json:"pricePerHour"`
+	MetroStations []patchCreativeSpaceRequestMetroStation `json:"metroStations"`
+	Coordinate    patchCreativeSpaceRequestCoordinate     `json:"coordinate"`
+	WorkingHours  patchCreativeSpaceRequestWorkingHours   `json:"workingHours"`
+}
+
+type patchCreativeSpaceRequestData struct {
+	Id            int                                     `json:"id"`
+	Description   string                                  `json:"description"`
+	Photos        []string                                `json:"photos"`
+	PricePerHour  int                                     `json:"pricePerHour"`
+	MetroStations []patchCreativeSpaceRequestMetroStation `json:"metroStations"`
+	Coordinate    patchCreativeSpaceRequestCoordinate     `json:"coordinate"`
+	WorkingHours  patchCreativeSpaceRequestWorkingHours   `json:"workingHours"`
+}
+
+func PatchCreativeSpaceDataFromRequest(c *gin.Context) (patchCreativeSpaceRequestData, error) {
+	dataFromUri := patchCreativeSpaceRequestUri{}
+	dataFromBody := patchCreativeSpaceRequestBody{}
+
+	uriErr := c.BindUri(&dataFromUri)
+
+	if uriErr != nil {
+		return patchCreativeSpaceRequestData{}, uriErr
+	}
+
+	bodyErr := c.BindJSON(&dataFromBody)
+
+	if bodyErr != nil {
+		return patchCreativeSpaceRequestData{}, bodyErr
+	}
+
+	data := patchCreativeSpaceRequestData{}
+
+	data.Id = dataFromUri.Id
+
+	data.Description = dataFromBody.Description
+	data.Photos = dataFromBody.Photos
+	data.PricePerHour = dataFromBody.PricePerHour
+	data.MetroStations = dataFromBody.MetroStations
+	data.Coordinate = dataFromBody.Coordinate
+	data.WorkingHours = dataFromBody.WorkingHours
+
+	return data, nil
+}
+
 type deleteCreativeSpaceRequestData struct {
 	Id int `json:"id" uri:"id" binding:"required"`
 }

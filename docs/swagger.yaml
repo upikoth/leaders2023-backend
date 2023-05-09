@@ -98,6 +98,48 @@ definitions:
     - email
     - password
     type: object
+  requests.patchCreativeSpaceRequestCoordinate:
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+    type: object
+  requests.patchCreativeSpaceRequestData:
+    properties:
+      coordinate:
+        $ref: '#/definitions/requests.patchCreativeSpaceRequestCoordinate'
+      description:
+        type: string
+      id:
+        type: integer
+      metroStations:
+        items:
+          $ref: '#/definitions/requests.patchCreativeSpaceRequestMetroStation'
+        type: array
+      photos:
+        items:
+          type: string
+        type: array
+      pricePerHour:
+        type: integer
+      workingHours:
+        $ref: '#/definitions/requests.patchCreativeSpaceRequestWorkingHours'
+    type: object
+  requests.patchCreativeSpaceRequestMetroStation:
+    properties:
+      distanceInMinutes:
+        type: integer
+      id:
+        type: integer
+    type: object
+  requests.patchCreativeSpaceRequestWorkingHours:
+    properties:
+      endAt:
+        type: string
+      startAt:
+        type: string
+    type: object
   requests.patchUserRequestData:
     properties:
       email:
@@ -287,16 +329,6 @@ definitions:
       id:
         type: integer
     type: object
-  responses.patchUserResponseData:
-    properties:
-      user:
-        $ref: '#/definitions/responses.patchUserResponseUser'
-    type: object
-  responses.patchUserResponseUser:
-    properties:
-      id:
-        type: integer
-    type: object
 host: localhost:8080.
 info:
   contact: {}
@@ -403,6 +435,33 @@ paths:
           schema:
             $ref: '#/definitions/model.ResponseError'
       summary: Возвращает информацию о пользователе
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: Id креативного пространства
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Параметры запроса
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.patchCreativeSpaceRequestData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "403":
+          description: 'Коды ошибок: [1100]'
+          schema:
+            $ref: '#/definitions/model.ResponseError'
+      summary: Обновление информации о креативном пространстве
   /api/v1/health:
     get:
       responses:
@@ -604,12 +663,7 @@ paths:
         "200":
           description: OK
           schema:
-            allOf:
-            - $ref: '#/definitions/model.ResponseSuccess'
-            - properties:
-                data:
-                  $ref: '#/definitions/responses.patchUserResponseData'
-              type: object
+            $ref: '#/definitions/model.ResponseSuccess'
         "403":
           description: 'Коды ошибок: [1100]'
           schema:

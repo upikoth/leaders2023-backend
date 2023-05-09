@@ -48,6 +48,10 @@ var (
 	ErrCreativeSpaceDeleteNotValidRequestData = errors.New("2200")
 	ErrCreativeSpaceDeleteNotFoundById        = errors.New("2201")
 	ErrCreativeSpaceDeleteDbError             = errors.New("2202")
+
+	ErrCreativeSpacePatchNotValidRequestData = errors.New("2300")
+	ErrCreativeSpacePatchNotFoundById        = errors.New("2301")
+	ErrCreativeSpacePatchDbError             = errors.New("2302")
 )
 
 //nolint:gochecknoglobals // Пока добавил в игнор.
@@ -95,4 +99,8 @@ var ErrDescriptionByCode = map[error]string{
 	ErrCreativeSpaceDeleteNotValidRequestData: "Ошбика при валидации параметров запроса",
 	ErrCreativeSpaceDeleteNotFoundById:        "Креативное пространство с указанным id не найдено",
 	ErrCreativeSpaceDeleteDbError:             "Не удалось удалить информацию о креативной площадке",
+
+	ErrCreativeSpacePatchNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrCreativeSpacePatchNotFoundById:        "Креативное пространство с указанным id не найдено",
+	ErrCreativeSpacePatchDbError:             "Не удалось обновить информацию о креативной площадке",
 }

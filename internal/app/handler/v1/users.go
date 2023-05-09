@@ -93,7 +93,7 @@ func (h *HandlerV1) CreateUser(c *gin.Context) {
 		PasswordHash: string(hashedBytes),
 	}
 
-	createdUser, err := h.store.CreateUser(user)
+	createdUserId, err := h.store.CreateUser(user)
 
 	if err != nil {
 		c.Set("responseErrorCode", constants.ErrUserPostDbError)
@@ -101,7 +101,7 @@ func (h *HandlerV1) CreateUser(c *gin.Context) {
 		return
 	}
 
-	responseData := responses.CreateUserResponseFromStoreData(createdUser)
+	responseData := responses.CreateUserResponseFromStoreData(createdUserId)
 	c.Set("responseData", responseData)
 }
 
@@ -111,7 +111,7 @@ func (h *HandlerV1) CreateUser(c *gin.Context) {
 // @Produce      json
 // @Param        id  path  string  true  "Id пользователя"
 // @Param        body body  requests.patchUserRequestData true "Параметры запроса"
-// @Success      200  {object}  model.ResponseSuccess{data=responses.patchUserResponseData}
+// @Success      200  {object}  model.ResponseSuccess
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
 // @Router       /api/v1/users/:id [patch].
 func (h *HandlerV1) PatchUser(c *gin.Context) {
@@ -129,16 +129,13 @@ func (h *HandlerV1) PatchUser(c *gin.Context) {
 		Email: reqData.Email,
 	}
 
-	updatedUser, err := h.store.PatchUser(user)
+	storeErr := h.store.PatchUser(user)
 
-	if err != nil {
+	if storeErr != nil {
 		c.Set("responseErrorCode", constants.ErrUserPatchDbError)
-		c.Set("responseErrorDetails", err)
+		c.Set("responseErrorDetails", storeErr)
 		return
 	}
-
-	responseData := responses.PatchUserResponseFromStoreData(updatedUser)
-	c.Set("responseData", responseData)
 }
 
 // DeleteUser godoc

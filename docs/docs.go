@@ -183,6 +183,47 @@ const docTemplate_swagger = `{
                         }
                     }
                 }
+            },
+            "patch": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Обновление информации о креативном пространстве",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Id креативного пространства",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Параметры запроса",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.patchCreativeSpaceRequestData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseSuccess"
+                        }
+                    },
+                    "403": {
+                        "description": "Коды ошибок: [1100]",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseError"
+                        }
+                    }
+                }
             }
         },
         "/api/v1/health": {
@@ -515,19 +556,7 @@ const docTemplate_swagger = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.ResponseSuccess"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.patchUserResponseData"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/model.ResponseSuccess"
                         }
                     },
                     "403": {
@@ -684,6 +713,71 @@ const docTemplate_swagger = `{
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.patchCreativeSpaceRequestCoordinate": {
+            "type": "object",
+            "properties": {
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
+                }
+            }
+        },
+        "requests.patchCreativeSpaceRequestData": {
+            "type": "object",
+            "properties": {
+                "coordinate": {
+                    "$ref": "#/definitions/requests.patchCreativeSpaceRequestCoordinate"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "metroStations": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/requests.patchCreativeSpaceRequestMetroStation"
+                    }
+                },
+                "photos": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "pricePerHour": {
+                    "type": "integer"
+                },
+                "workingHours": {
+                    "$ref": "#/definitions/requests.patchCreativeSpaceRequestWorkingHours"
+                }
+            }
+        },
+        "requests.patchCreativeSpaceRequestMetroStation": {
+            "type": "object",
+            "properties": {
+                "distanceInMinutes": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "requests.patchCreativeSpaceRequestWorkingHours": {
+            "type": "object",
+            "properties": {
+                "endAt": {
+                    "type": "string"
+                },
+                "startAt": {
                     "type": "string"
                 }
             }
@@ -978,22 +1072,6 @@ const docTemplate_swagger = `{
                 "email": {
                     "type": "string"
                 },
-                "id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "responses.patchUserResponseData": {
-            "type": "object",
-            "properties": {
-                "user": {
-                    "$ref": "#/definitions/responses.patchUserResponseUser"
-                }
-            }
-        },
-        "responses.patchUserResponseUser": {
-            "type": "object",
-            "properties": {
                 "id": {
                     "type": "integer"
                 }

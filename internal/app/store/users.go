@@ -41,18 +41,18 @@ func (s *Store) GetUserById(id int) (User, error) {
 	return user, nil
 }
 
-func (s *Store) CreateUser(user User) (User, error) {
+func (s *Store) CreateUser(user User) (int, error) {
 	result, err := s.db.Model(&user).OnConflict("DO NOTHING").Insert()
 
 	if result.RowsAffected() == 0 {
-		return User{}, constants.ErrUserPostEmailExist
+		return 0, constants.ErrUserPostEmailExist
 	}
 
 	if err != nil {
-		return User{}, err
+		return 0, err
 	}
 
-	return user, nil
+	return user.Id, nil
 }
 
 func (s *Store) DeleteUser(id int) error {
@@ -73,28 +73,28 @@ func (s *Store) DeleteUser(id int) error {
 	return nil
 }
 
-func (s *Store) PatchUser(user User) (User, error) {
+func (s *Store) PatchUser(user User) error {
 	count, err := s.db.Model(&user).WherePK().Count()
 
 	if err != nil {
-		return User{}, err
+		return err
 	}
 
 	if count == 0 {
-		return User{}, constants.ErrUserPatchNotFoundById
+		return constants.ErrUserPatchNotFoundById
 	}
 
 	result, err := s.db.Model(&user).WherePK().OnConflict("DO NOTHING").UpdateNotZero()
 
 	if result == nil {
-		return User{}, constants.ErrUserPatchEmailExist
+		return constants.ErrUserPatchEmailExist
 	}
 
 	if err != nil {
-		return User{}, err
+		return err
 	}
 
-	return user, nil
+	return nil
 }
 
 func (s *Store) GetUserByEmail(email string) (User, error) {

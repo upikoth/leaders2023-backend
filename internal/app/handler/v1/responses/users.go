@@ -54,29 +54,11 @@ type createUserResponseData struct {
 	User createUserResponseUser `json:"user"`
 }
 
-func CreateUserResponseFromStoreData(user store.User) createUserResponseData {
+func CreateUserResponseFromStoreData(id int) createUserResponseData {
 	res := createUserResponseData{}
 
 	res.User = createUserResponseUser{
-		Id: user.Id,
-	}
-
-	return res
-}
-
-type patchUserResponseUser struct {
-	Id int `json:"id"`
-}
-
-type patchUserResponseData struct {
-	User patchUserResponseUser `json:"user"`
-}
-
-func PatchUserResponseFromStoreData(user store.User) patchUserResponseData {
-	res := patchUserResponseData{}
-
-	res.User = patchUserResponseUser{
-		Id: user.Id,
+		Id: id,
 	}
 
 	return res
