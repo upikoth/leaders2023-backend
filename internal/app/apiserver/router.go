@@ -115,7 +115,7 @@ func checkAuthorization(jwtSecret []byte) gin.HandlerFunc {
 		jwtToken, err := c.Cookie("Authorization")
 
 		if err != nil || jwtToken == "" {
-			c.Set("responseCode", http.StatusForbidden)
+			c.Set("responseCode", http.StatusUnauthorized)
 			c.Set("responseErrorCode", constants.ErrUserNotAuthorized)
 			c.Abort()
 			return
@@ -134,7 +134,7 @@ func checkAuthorization(jwtSecret []byte) gin.HandlerFunc {
 		claims, isClaimsValid := token.Claims.(*model.JwtTokenClaims)
 
 		if err != nil || !isClaimsValid || !token.Valid {
-			c.Set("responseCode", http.StatusForbidden)
+			c.Set("responseCode", http.StatusUnauthorized)
 			c.Set("responseErrorCode", constants.ErrUserNotAuthorized)
 			c.Abort()
 			return
