@@ -30,7 +30,7 @@ func (h *HandlerV1) CreateSession(c *gin.Context) {
 		return
 	}
 
-	user, err := h.store.GetUserByEmail(reqData.Email)
+	user, err := h.store.GetUserByPhone(reqData.Phone)
 
 	if err != nil {
 		c.Set("responseErrorCode", constants.ErrSessionPostUserNotExist)
@@ -45,7 +45,8 @@ func (h *HandlerV1) CreateSession(c *gin.Context) {
 	}
 
 	tokenUserData := model.JwtTokenUserData{
-		UserId: user.Id,
+		UserId:   user.Id,
+		UserRole: user.Role,
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
@@ -79,4 +80,23 @@ func (h *HandlerV1) DeleteSession(c *gin.Context) {
 // @Success      200  {object}  model.ResponseSuccess
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
 // @Router       /api/v1/session [get].
-func (h *HandlerV1) GetSession(_ *gin.Context) {}
+func (h *HandlerV1) GetSession(c *gin.Context) {
+	userData, isClaimsValid := c.MustGet("userData").(model.JwtTokenUserData)
+
+	if !isClaimsValid {
+		c.Set("responseCode", http.StatusBadRequest)
+		c.Set("responseErrorCode", constants.ErrSessionGetNotValidRequestData)
+		return
+	}
+
+	user, err := h.store.GetUserById(userData.UserId)
+
+	if err != nil {
+		c.Set("responseErrorCode", constants.ErrUserGetDbError)
+		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	responseData := responses.GetSessionResponseFromStoreData(user)
+	c.Set("responseData", responseData)
+}

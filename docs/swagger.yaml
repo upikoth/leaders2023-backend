@@ -80,23 +80,26 @@ definitions:
     type: object
   requests.createSessionRequestData:
     properties:
-      email:
-        type: string
       password:
         type: string
+      phone:
+        type: string
     required:
-    - email
     - password
+    - phone
     type: object
   requests.createUserRequestData:
     properties:
-      email:
-        type: string
       password:
         type: string
+      phone:
+        type: string
+      role:
+        type: string
     required:
-    - email
     - password
+    - phone
+    - role
     type: object
   requests.patchCreativeSpaceRequestCoordinate:
     properties:
@@ -142,10 +145,10 @@ definitions:
     type: object
   requests.patchUserRequestData:
     properties:
-      email:
-        type: string
       id:
         type: integer
+      phone:
+        type: string
     type: object
   responses.createCreativeSpaceResponseCreativeSpace:
     properties:
@@ -164,10 +167,12 @@ definitions:
     type: object
   responses.createSessionResponseUser:
     properties:
-      email:
-        type: string
       id:
         type: integer
+      phone:
+        type: string
+      role:
+        type: string
     type: object
   responses.createUserResponseData:
     properties:
@@ -310,10 +315,12 @@ definitions:
     type: object
   responses.getUserResponseUser:
     properties:
-      email:
-        type: string
       id:
         type: integer
+      phone:
+        type: string
+      role:
+        type: string
     type: object
   responses.getUsersResponseData:
     properties:
@@ -324,10 +331,12 @@ definitions:
     type: object
   responses.getUsersResponseUser:
     properties:
-      email:
-        type: string
       id:
         type: integer
+      phone:
+        type: string
+      role:
+        type: string
     type: object
 host: localhost:8080.
 info:

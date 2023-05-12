@@ -680,14 +680,14 @@
         "requests.createSessionRequestData": {
             "type": "object",
             "required": [
-                "email",
-                "password"
+                "password",
+                "phone"
             ],
             "properties": {
-                "email": {
+                "password": {
                     "type": "string"
                 },
-                "password": {
+                "phone": {
                     "type": "string"
                 }
             }
@@ -695,14 +695,18 @@
         "requests.createUserRequestData": {
             "type": "object",
             "required": [
-                "email",
-                "password"
+                "password",
+                "phone",
+                "role"
             ],
             "properties": {
-                "email": {
+                "password": {
                     "type": "string"
                 },
-                "password": {
+                "phone": {
+                    "type": "string"
+                },
+                "role": {
                     "type": "string"
                 }
             }
@@ -775,11 +779,11 @@
         "requests.patchUserRequestData": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "integer"
+                },
+                "phone": {
+                    "type": "string"
                 }
             }
         },
@@ -810,11 +814,14 @@
         "responses.createSessionResponseUser": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "integer"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
                 }
             }
         },
@@ -1037,11 +1044,14 @@
         "responses.getUserResponseUser": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "integer"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
                 }
             }
         },
@@ -1059,11 +1069,14 @@
         "responses.getUsersResponseUser": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "integer"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
                 }
             }
         }

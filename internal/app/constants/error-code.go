@@ -13,11 +13,11 @@ var (
 	ErrUserGetNotValidRequestData = errors.New("1300")
 	ErrUserGetNotFoundById        = errors.New("1301")
 	ErrUserGetDbError             = errors.New("1302")
-	ErrUserGetByEmailDbError      = errors.New("1303")
-	ErrUserGetByEmailUserNotExist = errors.New("1304")
+	ErrUserGetByPhoneDbError      = errors.New("1303")
+	ErrUserGetByPhoneUserNotExist = errors.New("1304")
 
 	ErrUserPostNotValidRequestData = errors.New("1400")
-	ErrUserPostEmailExist          = errors.New("1401")
+	ErrUserPostPhoneExist          = errors.New("1401")
 	ErrUserPostDbError             = errors.New("1402")
 	ErrUserPostCreateHash          = errors.New("1403")
 
@@ -26,7 +26,7 @@ var (
 	ErrUserDeleteDbError             = errors.New("1502")
 
 	ErrUserPatchNotValidRequestData = errors.New("1600")
-	ErrUserPatchEmailExist          = errors.New("1601")
+	ErrUserPatchPhoneExist          = errors.New("1601")
 	ErrUserPatchDbError             = errors.New("1602")
 	ErrUserPatchNotFoundById        = errors.New("1603")
 
@@ -52,6 +52,8 @@ var (
 	ErrCreativeSpacePatchNotValidRequestData = errors.New("2300")
 	ErrCreativeSpacePatchNotFoundById        = errors.New("2301")
 	ErrCreativeSpacePatchDbError             = errors.New("2302")
+
+	ErrSessionGetNotValidRequestData = errors.New("1400")
 )
 
 //nolint:gochecknoglobals // Пока добавил в игнор.
@@ -64,11 +66,11 @@ var ErrDescriptionByCode = map[error]string{
 	ErrUserGetNotValidRequestData: "Ошбика при валидации параметров запроса",
 	ErrUserGetNotFoundById:        "Пользователь с указанным id не найден",
 	ErrUserGetDbError:             "Не удалось получить информацию о пользователе",
-	ErrUserGetByEmailDbError:      "Не удалось получить информацию о пользователе",
-	ErrUserGetByEmailUserNotExist: "Пользователя с такими email не существует",
+	ErrUserGetByPhoneDbError:      "Не удалось получить информацию о пользователе",
+	ErrUserGetByPhoneUserNotExist: "Пользователя с такими телефоном не существует",
 
 	ErrUserPostNotValidRequestData: "Ошбика при валидации параметров запроса",
-	ErrUserPostEmailExist:          "Пользователь с переданным email уже существует",
+	ErrUserPostPhoneExist:          "Пользователь с переданным телефоном уже существует",
 	ErrUserPostDbError:             "Не удалось создать пользователя",
 	ErrUserPostCreateHash:          "Ошибка при создании пользователя",
 
@@ -77,12 +79,12 @@ var ErrDescriptionByCode = map[error]string{
 	ErrUserDeleteDbError:             "Не удалось удалить пользователя",
 
 	ErrUserPatchNotValidRequestData: "Ошбика при валидации параметров запроса",
-	ErrUserPatchEmailExist:          "Пользователь с переданным email уже существует",
+	ErrUserPatchPhoneExist:          "Пользователь с переданным телефоном уже существует",
 	ErrUserPatchDbError:             "Не удалось обновить пользователя",
 	ErrUserPatchNotFoundById:        "Пользователь с указанным id не найден",
 
 	ErrSessionPostNotValidRequestData: "Ошбика при валидации параметров запроса",
-	ErrSessionPostUserNotExist:        "Пользователя с такими email и пароль не существует",
+	ErrSessionPostUserNotExist:        "Пользователя с такими телефоном и паролем не существует",
 	ErrSessionPostCreateJwtToken:      "Ошибка при входе в систему, попробуйте позже",
 
 	ErrMetroStationsGetDbError: "Не удалось получить список станций метро",
@@ -103,4 +105,6 @@ var ErrDescriptionByCode = map[error]string{
 	ErrCreativeSpacePatchNotValidRequestData: "Ошбика при валидации параметров запроса",
 	ErrCreativeSpacePatchNotFoundById:        "Креативное пространство с указанным id не найдено",
 	ErrCreativeSpacePatchDbError:             "Не удалось обновить информацию о креативной площадке",
+
+	ErrSessionGetNotValidRequestData: "Ошбика при валидации параметров запроса",
 }

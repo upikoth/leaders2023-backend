@@ -2,6 +2,7 @@ package requests
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/upikoth/leaders2023-backend/internal/app/model"
 )
 
 type getUserRequestData struct {
@@ -21,8 +22,9 @@ func GetUserDataFromRequest(c *gin.Context) (getUserRequestData, error) {
 }
 
 type createUserRequestData struct {
-	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required"`
+	Phone    string     `json:"phone" binding:"required"`
+	Password string     `json:"password" binding:"required"`
+	Role     model.Role `json:"role" binding:"required"`
 }
 
 func CreateUserDataFromRequest(c *gin.Context) (createUserRequestData, error) {
@@ -42,12 +44,12 @@ type patchUserRequestUri struct {
 }
 
 type patchUserRequestBody struct {
-	Email string `json:"email,omitempty" binding:"email"`
+	Phone string `json:"phone,omitempty"`
 }
 
 type patchUserRequestData struct {
 	Id    int    `json:"id"`
-	Email string `json:"email,omitempty"`
+	Phone string `json:"phone,omitempty"`
 }
 
 func PatchUserDataFromRequest(c *gin.Context) (patchUserRequestData, error) {
@@ -68,7 +70,7 @@ func PatchUserDataFromRequest(c *gin.Context) (patchUserRequestData, error) {
 
 	data := patchUserRequestData{}
 	data.Id = dataFromUri.Id
-	data.Email = dataFromBody.Email
+	data.Phone = dataFromBody.Phone
 
 	return data, nil
 }

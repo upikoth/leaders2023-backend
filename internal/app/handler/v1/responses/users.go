@@ -1,10 +1,14 @@
 package responses
 
-import "github.com/upikoth/leaders2023-backend/internal/app/store"
+import (
+	"github.com/upikoth/leaders2023-backend/internal/app/model"
+	"github.com/upikoth/leaders2023-backend/internal/app/store"
+)
 
 type getUsersResponseUser struct {
-	Id    int    `json:"id"`
-	Email string `json:"email"`
+	Id    int        `json:"id"`
+	Phone string     `json:"phone"`
+	Role  model.Role `json:"role"`
 }
 
 type getUsersResponseData struct {
@@ -17,7 +21,8 @@ func GetUsersResponseFromStoreData(users []store.User) getUsersResponseData {
 	for _, user := range users {
 		resUser := getUsersResponseUser{
 			Id:    user.Id,
-			Email: user.Email,
+			Phone: user.Phone,
+			Role:  user.Role,
 		}
 
 		res.Users = append(res.Users, resUser)
@@ -27,8 +32,9 @@ func GetUsersResponseFromStoreData(users []store.User) getUsersResponseData {
 }
 
 type getUserResponseUser struct {
-	Id    int    `json:"id"`
-	Email string `json:"email"`
+	Id    int        `json:"id"`
+	Phone string     `json:"phone"`
+	Role  model.Role `json:"role"`
 }
 
 type getUserResponseData struct {
@@ -40,7 +46,8 @@ func GetUserResponseFromStoreData(user store.User) getUserResponseData {
 
 	res.User = getUserResponseUser{
 		Id:    user.Id,
-		Email: user.Email,
+		Phone: user.Phone,
+		Role:  user.Role,
 	}
 
 	return res

@@ -3,7 +3,7 @@ package requests
 import "github.com/gin-gonic/gin"
 
 type createSessionRequestData struct {
-	Email    string `json:"email" binding:"required,email"`
+	Phone    string `json:"phone" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
 

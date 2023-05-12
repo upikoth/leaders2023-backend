@@ -89,7 +89,8 @@ func (h *HandlerV1) CreateUser(c *gin.Context) {
 	}
 
 	user := store.User{
-		Email:        reqData.Email,
+		Phone:        reqData.Phone,
+		Role:         reqData.Role,
 		PasswordHash: string(hashedBytes),
 	}
 
@@ -126,7 +127,7 @@ func (h *HandlerV1) PatchUser(c *gin.Context) {
 
 	user := store.User{
 		Id:    reqData.Id,
-		Email: reqData.Email,
+		Phone: reqData.Phone,
 	}
 
 	storeErr := h.store.PatchUser(user)

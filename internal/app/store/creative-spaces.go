@@ -59,12 +59,12 @@ func (s *Store) GetCreativeSpaceById(id int) (CreativeSpace, error) {
 		}).
 		SelectAndCount()
 
-	if count == 0 {
-		return CreativeSpace{}, constants.ErrCreativeSpaceGetNotFoundById
-	}
-
 	if err != nil {
 		return CreativeSpace{}, err
+	}
+
+	if count == 0 {
+		return CreativeSpace{}, constants.ErrCreativeSpaceGetNotFoundById
 	}
 
 	return creativeSpace, nil
@@ -80,12 +80,12 @@ func (s *Store) CreateCreativeSpace(
 			OnConflict("DO NOTHING").
 			Insert()
 
-		if result.RowsAffected() == 0 {
-			return constants.ErrCreativeSpacePostDbError
-		}
-
 		if creativeSpaceErr != nil {
 			return creativeSpaceErr
+		}
+
+		if result.RowsAffected() == 0 {
+			return constants.ErrCreativeSpacePostDbError
 		}
 
 		if len(creativeSpaceMetroStations) == 0 {
@@ -101,12 +101,12 @@ func (s *Store) CreateCreativeSpace(
 			OnConflict("DO NOTHING").
 			Insert()
 
-		if result.RowsAffected() == 0 {
-			return constants.ErrCreativeSpacePostDbError
-		}
-
 		if creativeSpaceMetroStationErr != nil {
 			return creativeSpaceMetroStationErr
+		}
+
+		if result.RowsAffected() == 0 {
+			return constants.ErrCreativeSpacePostDbError
 		}
 
 		return nil
@@ -203,12 +203,12 @@ func (s *Store) DeleteCreativeSpace(id int) error {
 			WherePK().
 			Delete()
 
-		if result.RowsAffected() == 0 {
-			return constants.ErrCreativeSpaceDeleteNotFoundById
-		}
-
 		if err != nil {
 			return err
+		}
+
+		if result.RowsAffected() == 0 {
+			return constants.ErrCreativeSpaceDeleteNotFoundById
 		}
 
 		return nil

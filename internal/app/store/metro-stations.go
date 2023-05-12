@@ -10,7 +10,10 @@ type MetroStation struct {
 func (s *Store) GetMetroStations() ([]MetroStation, error) {
 	metroStations := []MetroStation{}
 
-	err := s.db.Model(&metroStations).Order("name").Select()
+	err := s.db.
+		Model(&metroStations).
+		Order("name").
+		Select()
 
 	if err != nil {
 		return nil, err

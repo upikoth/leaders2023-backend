@@ -690,14 +690,14 @@ const docTemplate_swagger = `{
         "requests.createSessionRequestData": {
             "type": "object",
             "required": [
-                "email",
-                "password"
+                "password",
+                "phone"
             ],
             "properties": {
-                "email": {
+                "password": {
                     "type": "string"
                 },
-                "password": {
+                "phone": {
                     "type": "string"
                 }
             }
@@ -705,14 +705,18 @@ const docTemplate_swagger = `{
         "requests.createUserRequestData": {
             "type": "object",
             "required": [
-                "email",
-                "password"
+                "password",
+                "phone",
+                "role"
             ],
             "properties": {
-                "email": {
+                "password": {
                     "type": "string"
                 },
-                "password": {
+                "phone": {
+                    "type": "string"
+                },
+                "role": {
                     "type": "string"
                 }
             }
@@ -785,11 +789,11 @@ const docTemplate_swagger = `{
         "requests.patchUserRequestData": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "integer"
+                },
+                "phone": {
+                    "type": "string"
                 }
             }
         },
@@ -820,11 +824,14 @@ const docTemplate_swagger = `{
         "responses.createSessionResponseUser": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "integer"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
                 }
             }
         },
@@ -1047,11 +1054,14 @@ const docTemplate_swagger = `{
         "responses.getUserResponseUser": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "integer"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
                 }
             }
         },
@@ -1069,11 +1079,14 @@ const docTemplate_swagger = `{
         "responses.getUsersResponseUser": {
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "integer"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
                 }
             }
         }
