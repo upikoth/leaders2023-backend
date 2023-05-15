@@ -10,6 +10,8 @@ import (
 type CreativeSpace struct {
 	tableName           struct{}                     `pg:"creative_spaces"` //nolint:unused // Имя таблицы
 	Id                  int                          `pg:"id"`
+	Title               string                       `pg:"title"`
+	Address             string                       `pg:"address"`
 	LandlordId          int                          `pg:"landlord_id"`
 	Photos              []string                     `pg:"photos,array"`
 	PricePerHour        int                          `pg:"price_per_hour"`

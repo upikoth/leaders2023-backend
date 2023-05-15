@@ -670,13 +670,18 @@ const docTemplate_swagger = `{
         "requests.createCreativeSpaceRequestData": {
             "type": "object",
             "required": [
+                "address",
                 "coordinate",
                 "description",
                 "photos",
                 "pricePerHour",
+                "title",
                 "workingHours"
             ],
             "properties": {
+                "address": {
+                    "type": "string"
+                },
                 "coordinate": {
                     "$ref": "#/definitions/requests.createCreativeSpaceRequestCoordinate"
                 },
@@ -697,6 +702,9 @@ const docTemplate_swagger = `{
                 },
                 "pricePerHour": {
                     "type": "integer"
+                },
+                "title": {
+                    "type": "string"
                 },
                 "workingHours": {
                     "$ref": "#/definitions/requests.createCreativeSpaceRequestWorkingHours"
@@ -781,6 +789,9 @@ const docTemplate_swagger = `{
         "requests.patchCreativeSpaceRequestData": {
             "type": "object",
             "properties": {
+                "address": {
+                    "type": "string"
+                },
                 "coordinate": {
                     "$ref": "#/definitions/requests.patchCreativeSpaceRequestCoordinate"
                 },
@@ -804,6 +815,9 @@ const docTemplate_swagger = `{
                 },
                 "pricePerHour": {
                     "type": "integer"
+                },
+                "title": {
+                    "type": "string"
                 },
                 "workingHours": {
                     "$ref": "#/definitions/requests.patchCreativeSpaceRequestWorkingHours"
@@ -936,6 +950,9 @@ const docTemplate_swagger = `{
         "responses.getCreativeSpaceResponseCreativeSpace": {
             "type": "object",
             "properties": {
+                "address": {
+                    "type": "string"
+                },
                 "coordinate": {
                     "$ref": "#/definitions/responses.getCreativeSpaceResponseCoordinate"
                 },
@@ -962,6 +979,9 @@ const docTemplate_swagger = `{
                 },
                 "pricePerHour": {
                     "type": "integer"
+                },
+                "title": {
+                    "type": "string"
                 },
                 "workingHours": {
                     "$ref": "#/definitions/responses.getCreativeSpaceResponseWorkingHours"
@@ -1018,6 +1038,9 @@ const docTemplate_swagger = `{
         "responses.getCreativeSpacesResponseCreativeSpace": {
             "type": "object",
             "properties": {
+                "address": {
+                    "type": "string"
+                },
                 "coordinate": {
                     "$ref": "#/definitions/responses.getCreativeSpacesResponseCoordinate"
                 },
@@ -1044,6 +1067,9 @@ const docTemplate_swagger = `{
                 },
                 "pricePerHour": {
                     "type": "integer"
+                },
+                "title": {
+                    "type": "string"
                 },
                 "workingHours": {
                     "$ref": "#/definitions/responses.getCreativeSpacesResponseWorkingHours"

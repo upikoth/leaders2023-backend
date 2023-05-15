@@ -660,13 +660,18 @@
         "requests.createCreativeSpaceRequestData": {
             "type": "object",
             "required": [
+                "address",
                 "coordinate",
                 "description",
                 "photos",
                 "pricePerHour",
+                "title",
                 "workingHours"
             ],
             "properties": {
+                "address": {
+                    "type": "string"
+                },
                 "coordinate": {
                     "$ref": "#/definitions/requests.createCreativeSpaceRequestCoordinate"
                 },
@@ -687,6 +692,9 @@
                 },
                 "pricePerHour": {
                     "type": "integer"
+                },
+                "title": {
+                    "type": "string"
                 },
                 "workingHours": {
                     "$ref": "#/definitions/requests.createCreativeSpaceRequestWorkingHours"
@@ -771,6 +779,9 @@
         "requests.patchCreativeSpaceRequestData": {
             "type": "object",
             "properties": {
+                "address": {
+                    "type": "string"
+                },
                 "coordinate": {
                     "$ref": "#/definitions/requests.patchCreativeSpaceRequestCoordinate"
                 },
@@ -794,6 +805,9 @@
                 },
                 "pricePerHour": {
                     "type": "integer"
+                },
+                "title": {
+                    "type": "string"
                 },
                 "workingHours": {
                     "$ref": "#/definitions/requests.patchCreativeSpaceRequestWorkingHours"
@@ -926,6 +940,9 @@
         "responses.getCreativeSpaceResponseCreativeSpace": {
             "type": "object",
             "properties": {
+                "address": {
+                    "type": "string"
+                },
                 "coordinate": {
                     "$ref": "#/definitions/responses.getCreativeSpaceResponseCoordinate"
                 },
@@ -952,6 +969,9 @@
                 },
                 "pricePerHour": {
                     "type": "integer"
+                },
+                "title": {
+                    "type": "string"
                 },
                 "workingHours": {
                     "$ref": "#/definitions/responses.getCreativeSpaceResponseWorkingHours"
@@ -1008,6 +1028,9 @@
         "responses.getCreativeSpacesResponseCreativeSpace": {
             "type": "object",
             "properties": {
+                "address": {
+                    "type": "string"
+                },
                 "coordinate": {
                     "$ref": "#/definitions/responses.getCreativeSpacesResponseCoordinate"
                 },
@@ -1034,6 +1057,9 @@
                 },
                 "pricePerHour": {
                     "type": "integer"
+                },
+                "title": {
+                    "type": "string"
                 },
                 "workingHours": {
                     "$ref": "#/definitions/responses.getCreativeSpacesResponseWorkingHours"

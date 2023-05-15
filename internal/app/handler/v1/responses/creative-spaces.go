@@ -21,6 +21,8 @@ type getCreativeSpacesResponseMetroStation struct {
 
 type getCreativeSpacesResponseCreativeSpace struct {
 	Id            int                                     `json:"id"`
+	Title         string                                  `json:"title"`
+	Address       string                                  `json:"address"`
 	LandlordId    int                                     `json:"landlordId"`
 	Description   string                                  `json:"description"`
 	Photos        []string                                `json:"photos"`
@@ -51,6 +53,8 @@ func GetCreativeSpacesResponseFromStoreData(creativeSpaces []store.CreativeSpace
 
 		res.CreativeSpaces = append(res.CreativeSpaces, getCreativeSpacesResponseCreativeSpace{
 			Id:           creativeSpace.Id,
+			Title:        creativeSpace.Title,
+			Address:      creativeSpace.Address,
 			LandlordId:   creativeSpace.LandlordId,
 			Description:  creativeSpace.Description,
 			Photos:       creativeSpace.Photos,
@@ -89,6 +93,8 @@ type getCreativeSpaceResponseMetroStation struct {
 
 type getCreativeSpaceResponseCreativeSpace struct {
 	Id            int                                    `json:"id"`
+	Title         string                                 `json:"title"`
+	Address       string                                 `json:"address"`
 	LandlordId    int                                    `json:"landlordId"`
 	Description   string                                 `json:"description"`
 	Photos        []string                               `json:"photos"`
@@ -117,6 +123,8 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 
 	res.CreativeSpace = getCreativeSpaceResponseCreativeSpace{
 		Id:           creativeSpace.Id,
+		Title:        creativeSpace.Title,
+		Address:      creativeSpace.Address,
 		LandlordId:   creativeSpace.LandlordId,
 		Description:  creativeSpace.Description,
 		Photos:       creativeSpace.Photos,

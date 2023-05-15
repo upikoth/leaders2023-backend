@@ -34,6 +34,8 @@ type createCreativeSpaceRequestMetroStation struct {
 }
 
 type createCreativeSpaceRequestData struct {
+	Title         string                                   `json:"title" binding:"required"`
+	Address       string                                   `json:"address" binding:"required"`
 	Description   string                                   `json:"description" binding:"required"`
 	Photos        []string                                 `json:"photos" binding:"required"`
 	PricePerHour  int                                      `json:"pricePerHour" binding:"required"`
@@ -74,6 +76,8 @@ type patchCreativeSpaceRequestUri struct {
 }
 
 type patchCreativeSpaceRequestBody struct {
+	Title         string                                  `json:"title"`
+	Address       string                                  `json:"address"`
 	Description   string                                  `json:"description"`
 	Photos        []string                                `json:"photos"`
 	PricePerHour  int                                     `json:"pricePerHour"`
@@ -84,6 +88,8 @@ type patchCreativeSpaceRequestBody struct {
 
 type patchCreativeSpaceRequestData struct {
 	Id            int                                     `json:"id"`
+	Title         string                                  `json:"title"`
+	Address       string                                  `json:"address"`
 	Description   string                                  `json:"description"`
 	Photos        []string                                `json:"photos"`
 	PricePerHour  int                                     `json:"pricePerHour"`
@@ -112,6 +118,8 @@ func PatchCreativeSpaceDataFromRequest(c *gin.Context) (patchCreativeSpaceReques
 
 	data.Id = dataFromUri.Id
 
+	data.Title = dataFromBody.Title
+	data.Address = dataFromBody.Address
 	data.Description = dataFromBody.Description
 	data.Photos = dataFromBody.Photos
 	data.PricePerHour = dataFromBody.PricePerHour

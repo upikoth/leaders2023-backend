@@ -82,6 +82,8 @@ func (h *HandlerV1) CreateCreativeSpace(c *gin.Context) {
 
 	creativeSpace := store.CreativeSpace{
 		LandlordId:          userData.UserId,
+		Title:               reqData.Title,
+		Address:             reqData.Address,
 		Photos:              reqData.Photos,
 		PricePerHour:        reqData.PricePerHour,
 		Latitude:            reqData.Coordinate.Latitude,
@@ -134,6 +136,8 @@ func (h *HandlerV1) PatchCreativeSpace(c *gin.Context) {
 
 	creativeSpace := store.CreativeSpace{
 		Id:                  reqData.Id,
+		Title:               reqData.Title,
+		Address:             reqData.Address,
 		Photos:              reqData.Photos,
 		PricePerHour:        reqData.PricePerHour,
 		Latitude:            reqData.Coordinate.Latitude,
