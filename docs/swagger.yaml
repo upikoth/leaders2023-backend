@@ -184,6 +184,22 @@ definitions:
       id:
         type: integer
     type: object
+  responses.getAddressesResponseData:
+    properties:
+      addresses:
+        items:
+          $ref: '#/definitions/responses.getAddressesResponseUser'
+        type: array
+    type: object
+  responses.getAddressesResponseUser:
+    properties:
+      latitude:
+        type: string
+      longitude:
+        type: string
+      value:
+        type: string
+    type: object
   responses.getCreativeSpaceResponseCoordinate:
     properties:
       latitude:
@@ -343,6 +359,33 @@ info:
   contact: {}
   title: Starter API
 paths:
+  /api/v1/addresses:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.ResponseSuccess'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.getAddressesResponseData'
+              type: object
+        "403":
+          description: 'Коды ошибок: [1100]'
+          schema:
+            $ref: '#/definitions/model.ResponseError'
+      summary: Возвращает список пользователей
   /api/v1/creativeSpace:
     post:
       consumes:

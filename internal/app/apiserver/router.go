@@ -52,6 +52,8 @@ func (s *ApiServer) initRoutes() {
 	authorized.PATCH("/api/v1/creativeSpaces/:id", s.handler.V1.PatchCreativeSpace)
 	authorized.DELETE("/api/v1/creativeSpaces/:id", s.handler.V1.DeleteCreativeSpace)
 
+	authorized.GET("/api/v1/addresses", s.handler.V1.GetAddresses)
+
 	s.router.NoRoute(func(c *gin.Context) {
 		c.Set("responseCode", http.StatusNotFound)
 		c.Set("responseErrorCode", constants.ErrRouteNotFound)

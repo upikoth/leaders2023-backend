@@ -6,6 +6,52 @@
     },
     "host": "localhost:8080.",
     "paths": {
+        "/api/v1/addresses": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Возвращает список пользователей",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.ResponseSuccess"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.getAddressesResponseData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Коды ошибок: [1100]",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/creativeSpace": {
             "post": {
                 "consumes": [
@@ -838,6 +884,31 @@
             "properties": {
                 "id": {
                     "type": "integer"
+                }
+            }
+        },
+        "responses.getAddressesResponseData": {
+            "type": "object",
+            "properties": {
+                "addresses": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.getAddressesResponseUser"
+                    }
+                }
+            }
+        },
+        "responses.getAddressesResponseUser": {
+            "type": "object",
+            "properties": {
+                "latitude": {
+                    "type": "string"
+                },
+                "longitude": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
                 }
             }
         },

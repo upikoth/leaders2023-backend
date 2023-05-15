@@ -54,6 +54,9 @@ var (
 	ErrCreativeSpacePatchDbError             = errors.New("2302")
 
 	ErrSessionGetNotValidRequestData = errors.New("1400")
+
+	ErrAddressesGetNotValidRequestData = errors.New("1500")
+	ErrAddressesGetDadataError         = errors.New("1501")
 )
 
 //nolint:gochecknoglobals // Пока добавил в игнор.
@@ -107,4 +110,7 @@ var ErrDescriptionByCode = map[error]string{
 	ErrCreativeSpacePatchDbError:             "Не удалось обновить информацию о креативной площадке",
 
 	ErrSessionGetNotValidRequestData: "Ошбика при валидации параметров запроса",
+
+	ErrAddressesGetNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrAddressesGetDadataError:         "Не удалось получить список адресов",
 }
