@@ -15,3 +15,6 @@ SET address = '';
 
 ALTER TABLE creative_spaces
 ALTER COLUMN address SET NOT NULL;
+
+ALTER TABLE creative_spaces
+ALTER COLUMN photos type text[];
