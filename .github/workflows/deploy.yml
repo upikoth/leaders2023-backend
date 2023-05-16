@@ -81,5 +81,7 @@ jobs:
               --env DATABASE_USER=${{ secrets.DATABASE_USER }} \
               --env DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
               --env JWT_SECRET=${{ secrets.JWT_SECRET }} \
+              --env DADATA_API_KEY=${{ secrets.DADATA_API_KEY }} \
+              --env DADATA_SECRET_KEY=${{ secrets.DADATA_SECRET_KEY }} \
               ghcr.io/upikoth/leaders2023-backend:main
             docker system prune -f
