@@ -34,7 +34,7 @@ func (s *ApiServer) initRoutes() {
 	authorized := s.router.Use(checkAuthorization(s.config.JwtSecret))
 
 	authorized.GET("/api/v1/session", s.handler.V1.GetSession)
-	authorized.DELETE("/api/v1/session", s.handler.V1.GetSession)
+	authorized.DELETE("/api/v1/session", s.handler.V1.DeleteSession)
 
 	authorized.GET("/api/v1/users", s.handler.V1.GetUsers)
 
