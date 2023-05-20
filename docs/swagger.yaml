@@ -107,6 +107,13 @@ definitions:
     - phone
     - role
     type: object
+  requests.deleteFileRequestData:
+    properties:
+      fileName:
+        type: string
+    required:
+    - fileName
+    type: object
   requests.patchCreativeSpaceRequestCoordinate:
     properties:
       latitude:
@@ -569,6 +576,32 @@ paths:
           schema:
             $ref: '#/definitions/model.ResponseError'
       summary: Возвращает ссылку на файл
+  /api/v1/files/:fileName:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Параметры запроса
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.deleteFileRequestData'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "403":
+          description: 'Коды ошибок: [1100]'
+          schema:
+            $ref: '#/definitions/model.ResponseError'
+      summary: Удаляет файл из s3
   /api/v1/health:
     get:
       responses:

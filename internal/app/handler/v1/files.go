@@ -22,7 +22,7 @@ import (
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
 // @Router       /api/v1/file [post].
 func (h *HandlerV1) CreateFile(c *gin.Context) {
-	reqData, err := requests.CreateFilesDataFromRequest(c)
+	reqData, err := requests.CreateFileDataFromRequest(c)
 
 	if err != nil {
 		c.Set("responseErrorCode", constants.ErrFilePostNotValidRequestData)
@@ -59,4 +59,33 @@ func (h *HandlerV1) CreateFile(c *gin.Context) {
 
 	responseData := responses.CreateFileResponseFromFileKey(fileKey)
 	c.Set("responseData", responseData)
+}
+
+// DeleteFile godoc
+// @Summary      Удаляет файл из s3
+// @Accept       json
+// @Param        Authorization  header  string  true  "Authentication header"
+// @Param        body body  requests.deleteFileRequestData true "Параметры запроса"
+// @Success      200  {object}  model.ResponseSuccess
+// @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
+// @Router       /api/v1/files/:fileName [delete].
+func (h *HandlerV1) DeleteFile(c *gin.Context) {
+	reqData, err := requests.DeleteFileDataFromRequest(c)
+
+	if err != nil {
+		c.Set("responseErrorCode", constants.ErrFileDeleteNotValidRequestData)
+		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	_, s3Error := h.s3.DeleteObject(&s3.DeleteObjectInput{
+		Bucket: aws.String(constants.FilesBucketName),
+		Key:    aws.String(reqData.FileName),
+	})
+
+	if s3Error != nil {
+		c.Set("responseErrorCode", constants.ErrFileDeleteS3Error)
+		c.Set("responseErrorDetails", s3Error)
+		return
+	}
 }

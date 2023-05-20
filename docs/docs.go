@@ -318,6 +318,46 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/api/v1/files/:fileName": {
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "Удаляет файл из s3",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Параметры запроса",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.deleteFileRequestData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseSuccess"
+                        }
+                    },
+                    "403": {
+                        "description": "Коды ошибок: [1100]",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/health": {
             "get": {
                 "summary": "Проверка работоспособности сервера",
@@ -817,6 +857,17 @@ const docTemplate_swagger = `{
                     "type": "string"
                 },
                 "role": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.deleteFileRequestData": {
+            "type": "object",
+            "required": [
+                "fileName"
+            ],
+            "properties": {
+                "fileName": {
                     "type": "string"
                 }
             }

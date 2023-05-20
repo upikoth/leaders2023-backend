@@ -55,6 +55,7 @@ func (s *ApiServer) initRoutes() {
 	authorized.GET("/api/v1/addresses", s.handler.V1.GetAddresses)
 
 	authorized.POST("/api/v1/file", s.handler.V1.CreateFile)
+	authorized.DELETE("/api/v1/files/:fileName", s.handler.V1.DeleteFile)
 
 	s.router.NoRoute(func(c *gin.Context) {
 		c.Set("responseCode", http.StatusNotFound)
