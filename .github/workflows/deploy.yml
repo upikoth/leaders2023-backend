@@ -83,5 +83,10 @@ jobs:
               --env JWT_SECRET=${{ secrets.JWT_SECRET }} \
               --env DADATA_API_KEY=${{ secrets.DADATA_API_KEY }} \
               --env DADATA_SECRET_KEY=${{ secrets.DADATA_SECRET_KEY }} \
+              --env S3_REGION=${{ vars.S3_REGION }} \
+              --env S3_ENDPOINT=${{ vars.S3_ENDPOINT }} \
+              --env S3_ACCESS_KEY_ID=${{ secrets.S3_ACCESS_KEY_ID }} \
+              --env S3_SECRET_ACCESS_KEY=${{ secrets.S3_SECRET_ACCESS_KEY }} \
+              --env S3_ACCESS_DOMAIN_NAME=${{ vars.S3_ACCESS_DOMAIN_NAME }} \
               ghcr.io/upikoth/leaders2023-backend:main
             docker system prune -f
