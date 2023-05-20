@@ -57,6 +57,10 @@ var (
 
 	ErrAddressesGetNotValidRequestData = errors.New("1500")
 	ErrAddressesGetDadataError         = errors.New("1501")
+
+	ErrFilePostNotValidRequestData = errors.New("1600")
+	ErrFilePostOpenFileError       = errors.New("1601")
+	ErrFilePostS3Error             = errors.New("1602")
 )
 
 //nolint:gochecknoglobals // Пока добавил в игнор.
@@ -113,4 +117,8 @@ var ErrDescriptionByCode = map[error]string{
 
 	ErrAddressesGetNotValidRequestData: "Ошбика при валидации параметров запроса",
 	ErrAddressesGetDadataError:         "Не удалось получить список адресов",
+
+	ErrFilePostNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrFilePostOpenFileError:       "Не удалось открыть фалй",
+	ErrFilePostS3Error:             "Не удалось отправить файл на s3",
 }

@@ -272,6 +272,52 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/api/v1/file": {
+            "post": {
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Возвращает ссылку на файл",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.ResponseSuccess"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.createFileStationsResponseData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Коды ошибок: [1100]",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/health": {
             "get": {
                 "summary": "Проверка работоспособности сервера",
@@ -870,6 +916,22 @@ const docTemplate_swagger = `{
             "properties": {
                 "creativeSpace": {
                     "$ref": "#/definitions/responses.createCreativeSpaceResponseCreativeSpace"
+                }
+            }
+        },
+        "responses.createFileResponseFile": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.createFileStationsResponseData": {
+            "type": "object",
+            "properties": {
+                "file": {
+                    "$ref": "#/definitions/responses.createFileResponseFile"
                 }
             }
         },

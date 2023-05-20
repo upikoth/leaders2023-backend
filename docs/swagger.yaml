@@ -170,6 +170,16 @@ definitions:
       creativeSpace:
         $ref: '#/definitions/responses.createCreativeSpaceResponseCreativeSpace'
     type: object
+  responses.createFileResponseFile:
+    properties:
+      name:
+        type: string
+    type: object
+  responses.createFileStationsResponseData:
+    properties:
+      file:
+        $ref: '#/definitions/responses.createFileResponseFile'
+    type: object
   responses.createSessionResponseData:
     properties:
       user:
@@ -532,6 +542,33 @@ paths:
           schema:
             $ref: '#/definitions/model.ResponseError'
       summary: Обновление информации о креативном пространстве
+  /api/v1/file:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.ResponseSuccess'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.createFileStationsResponseData'
+              type: object
+        "403":
+          description: 'Коды ошибок: [1100]'
+          schema:
+            $ref: '#/definitions/model.ResponseError'
+      summary: Возвращает ссылку на файл
   /api/v1/health:
     get:
       responses:

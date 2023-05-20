@@ -53,7 +53,7 @@ func (h *HandlerV1) CreateSession(c *gin.Context) {
 		"userData": tokenUserData,
 	})
 
-	jwtToken, err := token.SignedString(h.jwtSecret)
+	jwtToken, err := token.SignedString(h.env.JwtSecret)
 
 	if err != nil {
 		c.Set("responseErrorCode", constants.ErrSessionPostCreateJwtToken)
