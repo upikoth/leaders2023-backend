@@ -48,6 +48,7 @@ var (
 	ErrCreativeSpaceDeleteNotValidRequestData = errors.New("2200")
 	ErrCreativeSpaceDeleteNotFoundById        = errors.New("2201")
 	ErrCreativeSpaceDeleteDbError             = errors.New("2202")
+	ErrCreativeSpaceDeleteS3Error             = errors.New("2203")
 
 	ErrCreativeSpacePatchNotValidRequestData = errors.New("2300")
 	ErrCreativeSpacePatchNotFoundById        = errors.New("2301")
@@ -111,6 +112,7 @@ var ErrDescriptionByCode = map[error]string{
 	ErrCreativeSpaceDeleteNotValidRequestData: "Ошбика при валидации параметров запроса",
 	ErrCreativeSpaceDeleteNotFoundById:        "Креативное пространство с указанным id не найдено",
 	ErrCreativeSpaceDeleteDbError:             "Не удалось удалить информацию о креативной площадке",
+	ErrCreativeSpaceDeleteS3Error:             "Не удалось удалить фотографии из s3",
 
 	ErrCreativeSpacePatchNotValidRequestData: "Ошбика при валидации параметров запроса",
 	ErrCreativeSpacePatchNotFoundById:        "Креативное пространство с указанным id не найдено",

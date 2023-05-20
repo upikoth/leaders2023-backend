@@ -3,6 +3,8 @@ package v1
 import (
 	"net/http"
 
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/gin-gonic/gin"
 	"github.com/upikoth/leaders2023-backend/internal/app/constants"
 	"github.com/upikoth/leaders2023-backend/internal/app/handler/v1/requests"
@@ -181,6 +183,35 @@ func (h *HandlerV1) DeleteCreativeSpace(c *gin.Context) {
 		c.Set("responseCode", http.StatusBadRequest)
 		c.Set("responseErrorCode", constants.ErrCreativeSpaceDeleteNotValidRequestData)
 		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	creativeSpaceToDelete, err := h.store.GetCreativeSpaceById(reqData.Id)
+
+	if err != nil {
+		c.Set("responseErrorCode", constants.ErrCreativeSpaceDeleteDbError)
+		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	photos := []*s3.ObjectIdentifier{}
+
+	for _, photo := range creativeSpaceToDelete.Photos {
+		photos = append(photos, &s3.ObjectIdentifier{
+			Key: aws.String(photo),
+		})
+	}
+
+	_, s3Error := h.s3.DeleteObjects(&s3.DeleteObjectsInput{
+		Bucket: aws.String(constants.FilesBucketName),
+		Delete: &s3.Delete{
+			Objects: photos,
+		},
+	})
+
+	if s3Error != nil {
+		c.Set("responseErrorCode", constants.ErrCreativeSpaceDeleteS3Error)
+		c.Set("responseErrorDetails", s3Error)
 		return
 	}
 
