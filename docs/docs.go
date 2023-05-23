@@ -62,6 +62,52 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/api/v1/calendar/convert": {
+            "post": {
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Возвращает события календаря",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.ResponseSuccess"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.convertCaledarResponseData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Коды ошибок: [1100]",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/creativeSpace": {
             "post": {
                 "consumes": [
@@ -950,6 +996,28 @@ const docTemplate_swagger = `{
                     "type": "integer"
                 },
                 "phone": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.convertCaledarResponseData": {
+            "type": "object",
+            "properties": {
+                "events": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.convertCaledarResponseEvent"
+                    }
+                }
+            }
+        },
+        "responses.convertCaledarResponseEvent": {
+            "type": "object",
+            "properties": {
+                "endAt": {
+                    "type": "string"
+                },
+                "startAt": {
                     "type": "string"
                 }
             }

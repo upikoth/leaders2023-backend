@@ -167,6 +167,20 @@ definitions:
       phone:
         type: string
     type: object
+  responses.convertCaledarResponseData:
+    properties:
+      events:
+        items:
+          $ref: '#/definitions/responses.convertCaledarResponseEvent'
+        type: array
+    type: object
+  responses.convertCaledarResponseEvent:
+    properties:
+      endAt:
+        type: string
+      startAt:
+        type: string
+    type: object
   responses.createCreativeSpaceResponseCreativeSpace:
     properties:
       id:
@@ -421,6 +435,33 @@ paths:
           schema:
             $ref: '#/definitions/model.ResponseError'
       summary: Возвращает список пользователей
+  /api/v1/calendar/convert:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.ResponseSuccess'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.convertCaledarResponseData'
+              type: object
+        "403":
+          description: 'Коды ошибок: [1100]'
+          schema:
+            $ref: '#/definitions/model.ResponseError'
+      summary: Возвращает события календаря
   /api/v1/creativeSpace:
     post:
       consumes:
