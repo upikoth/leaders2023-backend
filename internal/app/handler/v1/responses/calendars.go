@@ -1,14 +1,12 @@
 package responses
 
 import (
-	"time"
-
 	ical "github.com/arran4/golang-ical"
+	"github.com/upikoth/leaders2023-backend/internal/app/constants"
 )
 
 type convertCaledarResponseEvent struct {
-	StartAt string `json:"startAt"`
-	EndAt   string `json:"endAt"`
+	Date string `json:"date"`
 }
 
 type convertCaledarResponseData struct {
@@ -22,10 +20,13 @@ func ConvertCalendarResponseFromCalendarEvents(events []*ical.VEvent) convertCal
 		startAt, _ := event.GetStartAt()
 		endAt, _ := event.GetEndAt()
 
-		res.Events = append(res.Events, convertCaledarResponseEvent{
-			StartAt: startAt.UTC().Format(time.RFC1123),
-			EndAt:   endAt.UTC().Format(time.RFC1123),
-		})
+		for startAt.Before(endAt) {
+			res.Events = append(res.Events, convertCaledarResponseEvent{
+				Date: startAt.Format(constants.DateLayout),
+			})
+
+			startAt = startAt.Add(constants.Day)
+		}
 	}
 
 	return res
