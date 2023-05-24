@@ -31,3 +31,30 @@ func ConvertCalendarResponseFromCalendarEvents(events []*ical.VEvent) convertCal
 
 	return res
 }
+
+type convertCaledarFromLinkResponseEvent struct {
+	Date string `json:"date"`
+}
+
+type convertCaledarFromLinkResponseData struct {
+	Events []convertCaledarFromLinkResponseEvent `json:"events"`
+}
+
+func ConvertCalendarFromLinkResponseFromCalendarEvents(events []*ical.VEvent) convertCaledarFromLinkResponseData {
+	res := convertCaledarFromLinkResponseData{}
+
+	for _, event := range events {
+		startAt, _ := event.GetStartAt()
+		endAt, _ := event.GetEndAt()
+
+		for startAt.Before(endAt) {
+			res.Events = append(res.Events, convertCaledarFromLinkResponseEvent{
+				Date: startAt.Format(constants.DateLayout),
+			})
+
+			startAt = startAt.Add(constants.Day)
+		}
+	}
+
+	return res
+}

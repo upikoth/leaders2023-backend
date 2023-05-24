@@ -67,6 +67,8 @@ var (
 	ErrFileDeleteS3Error             = errors.New("1701")
 
 	ErrCalendarConvertNotValidRequestData = errors.New("1800")
+
+	ErrCalendarConvertFromLinkNotValidRequestData = errors.New("1900")
 )
 
 //nolint:gochecknoglobals // Пока добавил в игнор.
@@ -133,4 +135,6 @@ var ErrDescriptionByCode = map[error]string{
 	ErrFileDeleteS3Error:             "Не удалось удалить файл из s3",
 
 	ErrCalendarConvertNotValidRequestData: "Ошбика при валидации параметров запроса",
+
+	ErrCalendarConvertFromLinkNotValidRequestData: "Ошбика при валидации параметров запроса",
 }

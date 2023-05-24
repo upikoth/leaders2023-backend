@@ -58,6 +58,7 @@ func (s *ApiServer) initRoutes() {
 	authorized.DELETE("/api/v1/files/:fileName", s.handler.V1.DeleteFile)
 
 	authorized.POST("/api/v1/calendar/convert", s.handler.V1.ConverCalendar)
+	authorized.POST("/api/v1/calendar/convertFromLink", s.handler.V1.ConverCalendarFromLink)
 
 	s.router.NoRoute(func(c *gin.Context) {
 		c.Set("responseCode", http.StatusNotFound)

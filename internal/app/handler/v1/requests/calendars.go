@@ -21,3 +21,19 @@ func ConvertCalendarDataFromRequest(c *gin.Context) (convertCalendarRequestData,
 
 	return data, nil
 }
+
+type convertCalendarFromLinkRequestData struct {
+	Link string `json:"link" binding:"required"`
+}
+
+func ConvertCalendarFromLinkDataFromRequest(c *gin.Context) (convertCalendarFromLinkRequestData, error) {
+	data := convertCalendarFromLinkRequestData{}
+
+	err := c.BindJSON(&data)
+
+	if err != nil {
+		return convertCalendarFromLinkRequestData{}, err
+	}
+
+	return data, nil
+}
