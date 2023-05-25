@@ -82,27 +82,39 @@ func (h *HandlerV1) CreateCreativeSpace(c *gin.Context) {
 		return
 	}
 
-	creativeSpace := store.CreativeSpace{
-		LandlordId:   userData.UserId,
-		Title:        reqData.Title,
-		Address:      reqData.Address,
-		Photos:       reqData.Photos,
-		PricePerHour: reqData.PricePerHour,
-		Latitude:     reqData.Coordinate.Latitude,
-		Longitude:    reqData.Coordinate.Longitude,
-		Description:  reqData.Description,
+	creativeSpaceCalendarEvents := []*store.CalendarEvent{}
+
+	for _, event := range reqData.Calendar.Events {
+		creativeSpaceCalendarEvents = append(creativeSpaceCalendarEvents, &store.CalendarEvent{
+			Date: event.Date,
+		})
 	}
 
-	creativeSpaceMetroStations := []store.CreativeSpaceMetroStation{}
+	creativeSpaceMetroStations := []*store.CreativeSpaceMetroStation{}
 
 	for _, station := range reqData.MetroStations {
-		creativeSpaceMetroStations = append(creativeSpaceMetroStations, store.CreativeSpaceMetroStation{
+		creativeSpaceMetroStations = append(creativeSpaceMetroStations, &store.CreativeSpaceMetroStation{
 			MetroStationId:    station.Id,
 			DistanceInMinutes: station.DistanceInMinutes,
 		})
 	}
 
-	creativeSpaceId, storeErr := h.store.CreateCreativeSpace(creativeSpace, creativeSpaceMetroStations)
+	creativeSpace := store.CreativeSpace{
+		LandlordId:             userData.UserId,
+		Title:                  reqData.Title,
+		Address:                reqData.Address,
+		Photos:                 reqData.Photos,
+		PricePerHour:           reqData.PricePerHour,
+		Latitude:               reqData.Coordinate.Latitude,
+		Longitude:              reqData.Coordinate.Longitude,
+		Description:            reqData.Description,
+		CalendarLink:           reqData.Calendar.Link,
+		CalendarWorkDayIndexes: reqData.Calendar.WorkDayIndexes,
+		CalendarEvents:         creativeSpaceCalendarEvents,
+		MetroStations:          creativeSpaceMetroStations,
+	}
+
+	creativeSpaceId, storeErr := h.store.CreateCreativeSpace(creativeSpace)
 
 	if storeErr != nil {
 		c.Set("responseCode", http.StatusBadRequest)
@@ -134,28 +146,41 @@ func (h *HandlerV1) PatchCreativeSpace(c *gin.Context) {
 		return
 	}
 
-	creativeSpace := store.CreativeSpace{
-		Id:           reqData.Id,
-		Title:        reqData.Title,
-		Address:      reqData.Address,
-		Photos:       reqData.Photos,
-		PricePerHour: reqData.PricePerHour,
-		Latitude:     reqData.Coordinate.Latitude,
-		Longitude:    reqData.Coordinate.Longitude,
-		Description:  reqData.Description,
+	creativeSpaceCalendarEvents := []*store.CalendarEvent{}
+
+	for _, event := range reqData.Calendar.Events {
+		creativeSpaceCalendarEvents = append(creativeSpaceCalendarEvents, &store.CalendarEvent{
+			Date:            event.Date,
+			CreativeSpaceId: reqData.Id,
+		})
 	}
 
-	creativeSpaceMetroStations := []store.CreativeSpaceMetroStation{}
+	creativeSpaceMetroStations := []*store.CreativeSpaceMetroStation{}
 
 	for _, station := range reqData.MetroStations {
-		creativeSpaceMetroStations = append(creativeSpaceMetroStations, store.CreativeSpaceMetroStation{
-			CreativeSpaceId:   creativeSpace.Id,
+		creativeSpaceMetroStations = append(creativeSpaceMetroStations, &store.CreativeSpaceMetroStation{
+			CreativeSpaceId:   reqData.Id,
 			MetroStationId:    station.Id,
 			DistanceInMinutes: station.DistanceInMinutes,
 		})
 	}
 
-	storeErr := h.store.PatchCreativeSpace(creativeSpace, creativeSpaceMetroStations)
+	creativeSpace := store.CreativeSpace{
+		Id:                     reqData.Id,
+		Title:                  reqData.Title,
+		Address:                reqData.Address,
+		Photos:                 reqData.Photos,
+		PricePerHour:           reqData.PricePerHour,
+		Latitude:               reqData.Coordinate.Latitude,
+		Longitude:              reqData.Coordinate.Longitude,
+		Description:            reqData.Description,
+		CalendarLink:           reqData.Calendar.Link,
+		CalendarWorkDayIndexes: reqData.Calendar.WorkDayIndexes,
+		CalendarEvents:         creativeSpaceCalendarEvents,
+		MetroStations:          creativeSpaceMetroStations,
+	}
+
+	storeErr := h.store.PatchCreativeSpace(creativeSpace)
 
 	if storeErr != nil {
 		c.Set("responseErrorCode", constants.ErrCreativeSpacePatchDbError)

@@ -8,25 +8,20 @@ import (
 )
 
 type CreativeSpace struct {
-	tableName     struct{}                     `pg:"creative_spaces"` //nolint:unused // Имя таблицы
-	Id            int                          `pg:"id"`
-	Title         string                       `pg:"title"`
-	Address       string                       `pg:"address"`
-	LandlordId    int                          `pg:"landlord_id"`
-	Photos        []string                     `pg:"photos,array"`
-	PricePerHour  int                          `pg:"price_per_hour"`
-	Latitude      float32                      `pg:"latitude"`
-	Longitude     float32                      `pg:"longitude"`
-	Description   string                       `pg:"description"`
-	MetroStations []*CreativeSpaceMetroStation `pg:"rel:has-many"`
-}
-
-type CreativeSpaceMetroStation struct {
-	tableName         struct{}      `pg:"creative_space_metro_station"` //nolint:unused // Имя таблицы
-	MetroStationId    int           `pg:"metro_station_id"`
-	CreativeSpaceId   int           `pg:"creative_space_id"`
-	DistanceInMinutes int           `pg:"distance_in_minutes"`
-	MetroStation      *MetroStation `pg:"rel:has-one"`
+	tableName              struct{}                     `pg:"creative_spaces"` //nolint:unused // Имя таблицы
+	Id                     int                          `pg:"id"`
+	Title                  string                       `pg:"title"`
+	Address                string                       `pg:"address"`
+	LandlordId             int                          `pg:"landlord_id"`
+	Photos                 []string                     `pg:"photos,array"`
+	PricePerHour           int                          `pg:"price_per_hour"`
+	Latitude               float32                      `pg:"latitude"`
+	Longitude              float32                      `pg:"longitude"`
+	Description            string                       `pg:"description"`
+	CalendarLink           string                       `pg:"calendar_link"`
+	CalendarWorkDayIndexes []int                        `pg:"calendar_work_day_indexes,array"`
+	CalendarEvents         []*CalendarEvent             `pg:"rel:has-many"`
+	MetroStations          []*CreativeSpaceMetroStation `pg:"rel:has-many"`
 }
 
 func (s *Store) GetCreativeSpaces() ([]CreativeSpace, error) {
@@ -37,6 +32,7 @@ func (s *Store) GetCreativeSpaces() ([]CreativeSpace, error) {
 		Relation("MetroStations", func(q *pg.Query) (*pg.Query, error) {
 			return q.Relation("MetroStation"), nil
 		}).
+		Relation("CalendarEvents").
 		Select()
 
 	if err != nil {
@@ -57,6 +53,7 @@ func (s *Store) GetCreativeSpaceById(id int) (CreativeSpace, error) {
 		Relation("MetroStations", func(q *pg.Query) (*pg.Query, error) {
 			return q.Relation("MetroStation"), nil
 		}).
+		Relation("CalendarEvents").
 		SelectAndCount()
 
 	if err != nil {
@@ -70,11 +67,12 @@ func (s *Store) GetCreativeSpaceById(id int) (CreativeSpace, error) {
 	return creativeSpace, nil
 }
 
+//nolint:gocognit // Длина функции. Добавил в игнор, потому что одна транзакция.
 func (s *Store) CreateCreativeSpace(
 	creativeSpace CreativeSpace,
-	creativeSpaceMetroStations []CreativeSpaceMetroStation,
 ) (int, error) {
 	storeErr := s.db.RunInTransaction(context.Background(), func(tx *pg.Tx) error {
+		// Записываем в таблицу creative_spaces.
 		result, creativeSpaceErr := tx.
 			Model(&creativeSpace).
 			OnConflict("DO NOTHING").
@@ -88,25 +86,44 @@ func (s *Store) CreateCreativeSpace(
 			return constants.ErrCreativeSpacePostDbError
 		}
 
-		if len(creativeSpaceMetroStations) == 0 {
-			return nil
+		if len(creativeSpace.MetroStations) > 0 {
+			for i := range creativeSpace.MetroStations {
+				creativeSpace.MetroStations[i].CreativeSpaceId = creativeSpace.Id
+			}
+
+			// Записываем в таблицу creative_space_metro_station.
+			creativeSpaceMetroStationResult, creativeSpaceMetroStationErr := tx.
+				Model(&creativeSpace.MetroStations).
+				OnConflict("DO NOTHING").
+				Insert()
+
+			if creativeSpaceMetroStationErr != nil {
+				return creativeSpaceMetroStationErr
+			}
+
+			if creativeSpaceMetroStationResult.RowsAffected() == 0 {
+				return constants.ErrCreativeSpacePostDbError
+			}
 		}
 
-		for i := range creativeSpaceMetroStations {
-			creativeSpaceMetroStations[i].CreativeSpaceId = creativeSpace.Id
-		}
+		if len(creativeSpace.CalendarEvents) > 0 {
+			for i := range creativeSpace.CalendarEvents {
+				creativeSpace.CalendarEvents[i].CreativeSpaceId = creativeSpace.Id
+			}
 
-		result, creativeSpaceMetroStationErr := tx.
-			Model(&creativeSpaceMetroStations).
-			OnConflict("DO NOTHING").
-			Insert()
+			// Записываем в таблицу calendar_events.
+			creativeSpaceCalendarEventsResult, creativeSpaceCalendarEventsErr := tx.
+				Model(&creativeSpace.CalendarEvents).
+				OnConflict("DO NOTHING").
+				Insert()
 
-		if creativeSpaceMetroStationErr != nil {
-			return creativeSpaceMetroStationErr
-		}
+			if creativeSpaceCalendarEventsErr != nil {
+				return creativeSpaceCalendarEventsErr
+			}
 
-		if result.RowsAffected() == 0 {
-			return constants.ErrCreativeSpacePostDbError
+			if creativeSpaceCalendarEventsResult.RowsAffected() == 0 {
+				return constants.ErrCreativeSpacePostDbError
+			}
 		}
 
 		return nil
@@ -121,7 +138,6 @@ func (s *Store) CreateCreativeSpace(
 
 func (s *Store) PatchCreativeSpace(
 	creativeSpace CreativeSpace,
-	creativeSpaceMetroStations []CreativeSpaceMetroStation,
 ) error {
 	count, err := s.db.
 		Model(&creativeSpace).
@@ -156,17 +172,35 @@ func (s *Store) PatchCreativeSpace(
 			return creativeSpaceMetroStationsDeleteErr
 		}
 
-		if len(creativeSpaceMetroStations) == 0 {
-			return nil
+		if len(creativeSpace.MetroStations) > 0 {
+			_, creativeSpaceMetroStationsInsertErr := tx.
+				Model(&creativeSpace.MetroStations).
+				OnConflict("DO NOTHING").
+				Insert()
+
+			if creativeSpaceMetroStationsInsertErr != nil {
+				return creativeSpaceMetroStationsInsertErr
+			}
 		}
 
-		_, creativeSpaceMetroStationsInsertErr := tx.
-			Model(&creativeSpaceMetroStations).
-			OnConflict("DO NOTHING").
-			Insert()
+		_, creativeSpaceCalendarEventsDeleteErr := tx.
+			Model(&CalendarEvent{}).
+			Where("creative_space_id = ?", creativeSpace.Id).
+			Delete()
 
-		if creativeSpaceMetroStationsInsertErr != nil {
-			return creativeSpaceMetroStationsInsertErr
+		if creativeSpaceCalendarEventsDeleteErr != nil {
+			return creativeSpaceCalendarEventsDeleteErr
+		}
+
+		if len(creativeSpace.CalendarEvents) > 0 {
+			_, creativeSpaceCalendarEventsInsertErr := tx.
+				Model(&creativeSpace.CalendarEvents).
+				OnConflict("DO NOTHING").
+				Insert()
+
+			if creativeSpaceCalendarEventsInsertErr != nil {
+				return creativeSpaceCalendarEventsInsertErr
+			}
 		}
 
 		return nil
@@ -188,6 +222,10 @@ func (s *Store) DeleteCreativeSpace(id int) error {
 		CreativeSpaceId: id,
 	}
 
+	creativeSpaceCalendarEvent := CalendarEvent{
+		CreativeSpaceId: id,
+	}
+
 	storeErr := s.db.RunInTransaction(context.Background(), func(tx *pg.Tx) error {
 		_, err := tx.
 			Model(&creativeSpaceMetroStation).
@@ -196,6 +234,15 @@ func (s *Store) DeleteCreativeSpace(id int) error {
 
 		if err != nil {
 			return err
+		}
+
+		_, calendarEventErr := tx.
+			Model(&creativeSpaceCalendarEvent).
+			Where("creative_space_id = ?", creativeSpaceCalendarEvent.CreativeSpaceId).
+			Delete()
+
+		if calendarEventErr != nil {
+			return calendarEventErr
 		}
 
 		result, err := tx.

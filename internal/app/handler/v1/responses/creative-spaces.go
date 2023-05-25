@@ -2,6 +2,16 @@ package responses
 
 import "github.com/upikoth/leaders2023-backend/internal/app/store"
 
+type getCreativeSpacesResponseCalendarEvent struct {
+	Date string `json:"date"`
+}
+
+type getCreativeSpacesResponseCalendar struct {
+	WorkDayIndexes []int                                    `json:"workDayIndexes"`
+	Events         []getCreativeSpacesResponseCalendarEvent `json:"events"`
+	Link           string                                   `json:"link"`
+}
+
 type getCreativeSpacesResponseCoordinate struct {
 	Latitude  float32 `json:"latitude"`
 	Longitude float32 `json:"longitude"`
@@ -24,6 +34,7 @@ type getCreativeSpacesResponseCreativeSpace struct {
 	PricePerHour  int                                     `json:"pricePerHour"`
 	MetroStations []getCreativeSpacesResponseMetroStation `json:"metroStations"`
 	Coordinate    getCreativeSpacesResponseCoordinate     `json:"coordinate"`
+	Calendar      getCreativeSpacesResponseCalendar       `json:"calendar"`
 }
 
 type getCreativeSpacesResponseData struct {
@@ -45,6 +56,20 @@ func GetCreativeSpacesResponseFromStoreData(creativeSpaces []store.CreativeSpace
 			})
 		}
 
+		resCalendarEvents := []getCreativeSpacesResponseCalendarEvent{}
+
+		for _, calendarEvent := range creativeSpace.CalendarEvents {
+			resCalendarEvents = append(resCalendarEvents, getCreativeSpacesResponseCalendarEvent{
+				Date: calendarEvent.Date,
+			})
+		}
+
+		resCalendar := getCreativeSpacesResponseCalendar{
+			WorkDayIndexes: creativeSpace.CalendarWorkDayIndexes,
+			Events:         resCalendarEvents,
+			Link:           creativeSpace.CalendarLink,
+		}
+
 		res.CreativeSpaces = append(res.CreativeSpaces, getCreativeSpacesResponseCreativeSpace{
 			Id:           creativeSpace.Id,
 			Title:        creativeSpace.Title,
@@ -58,10 +83,21 @@ func GetCreativeSpacesResponseFromStoreData(creativeSpaces []store.CreativeSpace
 				Longitude: creativeSpace.Longitude,
 			},
 			MetroStations: resMetroStations,
+			Calendar:      resCalendar,
 		})
 	}
 
 	return res
+}
+
+type getCreativeSpaceResponseCalendarEvent struct {
+	Date string `json:"date"`
+}
+
+type getCreativeSpaceResponseCalendar struct {
+	WorkDayIndexes []int                                   `json:"workDayIndexes"`
+	Events         []getCreativeSpaceResponseCalendarEvent `json:"events"`
+	Link           string                                  `json:"link"`
 }
 
 type getCreativeSpaceResponseCoordinate struct {
@@ -86,6 +122,7 @@ type getCreativeSpaceResponseCreativeSpace struct {
 	PricePerHour  int                                    `json:"pricePerHour"`
 	MetroStations []getCreativeSpaceResponseMetroStation `json:"metroStations"`
 	Coordinate    getCreativeSpaceResponseCoordinate     `json:"coordinate"`
+	Calendar      getCreativeSpaceResponseCalendar       `json:"calendar"`
 }
 
 type getCreativeSpaceResponseData struct {
@@ -105,6 +142,14 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 		})
 	}
 
+	resCalendarEvents := []getCreativeSpaceResponseCalendarEvent{}
+
+	for _, calendarEvent := range creativeSpace.CalendarEvents {
+		resCalendarEvents = append(resCalendarEvents, getCreativeSpaceResponseCalendarEvent{
+			Date: calendarEvent.Date,
+		})
+	}
+
 	res.CreativeSpace = getCreativeSpaceResponseCreativeSpace{
 		Id:           creativeSpace.Id,
 		Title:        creativeSpace.Title,
@@ -118,6 +163,11 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 			Longitude: creativeSpace.Longitude,
 		},
 		MetroStations: resMetroStations,
+		Calendar: getCreativeSpaceResponseCalendar{
+			WorkDayIndexes: creativeSpace.CalendarWorkDayIndexes,
+			Events:         resCalendarEvents,
+			Link:           creativeSpace.CalendarLink,
+		},
 	}
 
 	return res

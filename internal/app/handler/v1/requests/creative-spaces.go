@@ -18,6 +18,16 @@ func GetCreativeSpaceDataFromRequest(c *gin.Context) (getCreativeSpaceRequestDat
 	return data, nil
 }
 
+type createCreativeSpaceRequestCalendarEvent struct {
+	Date string `json:"date" binding:"required"`
+}
+
+type createCreativeSpaceRequestCalendar struct {
+	WorkDayIndexes []int                                     `json:"workDayIndexes" binding:"required"`
+	Events         []createCreativeSpaceRequestCalendarEvent `json:"events" binding:"required"`
+	Link           string                                    `json:"link"`
+}
+
 type createCreativeSpaceRequestCoordinate struct {
 	Latitude  float32 `json:"latitude" binding:"required"`
 	Longitude float32 `json:"longitude" binding:"required"`
@@ -36,6 +46,7 @@ type createCreativeSpaceRequestData struct {
 	PricePerHour  int                                      `json:"pricePerHour" binding:"required"`
 	MetroStations []createCreativeSpaceRequestMetroStation `json:"metroStations"`
 	Coordinate    createCreativeSpaceRequestCoordinate     `json:"coordinate" binding:"required"`
+	Calendar      createCreativeSpaceRequestCalendar       `json:"calendar" binding:"required"`
 }
 
 func CreateCreativeSpaceDataFromRequest(c *gin.Context) (createCreativeSpaceRequestData, error) {
@@ -48,6 +59,16 @@ func CreateCreativeSpaceDataFromRequest(c *gin.Context) (createCreativeSpaceRequ
 	}
 
 	return data, nil
+}
+
+type patchCreativeSpaceRequestCalendarEvent struct {
+	Date string `json:"date"`
+}
+
+type patchCreativeSpaceRequestCalendar struct {
+	WorkDayIndexes []int                                    `json:"workDayIndexes"`
+	Events         []patchCreativeSpaceRequestCalendarEvent `json:"events"`
+	Link           string                                   `json:"link"`
 }
 
 type patchCreativeSpaceRequestCoordinate struct {
@@ -72,6 +93,7 @@ type patchCreativeSpaceRequestBody struct {
 	PricePerHour  int                                     `json:"pricePerHour"`
 	MetroStations []patchCreativeSpaceRequestMetroStation `json:"metroStations"`
 	Coordinate    patchCreativeSpaceRequestCoordinate     `json:"coordinate"`
+	Calendar      patchCreativeSpaceRequestCalendar       `json:"calendar"`
 }
 
 type patchCreativeSpaceRequestData struct {
@@ -83,6 +105,7 @@ type patchCreativeSpaceRequestData struct {
 	PricePerHour  int                                     `json:"pricePerHour"`
 	MetroStations []patchCreativeSpaceRequestMetroStation `json:"metroStations"`
 	Coordinate    patchCreativeSpaceRequestCoordinate     `json:"coordinate"`
+	Calendar      patchCreativeSpaceRequestCalendar       `json:"calendar"`
 }
 
 func PatchCreativeSpaceDataFromRequest(c *gin.Context) (patchCreativeSpaceRequestData, error) {
@@ -112,6 +135,12 @@ func PatchCreativeSpaceDataFromRequest(c *gin.Context) (patchCreativeSpaceReques
 	data.PricePerHour = dataFromBody.PricePerHour
 	data.MetroStations = dataFromBody.MetroStations
 	data.Coordinate = dataFromBody.Coordinate
+
+	data.Calendar = patchCreativeSpaceRequestCalendar{
+		WorkDayIndexes: dataFromBody.Calendar.WorkDayIndexes,
+		Events:         dataFromBody.Calendar.Events,
+		Link:           dataFromBody.Calendar.Link,
+	}
 
 	return data, nil
 }
