@@ -82,6 +82,12 @@ func (h *HandlerV1) CreateCreativeSpace(c *gin.Context) {
 		return
 	}
 
+	if userData.UserRole != model.RoleLandlord {
+		c.Set("responseCode", http.StatusForbidden)
+		c.Set("responseErrorCode", constants.ErrCreativeSpacePostForbidden)
+		return
+	}
+
 	creativeSpaceCalendarEvents := []*store.CalendarEvent{}
 
 	for _, event := range reqData.Calendar.Events {
@@ -138,11 +144,26 @@ func (h *HandlerV1) CreateCreativeSpace(c *gin.Context) {
 // @Router       /api/v1/creativeSpaces/:id [patch].
 func (h *HandlerV1) PatchCreativeSpace(c *gin.Context) {
 	reqData, err := requests.PatchCreativeSpaceDataFromRequest(c)
+	userData, isClaimsValid := c.MustGet("userData").(model.JwtTokenUserData)
 
-	if err != nil {
+	if err != nil || !isClaimsValid {
 		c.Set("responseCode", http.StatusBadRequest)
 		c.Set("responseErrorCode", constants.ErrCreativeSpacePatchNotValidRequestData)
 		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	creativeSpaceToUpdate, err := h.store.GetCreativeSpaceById(reqData.Id)
+
+	if err != nil {
+		c.Set("responseErrorCode", constants.ErrCreativeSpacePatchDbError)
+		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	if userData.UserId != creativeSpaceToUpdate.LandlordId && userData.UserRole != model.RoleAdmin {
+		c.Set("responseCode", http.StatusForbidden)
+		c.Set("responseErrorCode", constants.ErrPatchSpacePostForbidden)
 		return
 	}
 
@@ -199,8 +220,9 @@ func (h *HandlerV1) PatchCreativeSpace(c *gin.Context) {
 // @Router       /api/v1/creativeSpaces/:id [delete].
 func (h *HandlerV1) DeleteCreativeSpace(c *gin.Context) {
 	reqData, err := requests.DeleteCreativeSpaceDataFromRequest(c)
+	userData, isClaimsValid := c.MustGet("userData").(model.JwtTokenUserData)
 
-	if err != nil {
+	if err != nil || !isClaimsValid {
 		c.Set("responseCode", http.StatusBadRequest)
 		c.Set("responseErrorCode", constants.ErrCreativeSpaceDeleteNotValidRequestData)
 		c.Set("responseErrorDetails", err)
@@ -212,6 +234,12 @@ func (h *HandlerV1) DeleteCreativeSpace(c *gin.Context) {
 	if err != nil {
 		c.Set("responseErrorCode", constants.ErrCreativeSpaceDeleteDbError)
 		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	if userData.UserId != creativeSpaceToDelete.LandlordId && userData.UserRole != model.RoleAdmin {
+		c.Set("responseCode", http.StatusForbidden)
+		c.Set("responseErrorCode", constants.ErrPatchSpacePostForbidden)
 		return
 	}
 

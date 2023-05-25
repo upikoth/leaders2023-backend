@@ -38,6 +38,7 @@ var (
 
 	ErrCreativeSpacePostNotValidRequestData = errors.New("1900")
 	ErrCreativeSpacePostDbError             = errors.New("1901")
+	ErrCreativeSpacePostForbidden           = errors.New("1902")
 
 	ErrCreativeSpacesGetDbError = errors.New("2000")
 
@@ -53,6 +54,7 @@ var (
 	ErrCreativeSpacePatchNotValidRequestData = errors.New("2300")
 	ErrCreativeSpacePatchNotFoundById        = errors.New("2301")
 	ErrCreativeSpacePatchDbError             = errors.New("2302")
+	ErrPatchSpacePostForbidden               = errors.New("2303")
 
 	ErrSessionGetNotValidRequestData = errors.New("1400")
 
@@ -106,6 +108,7 @@ var ErrDescriptionByCode = map[error]string{
 
 	ErrCreativeSpacePostNotValidRequestData: "Ошбика при валидации параметров запроса",
 	ErrCreativeSpacePostDbError:             "Ошибка при создании креативной площадки",
+	ErrCreativeSpacePostForbidden:           "Недостаточно прав",
 
 	ErrCreativeSpacesGetDbError: "Не удалось получить список креативных пространств",
 
@@ -121,6 +124,7 @@ var ErrDescriptionByCode = map[error]string{
 	ErrCreativeSpacePatchNotValidRequestData: "Ошбика при валидации параметров запроса",
 	ErrCreativeSpacePatchNotFoundById:        "Креативное пространство с указанным id не найдено",
 	ErrCreativeSpacePatchDbError:             "Не удалось обновить информацию о креативной площадке",
+	ErrPatchSpacePostForbidden:               "Недостаточно прав",
 
 	ErrSessionGetNotValidRequestData: "Ошбика при валидации параметров запроса",
 
