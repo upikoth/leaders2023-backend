@@ -8,27 +8,32 @@ var (
 	ErrRouteNotFound     = errors.New("1000")
 	ErrUserNotAuthorized = errors.New("1100")
 
-	ErrUsersGetDbError = errors.New("1200")
+	ErrUsersGetDbError   = errors.New("1200")
+	ErrUsersGetForbidden = errors.New("1201")
 
 	ErrUserGetNotValidRequestData = errors.New("1300")
 	ErrUserGetNotFoundById        = errors.New("1301")
 	ErrUserGetDbError             = errors.New("1302")
 	ErrUserGetByPhoneDbError      = errors.New("1303")
 	ErrUserGetByPhoneUserNotExist = errors.New("1304")
+	ErrUserGetForbidden           = errors.New("1305")
 
 	ErrUserPostNotValidRequestData = errors.New("1400")
 	ErrUserPostPhoneExist          = errors.New("1401")
 	ErrUserPostDbError             = errors.New("1402")
 	ErrUserPostCreateHash          = errors.New("1403")
+	ErrUserPostForbidden           = errors.New("1404")
 
 	ErrUserDeleteNotValidRequestData = errors.New("1500")
 	ErrUserDeleteNotFoundById        = errors.New("1501")
 	ErrUserDeleteDbError             = errors.New("1502")
+	ErrUserDeleteForbidden           = errors.New("1503")
 
 	ErrUserPatchNotValidRequestData = errors.New("1600")
 	ErrUserPatchPhoneExist          = errors.New("1601")
 	ErrUserPatchDbError             = errors.New("1602")
 	ErrUserPatchNotFoundById        = errors.New("1603")
+	ErrUserPatchForbidden           = errors.New("1604")
 
 	ErrSessionPostNotValidRequestData = errors.New("1700")
 	ErrSessionPostUserNotExist        = errors.New("1701")
@@ -78,27 +83,32 @@ var ErrDescriptionByCode = map[error]string{
 	ErrRouteNotFound:     "Метод не найден",
 	ErrUserNotAuthorized: "Пользователь не авторизован",
 
-	ErrUsersGetDbError: "Не удалось получить список пользователей",
+	ErrUsersGetDbError:   "Не удалось получить список пользователей",
+	ErrUsersGetForbidden: "Недостаточно прав",
 
 	ErrUserGetNotValidRequestData: "Ошбика при валидации параметров запроса",
 	ErrUserGetNotFoundById:        "Пользователь с указанным id не найден",
 	ErrUserGetDbError:             "Не удалось получить информацию о пользователе",
 	ErrUserGetByPhoneDbError:      "Не удалось получить информацию о пользователе",
 	ErrUserGetByPhoneUserNotExist: "Пользователя с такими телефоном не существует",
+	ErrUserGetForbidden:           "Недостаточно прав",
 
 	ErrUserPostNotValidRequestData: "Ошбика при валидации параметров запроса",
 	ErrUserPostPhoneExist:          "Пользователь с переданным телефоном уже существует",
 	ErrUserPostDbError:             "Не удалось создать пользователя",
 	ErrUserPostCreateHash:          "Ошибка при создании пользователя",
+	ErrUserPostForbidden:           "Недостаточно прав",
 
 	ErrUserDeleteNotValidRequestData: "Ошбика при валидации параметров запроса",
 	ErrUserDeleteNotFoundById:        "Пользователь с указанным id не найден",
 	ErrUserDeleteDbError:             "Не удалось удалить пользователя",
+	ErrUserDeleteForbidden:           "Недостаточно прав",
 
 	ErrUserPatchNotValidRequestData: "Ошбика при валидации параметров запроса",
 	ErrUserPatchPhoneExist:          "Пользователь с переданным телефоном уже существует",
 	ErrUserPatchDbError:             "Не удалось обновить пользователя",
 	ErrUserPatchNotFoundById:        "Пользователь с указанным id не найден",
+	ErrUserPatchForbidden:           "Недостаточно прав",
 
 	ErrSessionPostNotValidRequestData: "Ошбика при валидации параметров запроса",
 	ErrSessionPostUserNotExist:        "Пользователя с такими телефоном и паролем не существует",

@@ -7,6 +7,7 @@ import (
 	"github.com/upikoth/leaders2023-backend/internal/app/constants"
 	"github.com/upikoth/leaders2023-backend/internal/app/handler/v1/requests"
 	"github.com/upikoth/leaders2023-backend/internal/app/handler/v1/responses"
+	"github.com/upikoth/leaders2023-backend/internal/app/model"
 	"github.com/upikoth/leaders2023-backend/internal/app/store"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -21,10 +22,17 @@ import (
 // @Router       /api/v1/users [get].
 func (h *HandlerV1) GetUsers(c *gin.Context) {
 	users, err := h.store.GetUsers()
+	userData, isClaimsValid := c.MustGet("userData").(model.JwtTokenUserData)
 
 	if err != nil {
 		c.Set("responseErrorCode", constants.ErrUsersGetDbError)
 		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	if !isClaimsValid || userData.UserRole != model.RoleAdmin {
+		c.Set("responseCode", http.StatusForbidden)
+		c.Set("responseErrorCode", constants.ErrUsersGetForbidden)
 		return
 	}
 
@@ -41,11 +49,18 @@ func (h *HandlerV1) GetUsers(c *gin.Context) {
 // @Router       /api/v1/users/:id [get].
 func (h *HandlerV1) GetUser(c *gin.Context) {
 	reqData, err := requests.GetUserDataFromRequest(c)
+	userData, isClaimsValid := c.MustGet("userData").(model.JwtTokenUserData)
 
-	if err != nil {
+	if err != nil || !isClaimsValid {
 		c.Set("responseCode", http.StatusBadRequest)
 		c.Set("responseErrorCode", constants.ErrUserGetNotValidRequestData)
 		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	if userData.UserRole != model.RoleAdmin && userData.UserId != reqData.Id {
+		c.Set("responseCode", http.StatusForbidden)
+		c.Set("responseErrorCode", constants.ErrUserGetForbidden)
 		return
 	}
 
@@ -71,11 +86,18 @@ func (h *HandlerV1) GetUser(c *gin.Context) {
 // @Router       /api/v1/user [post].
 func (h *HandlerV1) CreateUser(c *gin.Context) {
 	reqData, err := requests.CreateUserDataFromRequest(c)
+	userData, isClaimsValid := c.MustGet("userData").(model.JwtTokenUserData)
 
-	if err != nil {
+	if err != nil || !isClaimsValid {
 		c.Set("responseCode", http.StatusBadRequest)
 		c.Set("responseErrorCode", constants.ErrUserPostNotValidRequestData)
 		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	if userData.UserRole != model.RoleAdmin {
+		c.Set("responseCode", http.StatusForbidden)
+		c.Set("responseErrorCode", constants.ErrUserPostForbidden)
 		return
 	}
 
@@ -117,11 +139,18 @@ func (h *HandlerV1) CreateUser(c *gin.Context) {
 // @Router       /api/v1/users/:id [patch].
 func (h *HandlerV1) PatchUser(c *gin.Context) {
 	reqData, err := requests.PatchUserDataFromRequest(c)
+	userData, isClaimsValid := c.MustGet("userData").(model.JwtTokenUserData)
 
-	if err != nil {
+	if err != nil || !isClaimsValid {
 		c.Set("responseCode", http.StatusBadRequest)
 		c.Set("responseErrorCode", constants.ErrUserPatchNotValidRequestData)
 		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	if userData.UserRole != model.RoleAdmin && userData.UserId != reqData.Id {
+		c.Set("responseCode", http.StatusForbidden)
+		c.Set("responseErrorCode", constants.ErrUserPatchForbidden)
 		return
 	}
 
@@ -149,11 +178,18 @@ func (h *HandlerV1) PatchUser(c *gin.Context) {
 // @Router       /api/v1/users/:id [delete].
 func (h *HandlerV1) DeleteUser(c *gin.Context) {
 	reqData, err := requests.DeleteUserDataFromRequest(c)
+	userData, isClaimsValid := c.MustGet("userData").(model.JwtTokenUserData)
 
-	if err != nil {
+	if err != nil || !isClaimsValid {
 		c.Set("responseCode", http.StatusBadRequest)
 		c.Set("responseErrorCode", constants.ErrUserDeleteNotValidRequestData)
 		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	if userData.UserRole != model.RoleAdmin {
+		c.Set("responseCode", http.StatusForbidden)
+		c.Set("responseErrorCode", constants.ErrUserDeleteForbidden)
 		return
 	}
 
