@@ -14,7 +14,7 @@ type CreativeSpace struct {
 	Address                string                       `pg:"address"`
 	LandlordId             int                          `pg:"landlord_id"`
 	Photos                 []string                     `pg:"photos,array"`
-	PricePerHour           int                          `pg:"price_per_hour"`
+	PricePerDay            int                          `pg:"price_per_day"`
 	Latitude               float32                      `pg:"latitude"`
 	Longitude              float32                      `pg:"longitude"`
 	Description            string                       `pg:"description"`

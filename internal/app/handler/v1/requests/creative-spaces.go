@@ -43,7 +43,7 @@ type createCreativeSpaceRequestData struct {
 	Address       string                                   `json:"address" binding:"required"`
 	Description   string                                   `json:"description" binding:"required"`
 	Photos        []string                                 `json:"photos" binding:"required"`
-	PricePerHour  int                                      `json:"pricePerHour" binding:"required"`
+	PricePerDay   int                                      `json:"pricePerDay" binding:"required"`
 	MetroStations []createCreativeSpaceRequestMetroStation `json:"metroStations"`
 	Coordinate    createCreativeSpaceRequestCoordinate     `json:"coordinate" binding:"required"`
 	Calendar      createCreativeSpaceRequestCalendar       `json:"calendar" binding:"required"`
@@ -90,7 +90,7 @@ type patchCreativeSpaceRequestBody struct {
 	Address       string                                  `json:"address"`
 	Description   string                                  `json:"description"`
 	Photos        []string                                `json:"photos"`
-	PricePerHour  int                                     `json:"pricePerHour"`
+	PricePerDay   int                                     `json:"pricePerDay"`
 	MetroStations []patchCreativeSpaceRequestMetroStation `json:"metroStations"`
 	Coordinate    patchCreativeSpaceRequestCoordinate     `json:"coordinate"`
 	Calendar      patchCreativeSpaceRequestCalendar       `json:"calendar"`
@@ -102,7 +102,7 @@ type patchCreativeSpaceRequestData struct {
 	Address       string                                  `json:"address"`
 	Description   string                                  `json:"description"`
 	Photos        []string                                `json:"photos"`
-	PricePerHour  int                                     `json:"pricePerHour"`
+	PricePerDay   int                                     `json:"pricePerDay"`
 	MetroStations []patchCreativeSpaceRequestMetroStation `json:"metroStations"`
 	Coordinate    patchCreativeSpaceRequestCoordinate     `json:"coordinate"`
 	Calendar      patchCreativeSpaceRequestCalendar       `json:"calendar"`
@@ -132,7 +132,7 @@ func PatchCreativeSpaceDataFromRequest(c *gin.Context) (patchCreativeSpaceReques
 	data.Address = dataFromBody.Address
 	data.Description = dataFromBody.Description
 	data.Photos = dataFromBody.Photos
-	data.PricePerHour = dataFromBody.PricePerHour
+	data.PricePerDay = dataFromBody.PricePerDay
 	data.MetroStations = dataFromBody.MetroStations
 	data.Coordinate = dataFromBody.Coordinate
 

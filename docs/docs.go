@@ -830,6 +830,41 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "requests.createCreativeSpaceRequestCalendar": {
+            "type": "object",
+            "required": [
+                "events",
+                "workDayIndexes"
+            ],
+            "properties": {
+                "events": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/requests.createCreativeSpaceRequestCalendarEvent"
+                    }
+                },
+                "link": {
+                    "type": "string"
+                },
+                "workDayIndexes": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "requests.createCreativeSpaceRequestCalendarEvent": {
+            "type": "object",
+            "required": [
+                "date"
+            ],
+            "properties": {
+                "date": {
+                    "type": "string"
+                }
+            }
+        },
         "requests.createCreativeSpaceRequestCoordinate": {
             "type": "object",
             "required": [
@@ -849,15 +884,19 @@ const docTemplate_swagger = `{
             "type": "object",
             "required": [
                 "address",
+                "calendar",
                 "coordinate",
                 "description",
                 "photos",
-                "pricePerHour",
+                "pricePerDay",
                 "title"
             ],
             "properties": {
                 "address": {
                     "type": "string"
+                },
+                "calendar": {
+                    "$ref": "#/definitions/requests.createCreativeSpaceRequestCalendar"
                 },
                 "coordinate": {
                     "$ref": "#/definitions/requests.createCreativeSpaceRequestCoordinate"
@@ -877,7 +916,7 @@ const docTemplate_swagger = `{
                         "type": "string"
                     }
                 },
-                "pricePerHour": {
+                "pricePerDay": {
                     "type": "integer"
                 },
                 "title": {
@@ -945,6 +984,34 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "requests.patchCreativeSpaceRequestCalendar": {
+            "type": "object",
+            "properties": {
+                "events": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/requests.patchCreativeSpaceRequestCalendarEvent"
+                    }
+                },
+                "link": {
+                    "type": "string"
+                },
+                "workDayIndexes": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "requests.patchCreativeSpaceRequestCalendarEvent": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                }
+            }
+        },
         "requests.patchCreativeSpaceRequestCoordinate": {
             "type": "object",
             "properties": {
@@ -961,6 +1028,9 @@ const docTemplate_swagger = `{
             "properties": {
                 "address": {
                     "type": "string"
+                },
+                "calendar": {
+                    "$ref": "#/definitions/requests.patchCreativeSpaceRequestCalendar"
                 },
                 "coordinate": {
                     "$ref": "#/definitions/requests.patchCreativeSpaceRequestCoordinate"
@@ -983,7 +1053,7 @@ const docTemplate_swagger = `{
                         "type": "string"
                     }
                 },
-                "pricePerHour": {
+                "pricePerDay": {
                     "type": "integer"
                 },
                 "title": {
@@ -1146,6 +1216,34 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "responses.getCreativeSpaceResponseCalendar": {
+            "type": "object",
+            "properties": {
+                "events": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.getCreativeSpaceResponseCalendarEvent"
+                    }
+                },
+                "link": {
+                    "type": "string"
+                },
+                "workDayIndexes": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "responses.getCreativeSpaceResponseCalendarEvent": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                }
+            }
+        },
         "responses.getCreativeSpaceResponseCoordinate": {
             "type": "object",
             "properties": {
@@ -1162,6 +1260,9 @@ const docTemplate_swagger = `{
             "properties": {
                 "address": {
                     "type": "string"
+                },
+                "calendar": {
+                    "$ref": "#/definitions/responses.getCreativeSpaceResponseCalendar"
                 },
                 "coordinate": {
                     "$ref": "#/definitions/responses.getCreativeSpaceResponseCoordinate"
@@ -1187,7 +1288,7 @@ const docTemplate_swagger = `{
                         "type": "string"
                     }
                 },
-                "pricePerHour": {
+                "pricePerDay": {
                     "type": "integer"
                 },
                 "title": {
@@ -1220,6 +1321,34 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "responses.getCreativeSpacesResponseCalendar": {
+            "type": "object",
+            "properties": {
+                "events": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.getCreativeSpacesResponseCalendarEvent"
+                    }
+                },
+                "link": {
+                    "type": "string"
+                },
+                "workDayIndexes": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "responses.getCreativeSpacesResponseCalendarEvent": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                }
+            }
+        },
         "responses.getCreativeSpacesResponseCoordinate": {
             "type": "object",
             "properties": {
@@ -1236,6 +1365,9 @@ const docTemplate_swagger = `{
             "properties": {
                 "address": {
                     "type": "string"
+                },
+                "calendar": {
+                    "$ref": "#/definitions/responses.getCreativeSpacesResponseCalendar"
                 },
                 "coordinate": {
                     "$ref": "#/definitions/responses.getCreativeSpacesResponseCoordinate"
@@ -1261,7 +1393,7 @@ const docTemplate_swagger = `{
                         "type": "string"
                     }
                 },
-                "pricePerHour": {
+                "pricePerDay": {
                     "type": "integer"
                 },
                 "title": {

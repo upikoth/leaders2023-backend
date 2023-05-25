@@ -31,7 +31,7 @@ type getCreativeSpacesResponseCreativeSpace struct {
 	LandlordId    int                                     `json:"landlordId"`
 	Description   string                                  `json:"description"`
 	Photos        []string                                `json:"photos"`
-	PricePerHour  int                                     `json:"pricePerHour"`
+	PricePerDay   int                                     `json:"pricePerDay"`
 	MetroStations []getCreativeSpacesResponseMetroStation `json:"metroStations"`
 	Coordinate    getCreativeSpacesResponseCoordinate     `json:"coordinate"`
 	Calendar      getCreativeSpacesResponseCalendar       `json:"calendar"`
@@ -71,13 +71,13 @@ func GetCreativeSpacesResponseFromStoreData(creativeSpaces []store.CreativeSpace
 		}
 
 		res.CreativeSpaces = append(res.CreativeSpaces, getCreativeSpacesResponseCreativeSpace{
-			Id:           creativeSpace.Id,
-			Title:        creativeSpace.Title,
-			Address:      creativeSpace.Address,
-			LandlordId:   creativeSpace.LandlordId,
-			Description:  creativeSpace.Description,
-			Photos:       creativeSpace.Photos,
-			PricePerHour: creativeSpace.PricePerHour,
+			Id:          creativeSpace.Id,
+			Title:       creativeSpace.Title,
+			Address:     creativeSpace.Address,
+			LandlordId:  creativeSpace.LandlordId,
+			Description: creativeSpace.Description,
+			Photos:      creativeSpace.Photos,
+			PricePerDay: creativeSpace.PricePerDay,
 			Coordinate: getCreativeSpacesResponseCoordinate{
 				Latitude:  creativeSpace.Latitude,
 				Longitude: creativeSpace.Longitude,
@@ -119,7 +119,7 @@ type getCreativeSpaceResponseCreativeSpace struct {
 	LandlordId    int                                    `json:"landlordId"`
 	Description   string                                 `json:"description"`
 	Photos        []string                               `json:"photos"`
-	PricePerHour  int                                    `json:"pricePerHour"`
+	PricePerDay   int                                    `json:"pricePerDay"`
 	MetroStations []getCreativeSpaceResponseMetroStation `json:"metroStations"`
 	Coordinate    getCreativeSpaceResponseCoordinate     `json:"coordinate"`
 	Calendar      getCreativeSpaceResponseCalendar       `json:"calendar"`
@@ -151,13 +151,13 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 	}
 
 	res.CreativeSpace = getCreativeSpaceResponseCreativeSpace{
-		Id:           creativeSpace.Id,
-		Title:        creativeSpace.Title,
-		Address:      creativeSpace.Address,
-		LandlordId:   creativeSpace.LandlordId,
-		Description:  creativeSpace.Description,
-		Photos:       creativeSpace.Photos,
-		PricePerHour: creativeSpace.PricePerHour,
+		Id:          creativeSpace.Id,
+		Title:       creativeSpace.Title,
+		Address:     creativeSpace.Address,
+		LandlordId:  creativeSpace.LandlordId,
+		Description: creativeSpace.Description,
+		Photos:      creativeSpace.Photos,
+		PricePerDay: creativeSpace.PricePerDay,
 		Coordinate: getCreativeSpaceResponseCoordinate{
 			Latitude:  creativeSpace.Latitude,
 			Longitude: creativeSpace.Longitude,

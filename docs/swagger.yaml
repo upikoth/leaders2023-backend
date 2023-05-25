@@ -23,6 +23,29 @@ definitions:
         default: true
         type: boolean
     type: object
+  requests.createCreativeSpaceRequestCalendar:
+    properties:
+      events:
+        items:
+          $ref: '#/definitions/requests.createCreativeSpaceRequestCalendarEvent'
+        type: array
+      link:
+        type: string
+      workDayIndexes:
+        items:
+          type: integer
+        type: array
+    required:
+    - events
+    - workDayIndexes
+    type: object
+  requests.createCreativeSpaceRequestCalendarEvent:
+    properties:
+      date:
+        type: string
+    required:
+    - date
+    type: object
   requests.createCreativeSpaceRequestCoordinate:
     properties:
       latitude:
@@ -37,6 +60,8 @@ definitions:
     properties:
       address:
         type: string
+      calendar:
+        $ref: '#/definitions/requests.createCreativeSpaceRequestCalendar'
       coordinate:
         $ref: '#/definitions/requests.createCreativeSpaceRequestCoordinate'
       description:
@@ -49,16 +74,17 @@ definitions:
         items:
           type: string
         type: array
-      pricePerHour:
+      pricePerDay:
         type: integer
       title:
         type: string
     required:
     - address
+    - calendar
     - coordinate
     - description
     - photos
-    - pricePerHour
+    - pricePerDay
     - title
     type: object
   requests.createCreativeSpaceRequestMetroStation:
@@ -101,6 +127,24 @@ definitions:
     required:
     - fileName
     type: object
+  requests.patchCreativeSpaceRequestCalendar:
+    properties:
+      events:
+        items:
+          $ref: '#/definitions/requests.patchCreativeSpaceRequestCalendarEvent'
+        type: array
+      link:
+        type: string
+      workDayIndexes:
+        items:
+          type: integer
+        type: array
+    type: object
+  requests.patchCreativeSpaceRequestCalendarEvent:
+    properties:
+      date:
+        type: string
+    type: object
   requests.patchCreativeSpaceRequestCoordinate:
     properties:
       latitude:
@@ -112,6 +156,8 @@ definitions:
     properties:
       address:
         type: string
+      calendar:
+        $ref: '#/definitions/requests.patchCreativeSpaceRequestCalendar'
       coordinate:
         $ref: '#/definitions/requests.patchCreativeSpaceRequestCoordinate'
       description:
@@ -126,7 +172,7 @@ definitions:
         items:
           type: string
         type: array
-      pricePerHour:
+      pricePerDay:
         type: integer
       title:
         type: string
@@ -229,6 +275,24 @@ definitions:
       value:
         type: string
     type: object
+  responses.getCreativeSpaceResponseCalendar:
+    properties:
+      events:
+        items:
+          $ref: '#/definitions/responses.getCreativeSpaceResponseCalendarEvent'
+        type: array
+      link:
+        type: string
+      workDayIndexes:
+        items:
+          type: integer
+        type: array
+    type: object
+  responses.getCreativeSpaceResponseCalendarEvent:
+    properties:
+      date:
+        type: string
+    type: object
   responses.getCreativeSpaceResponseCoordinate:
     properties:
       latitude:
@@ -240,6 +304,8 @@ definitions:
     properties:
       address:
         type: string
+      calendar:
+        $ref: '#/definitions/responses.getCreativeSpaceResponseCalendar'
       coordinate:
         $ref: '#/definitions/responses.getCreativeSpaceResponseCoordinate'
       description:
@@ -256,7 +322,7 @@ definitions:
         items:
           type: string
         type: array
-      pricePerHour:
+      pricePerDay:
         type: integer
       title:
         type: string
@@ -277,6 +343,24 @@ definitions:
       name:
         type: string
     type: object
+  responses.getCreativeSpacesResponseCalendar:
+    properties:
+      events:
+        items:
+          $ref: '#/definitions/responses.getCreativeSpacesResponseCalendarEvent'
+        type: array
+      link:
+        type: string
+      workDayIndexes:
+        items:
+          type: integer
+        type: array
+    type: object
+  responses.getCreativeSpacesResponseCalendarEvent:
+    properties:
+      date:
+        type: string
+    type: object
   responses.getCreativeSpacesResponseCoordinate:
     properties:
       latitude:
@@ -288,6 +372,8 @@ definitions:
     properties:
       address:
         type: string
+      calendar:
+        $ref: '#/definitions/responses.getCreativeSpacesResponseCalendar'
       coordinate:
         $ref: '#/definitions/responses.getCreativeSpacesResponseCoordinate'
       description:
@@ -304,7 +390,7 @@ definitions:
         items:
           type: string
         type: array
-      pricePerHour:
+      pricePerDay:
         type: integer
       title:
         type: string
