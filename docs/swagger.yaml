@@ -53,8 +53,6 @@ definitions:
         type: integer
       title:
         type: string
-      workingHours:
-        $ref: '#/definitions/requests.createCreativeSpaceRequestWorkingHours'
     required:
     - address
     - coordinate
@@ -62,7 +60,6 @@ definitions:
     - photos
     - pricePerHour
     - title
-    - workingHours
     type: object
   requests.createCreativeSpaceRequestMetroStation:
     properties:
@@ -73,16 +70,6 @@ definitions:
     required:
     - distanceInMinutes
     - id
-    type: object
-  requests.createCreativeSpaceRequestWorkingHours:
-    properties:
-      endAt:
-        type: string
-      startAt:
-        type: string
-    required:
-    - endAt
-    - startAt
     type: object
   requests.createSessionRequestData:
     properties:
@@ -143,8 +130,6 @@ definitions:
         type: integer
       title:
         type: string
-      workingHours:
-        $ref: '#/definitions/requests.patchCreativeSpaceRequestWorkingHours'
     type: object
   requests.patchCreativeSpaceRequestMetroStation:
     properties:
@@ -153,18 +138,23 @@ definitions:
       id:
         type: integer
     type: object
-  requests.patchCreativeSpaceRequestWorkingHours:
-    properties:
-      endAt:
-        type: string
-      startAt:
-        type: string
-    type: object
   requests.patchUserRequestData:
     properties:
       id:
         type: integer
       phone:
+        type: string
+    type: object
+  responses.convertCaledarFromLinkResponseData:
+    properties:
+      events:
+        items:
+          $ref: '#/definitions/responses.convertCaledarFromLinkResponseEvent'
+        type: array
+    type: object
+  responses.convertCaledarFromLinkResponseEvent:
+    properties:
+      date:
         type: string
     type: object
   responses.convertCaledarResponseData:
@@ -176,9 +166,7 @@ definitions:
     type: object
   responses.convertCaledarResponseEvent:
     properties:
-      endAt:
-        type: string
-      startAt:
+      date:
         type: string
     type: object
   responses.createCreativeSpaceResponseCreativeSpace:
@@ -272,8 +260,6 @@ definitions:
         type: integer
       title:
         type: string
-      workingHours:
-        $ref: '#/definitions/responses.getCreativeSpaceResponseWorkingHours'
     type: object
   responses.getCreativeSpaceResponseData:
     properties:
@@ -289,13 +275,6 @@ definitions:
       id:
         type: integer
       name:
-        type: string
-    type: object
-  responses.getCreativeSpaceResponseWorkingHours:
-    properties:
-      endAt:
-        type: string
-      startAt:
         type: string
     type: object
   responses.getCreativeSpacesResponseCoordinate:
@@ -329,8 +308,6 @@ definitions:
         type: integer
       title:
         type: string
-      workingHours:
-        $ref: '#/definitions/responses.getCreativeSpacesResponseWorkingHours'
     type: object
   responses.getCreativeSpacesResponseData:
     properties:
@@ -348,13 +325,6 @@ definitions:
       id:
         type: integer
       name:
-        type: string
-    type: object
-  responses.getCreativeSpacesResponseWorkingHours:
-    properties:
-      endAt:
-        type: string
-      startAt:
         type: string
     type: object
   responses.getMetroStationsResponseData:
@@ -456,6 +426,33 @@ paths:
             - properties:
                 data:
                   $ref: '#/definitions/responses.convertCaledarResponseData'
+              type: object
+        "403":
+          description: 'Коды ошибок: [1100]'
+          schema:
+            $ref: '#/definitions/model.ResponseError'
+      summary: Возвращает события календаря
+  /api/v1/calendar/convertFromLink:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.ResponseSuccess'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.convertCaledarFromLinkResponseData'
               type: object
         "403":
           description: 'Коды ошибок: [1100]'

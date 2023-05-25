@@ -98,6 +98,52 @@
                 }
             }
         },
+        "/api/v1/calendar/convertFromLink": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Возвращает события календаря",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.ResponseSuccess"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.convertCaledarFromLinkResponseData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Коды ошибок: [1100]",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/creativeSpace": {
             "post": {
                 "consumes": [
@@ -797,8 +843,7 @@
                 "description",
                 "photos",
                 "pricePerHour",
-                "title",
-                "workingHours"
+                "title"
             ],
             "properties": {
                 "address": {
@@ -827,9 +872,6 @@
                 },
                 "title": {
                     "type": "string"
-                },
-                "workingHours": {
-                    "$ref": "#/definitions/requests.createCreativeSpaceRequestWorkingHours"
                 }
             }
         },
@@ -845,21 +887,6 @@
                 },
                 "id": {
                     "type": "integer"
-                }
-            }
-        },
-        "requests.createCreativeSpaceRequestWorkingHours": {
-            "type": "object",
-            "required": [
-                "endAt",
-                "startAt"
-            ],
-            "properties": {
-                "endAt": {
-                    "type": "string"
-                },
-                "startAt": {
-                    "type": "string"
                 }
             }
         },
@@ -951,9 +978,6 @@
                 },
                 "title": {
                     "type": "string"
-                },
-                "workingHours": {
-                    "$ref": "#/definitions/requests.patchCreativeSpaceRequestWorkingHours"
                 }
             }
         },
@@ -968,17 +992,6 @@
                 }
             }
         },
-        "requests.patchCreativeSpaceRequestWorkingHours": {
-            "type": "object",
-            "properties": {
-                "endAt": {
-                    "type": "string"
-                },
-                "startAt": {
-                    "type": "string"
-                }
-            }
-        },
         "requests.patchUserRequestData": {
             "type": "object",
             "properties": {
@@ -986,6 +999,25 @@
                     "type": "integer"
                 },
                 "phone": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.convertCaledarFromLinkResponseData": {
+            "type": "object",
+            "properties": {
+                "events": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.convertCaledarFromLinkResponseEvent"
+                    }
+                }
+            }
+        },
+        "responses.convertCaledarFromLinkResponseEvent": {
+            "type": "object",
+            "properties": {
+                "date": {
                     "type": "string"
                 }
             }
@@ -1004,10 +1036,7 @@
         "responses.convertCaledarResponseEvent": {
             "type": "object",
             "properties": {
-                "endAt": {
-                    "type": "string"
-                },
-                "startAt": {
+                "date": {
                     "type": "string"
                 }
             }
@@ -1153,9 +1182,6 @@
                 },
                 "title": {
                     "type": "string"
-                },
-                "workingHours": {
-                    "$ref": "#/definitions/responses.getCreativeSpaceResponseWorkingHours"
                 }
             }
         },
@@ -1180,17 +1206,6 @@
                     "type": "integer"
                 },
                 "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getCreativeSpaceResponseWorkingHours": {
-            "type": "object",
-            "properties": {
-                "endAt": {
-                    "type": "string"
-                },
-                "startAt": {
                     "type": "string"
                 }
             }
@@ -1241,9 +1256,6 @@
                 },
                 "title": {
                     "type": "string"
-                },
-                "workingHours": {
-                    "$ref": "#/definitions/responses.getCreativeSpacesResponseWorkingHours"
                 }
             }
         },
@@ -1271,17 +1283,6 @@
                     "type": "integer"
                 },
                 "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getCreativeSpacesResponseWorkingHours": {
-            "type": "object",
-            "properties": {
-                "endAt": {
-                    "type": "string"
-                },
-                "startAt": {
                     "type": "string"
                 }
             }

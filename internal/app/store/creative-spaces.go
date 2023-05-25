@@ -8,19 +8,17 @@ import (
 )
 
 type CreativeSpace struct {
-	tableName           struct{}                     `pg:"creative_spaces"` //nolint:unused // Имя таблицы
-	Id                  int                          `pg:"id"`
-	Title               string                       `pg:"title"`
-	Address             string                       `pg:"address"`
-	LandlordId          int                          `pg:"landlord_id"`
-	Photos              []string                     `pg:"photos,array"`
-	PricePerHour        int                          `pg:"price_per_hour"`
-	Latitude            float32                      `pg:"latitude"`
-	Longitude           float32                      `pg:"longitude"`
-	WorkingHoursStartAt string                       `pg:"working_hours_start_at"`
-	WorkingHoursEndAt   string                       `pg:"working_hours_end_at"`
-	Description         string                       `pg:"description"`
-	MetroStations       []*CreativeSpaceMetroStation `pg:"rel:has-many"`
+	tableName     struct{}                     `pg:"creative_spaces"` //nolint:unused // Имя таблицы
+	Id            int                          `pg:"id"`
+	Title         string                       `pg:"title"`
+	Address       string                       `pg:"address"`
+	LandlordId    int                          `pg:"landlord_id"`
+	Photos        []string                     `pg:"photos,array"`
+	PricePerHour  int                          `pg:"price_per_hour"`
+	Latitude      float32                      `pg:"latitude"`
+	Longitude     float32                      `pg:"longitude"`
+	Description   string                       `pg:"description"`
+	MetroStations []*CreativeSpaceMetroStation `pg:"rel:has-many"`
 }
 
 type CreativeSpaceMetroStation struct {

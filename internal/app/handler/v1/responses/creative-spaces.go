@@ -2,11 +2,6 @@ package responses
 
 import "github.com/upikoth/leaders2023-backend/internal/app/store"
 
-type getCreativeSpacesResponseWorkingHours struct {
-	StartAt string `json:"startAt"`
-	EndAt   string `json:"endAt"`
-}
-
 type getCreativeSpacesResponseCoordinate struct {
 	Latitude  float32 `json:"latitude"`
 	Longitude float32 `json:"longitude"`
@@ -29,7 +24,6 @@ type getCreativeSpacesResponseCreativeSpace struct {
 	PricePerHour  int                                     `json:"pricePerHour"`
 	MetroStations []getCreativeSpacesResponseMetroStation `json:"metroStations"`
 	Coordinate    getCreativeSpacesResponseCoordinate     `json:"coordinate"`
-	WorkingHours  getCreativeSpacesResponseWorkingHours   `json:"workingHours"`
 }
 
 type getCreativeSpacesResponseData struct {
@@ -63,20 +57,11 @@ func GetCreativeSpacesResponseFromStoreData(creativeSpaces []store.CreativeSpace
 				Latitude:  creativeSpace.Latitude,
 				Longitude: creativeSpace.Longitude,
 			},
-			WorkingHours: getCreativeSpacesResponseWorkingHours{
-				StartAt: creativeSpace.WorkingHoursStartAt,
-				EndAt:   creativeSpace.WorkingHoursEndAt,
-			},
 			MetroStations: resMetroStations,
 		})
 	}
 
 	return res
-}
-
-type getCreativeSpaceResponseWorkingHours struct {
-	StartAt string `json:"startAt"`
-	EndAt   string `json:"endAt"`
 }
 
 type getCreativeSpaceResponseCoordinate struct {
@@ -101,7 +86,6 @@ type getCreativeSpaceResponseCreativeSpace struct {
 	PricePerHour  int                                    `json:"pricePerHour"`
 	MetroStations []getCreativeSpaceResponseMetroStation `json:"metroStations"`
 	Coordinate    getCreativeSpaceResponseCoordinate     `json:"coordinate"`
-	WorkingHours  getCreativeSpaceResponseWorkingHours   `json:"workingHours"`
 }
 
 type getCreativeSpaceResponseData struct {
@@ -132,10 +116,6 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 		Coordinate: getCreativeSpaceResponseCoordinate{
 			Latitude:  creativeSpace.Latitude,
 			Longitude: creativeSpace.Longitude,
-		},
-		WorkingHours: getCreativeSpaceResponseWorkingHours{
-			StartAt: creativeSpace.WorkingHoursStartAt,
-			EndAt:   creativeSpace.WorkingHoursEndAt,
 		},
 		MetroStations: resMetroStations,
 	}

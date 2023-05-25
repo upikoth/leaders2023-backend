@@ -18,11 +18,6 @@ func GetCreativeSpaceDataFromRequest(c *gin.Context) (getCreativeSpaceRequestDat
 	return data, nil
 }
 
-type createCreativeSpaceRequestWorkingHours struct {
-	StartAt string `json:"startAt" binding:"required"`
-	EndAt   string `json:"endAt" binding:"required"`
-}
-
 type createCreativeSpaceRequestCoordinate struct {
 	Latitude  float32 `json:"latitude" binding:"required"`
 	Longitude float32 `json:"longitude" binding:"required"`
@@ -41,7 +36,6 @@ type createCreativeSpaceRequestData struct {
 	PricePerHour  int                                      `json:"pricePerHour" binding:"required"`
 	MetroStations []createCreativeSpaceRequestMetroStation `json:"metroStations"`
 	Coordinate    createCreativeSpaceRequestCoordinate     `json:"coordinate" binding:"required"`
-	WorkingHours  createCreativeSpaceRequestWorkingHours   `json:"workingHours" binding:"required"`
 }
 
 func CreateCreativeSpaceDataFromRequest(c *gin.Context) (createCreativeSpaceRequestData, error) {
@@ -54,11 +48,6 @@ func CreateCreativeSpaceDataFromRequest(c *gin.Context) (createCreativeSpaceRequ
 	}
 
 	return data, nil
-}
-
-type patchCreativeSpaceRequestWorkingHours struct {
-	StartAt string `json:"startAt"`
-	EndAt   string `json:"endAt"`
 }
 
 type patchCreativeSpaceRequestCoordinate struct {
@@ -83,7 +72,6 @@ type patchCreativeSpaceRequestBody struct {
 	PricePerHour  int                                     `json:"pricePerHour"`
 	MetroStations []patchCreativeSpaceRequestMetroStation `json:"metroStations"`
 	Coordinate    patchCreativeSpaceRequestCoordinate     `json:"coordinate"`
-	WorkingHours  patchCreativeSpaceRequestWorkingHours   `json:"workingHours"`
 }
 
 type patchCreativeSpaceRequestData struct {
@@ -95,7 +83,6 @@ type patchCreativeSpaceRequestData struct {
 	PricePerHour  int                                     `json:"pricePerHour"`
 	MetroStations []patchCreativeSpaceRequestMetroStation `json:"metroStations"`
 	Coordinate    patchCreativeSpaceRequestCoordinate     `json:"coordinate"`
-	WorkingHours  patchCreativeSpaceRequestWorkingHours   `json:"workingHours"`
 }
 
 func PatchCreativeSpaceDataFromRequest(c *gin.Context) (patchCreativeSpaceRequestData, error) {
@@ -125,7 +112,6 @@ func PatchCreativeSpaceDataFromRequest(c *gin.Context) (patchCreativeSpaceReques
 	data.PricePerHour = dataFromBody.PricePerHour
 	data.MetroStations = dataFromBody.MetroStations
 	data.Coordinate = dataFromBody.Coordinate
-	data.WorkingHours = dataFromBody.WorkingHours
 
 	return data, nil
 }

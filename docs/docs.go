@@ -108,6 +108,52 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/api/v1/calendar/convertFromLink": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Возвращает события календаря",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.ResponseSuccess"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.convertCaledarFromLinkResponseData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Коды ошибок: [1100]",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/creativeSpace": {
             "post": {
                 "consumes": [
@@ -807,8 +853,7 @@ const docTemplate_swagger = `{
                 "description",
                 "photos",
                 "pricePerHour",
-                "title",
-                "workingHours"
+                "title"
             ],
             "properties": {
                 "address": {
@@ -837,9 +882,6 @@ const docTemplate_swagger = `{
                 },
                 "title": {
                     "type": "string"
-                },
-                "workingHours": {
-                    "$ref": "#/definitions/requests.createCreativeSpaceRequestWorkingHours"
                 }
             }
         },
@@ -855,21 +897,6 @@ const docTemplate_swagger = `{
                 },
                 "id": {
                     "type": "integer"
-                }
-            }
-        },
-        "requests.createCreativeSpaceRequestWorkingHours": {
-            "type": "object",
-            "required": [
-                "endAt",
-                "startAt"
-            ],
-            "properties": {
-                "endAt": {
-                    "type": "string"
-                },
-                "startAt": {
-                    "type": "string"
                 }
             }
         },
@@ -961,9 +988,6 @@ const docTemplate_swagger = `{
                 },
                 "title": {
                     "type": "string"
-                },
-                "workingHours": {
-                    "$ref": "#/definitions/requests.patchCreativeSpaceRequestWorkingHours"
                 }
             }
         },
@@ -978,17 +1002,6 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "requests.patchCreativeSpaceRequestWorkingHours": {
-            "type": "object",
-            "properties": {
-                "endAt": {
-                    "type": "string"
-                },
-                "startAt": {
-                    "type": "string"
-                }
-            }
-        },
         "requests.patchUserRequestData": {
             "type": "object",
             "properties": {
@@ -996,6 +1009,25 @@ const docTemplate_swagger = `{
                     "type": "integer"
                 },
                 "phone": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.convertCaledarFromLinkResponseData": {
+            "type": "object",
+            "properties": {
+                "events": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.convertCaledarFromLinkResponseEvent"
+                    }
+                }
+            }
+        },
+        "responses.convertCaledarFromLinkResponseEvent": {
+            "type": "object",
+            "properties": {
+                "date": {
                     "type": "string"
                 }
             }
@@ -1014,10 +1046,7 @@ const docTemplate_swagger = `{
         "responses.convertCaledarResponseEvent": {
             "type": "object",
             "properties": {
-                "endAt": {
-                    "type": "string"
-                },
-                "startAt": {
+                "date": {
                     "type": "string"
                 }
             }
@@ -1163,9 +1192,6 @@ const docTemplate_swagger = `{
                 },
                 "title": {
                     "type": "string"
-                },
-                "workingHours": {
-                    "$ref": "#/definitions/responses.getCreativeSpaceResponseWorkingHours"
                 }
             }
         },
@@ -1190,17 +1216,6 @@ const docTemplate_swagger = `{
                     "type": "integer"
                 },
                 "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getCreativeSpaceResponseWorkingHours": {
-            "type": "object",
-            "properties": {
-                "endAt": {
-                    "type": "string"
-                },
-                "startAt": {
                     "type": "string"
                 }
             }
@@ -1251,9 +1266,6 @@ const docTemplate_swagger = `{
                 },
                 "title": {
                     "type": "string"
-                },
-                "workingHours": {
-                    "$ref": "#/definitions/responses.getCreativeSpacesResponseWorkingHours"
                 }
             }
         },
@@ -1281,17 +1293,6 @@ const docTemplate_swagger = `{
                     "type": "integer"
                 },
                 "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getCreativeSpacesResponseWorkingHours": {
-            "type": "object",
-            "properties": {
-                "endAt": {
-                    "type": "string"
-                },
-                "startAt": {
                     "type": "string"
                 }
             }
