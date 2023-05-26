@@ -64,6 +64,7 @@ func (s *ApiServer) initRoutes() {
 
 	authorized.GET("/api/v1/booking/:id", s.handler.V1.GetBooking)
 	authorized.POST("/api/v1/booking", s.handler.V1.CreateBooking)
+	authorized.PATCH("/api/v1/booking/:id", s.handler.V1.PatchBooking)
 
 	s.router.NoRoute(func(c *gin.Context) {
 		c.Set("responseCode", http.StatusNotFound)

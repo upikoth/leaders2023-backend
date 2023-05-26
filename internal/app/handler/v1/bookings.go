@@ -114,7 +114,7 @@ func (h *HandlerV1) CreateBooking(c *gin.Context) {
 
 	if userData.UserRole != model.RoleTenant {
 		c.Set("responseCode", http.StatusForbidden)
-		c.Set("responseErrorCode", constants.ErrCreativeSpacePostForbidden)
+		c.Set("responseErrorCode", constants.ErrBookingGetForbidden)
 		return
 	}
 
@@ -155,4 +155,59 @@ func (h *HandlerV1) CreateBooking(c *gin.Context) {
 
 	responseData := responses.CreateBookingResponseFromStoreData(bookingId)
 	c.Set("responseData", responseData)
+}
+
+// PatchBooking godoc
+// @Summary      Изменение дат бронирования креативной площадки
+// @Accept       json
+// @Produce      json
+// @Param        body body  requests.patchBookingRequestData true "Параметры запроса"
+// @Success      200  {object}  model.ResponseSuccess
+// @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
+// @Router       /api/v1/booking/:id [patch].
+func (h *HandlerV1) PatchBooking(c *gin.Context) {
+	reqData, err := requests.PatchBookingDataFromRequest(c)
+	userData, isClaimsValid := c.MustGet("userData").(model.JwtTokenUserData)
+
+	if err != nil || !isClaimsValid {
+		c.Set("responseCode", http.StatusBadRequest)
+		c.Set("responseErrorCode", constants.ErrBookingPatchNotValidRequestData)
+		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	if userData.UserRole != model.RoleAdmin {
+		c.Set("responseCode", http.StatusForbidden)
+		c.Set("responseErrorCode", constants.ErrBookingPatchForbidden)
+		return
+	}
+
+	booking, err := h.store.GetBookingById(reqData.Id)
+
+	if err != nil {
+		c.Set("responseErrorCode", constants.ErrBookingPatchDbError)
+		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	bookingCalendarEvents := []*store.CalendarEvent{}
+
+	for _, event := range reqData.CalendarEvents {
+		bookingCalendarEvents = append(bookingCalendarEvents, &store.CalendarEvent{
+			BookingId:       reqData.Id,
+			Date:            event.Date,
+			CreativeSpaceId: booking.CreativeSpaceId,
+		})
+	}
+
+	booking.CalendarEvents = bookingCalendarEvents
+
+	storeErr := h.store.PatchBooking(booking)
+
+	if storeErr != nil {
+		c.Set("responseCode", http.StatusBadRequest)
+		c.Set("responseErrorCode", constants.ErrBookingPatchDbError)
+		c.Set("responseErrorDetails", storeErr)
+		return
+	}
 }

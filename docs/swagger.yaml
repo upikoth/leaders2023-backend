@@ -146,6 +146,22 @@ definitions:
     required:
     - fileName
     type: object
+  requests.patchBookingRequestCalendarEvent:
+    properties:
+      date:
+        type: string
+    required:
+    - date
+    type: object
+  requests.patchBookingRequestData:
+    properties:
+      calendarEvents:
+        items:
+          $ref: '#/definitions/requests.patchBookingRequestCalendarEvent'
+        type: array
+      id:
+        type: integer
+    type: object
   requests.patchCreativeSpaceRequestCalendar:
     properties:
       events:
@@ -635,6 +651,28 @@ paths:
           schema:
             $ref: '#/definitions/model.ResponseError'
       summary: Возвращает бронирование по id
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: Параметры запроса
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.patchBookingRequestData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "403":
+          description: 'Коды ошибок: [1100]'
+          schema:
+            $ref: '#/definitions/model.ResponseError'
+      summary: Изменение дат бронирования креативной площадки
   /api/v1/bookings:
     get:
       consumes:

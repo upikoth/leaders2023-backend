@@ -154,6 +154,40 @@ const docTemplate_swagger = `{
                         }
                     }
                 }
+            },
+            "patch": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Изменение дат бронирования креативной площадки",
+                "parameters": [
+                    {
+                        "description": "Параметры запроса",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.patchBookingRequestData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseSuccess"
+                        }
+                    },
+                    "403": {
+                        "description": "Коды ошибок: [1100]",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseError"
+                        }
+                    }
+                }
             }
         },
         "/api/v1/bookings": {
@@ -1150,6 +1184,31 @@ const docTemplate_swagger = `{
             "properties": {
                 "fileName": {
                     "type": "string"
+                }
+            }
+        },
+        "requests.patchBookingRequestCalendarEvent": {
+            "type": "object",
+            "required": [
+                "date"
+            ],
+            "properties": {
+                "date": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.patchBookingRequestData": {
+            "type": "object",
+            "properties": {
+                "calendarEvents": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/requests.patchBookingRequestCalendarEvent"
+                    }
+                },
+                "id": {
+                    "type": "integer"
                 }
             }
         },

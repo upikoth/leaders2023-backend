@@ -2,6 +2,22 @@ package requests
 
 import "github.com/gin-gonic/gin"
 
+type getBookingRequestData struct {
+	Id int `uri:"id" binding:"required"`
+}
+
+func GetBookingDataFromRequest(c *gin.Context) (getBookingRequestData, error) {
+	data := getBookingRequestData{}
+
+	err := c.BindUri(&data)
+
+	if err != nil {
+		return getBookingRequestData{}, err
+	}
+
+	return data, nil
+}
+
 type createBookingRequestCalendarEvent struct {
 	Date string `json:"date" binding:"required"`
 }
@@ -23,17 +39,42 @@ func CreateBookingDataFromRequest(c *gin.Context) (createBookingRequestData, err
 	return data, nil
 }
 
-type getBookingRequestData struct {
+type patchBookingRequestUri struct {
 	Id int `uri:"id" binding:"required"`
 }
 
-func GetBookingDataFromRequest(c *gin.Context) (getBookingRequestData, error) {
-	data := getBookingRequestData{}
+type patchBookingRequestCalendarEvent struct {
+	Date string `json:"date" binding:"required"`
+}
 
-	err := c.BindUri(&data)
+type patchBookingRequestDataBody struct {
+	CalendarEvents []patchBookingRequestCalendarEvent `json:"calendarEvents"`
+}
 
-	if err != nil {
-		return getBookingRequestData{}, err
+type patchBookingRequestData struct {
+	Id             int                                `json:"id"`
+	CalendarEvents []patchBookingRequestCalendarEvent `json:"calendarEvents"`
+}
+
+func PatchBookingDataFromRequest(c *gin.Context) (patchBookingRequestData, error) {
+	dataFromUri := patchBookingRequestUri{}
+	dataFromBody := patchBookingRequestDataBody{}
+
+	uriErr := c.BindUri(&dataFromUri)
+
+	if uriErr != nil {
+		return patchBookingRequestData{}, uriErr
+	}
+
+	bodyErr := c.BindJSON(&dataFromBody)
+
+	if bodyErr != nil {
+		return patchBookingRequestData{}, bodyErr
+	}
+
+	data := patchBookingRequestData{
+		Id:             dataFromUri.Id,
+		CalendarEvents: dataFromBody.CalendarEvents,
 	}
 
 	return data, nil

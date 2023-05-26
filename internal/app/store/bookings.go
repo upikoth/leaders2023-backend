@@ -29,8 +29,8 @@ func (s *Store) GetBookings(filters BookingsFilter) ([]Booking, error) {
 
 	err := s.db.
 		Model(&bookings).
-		Where("tenant_id = ?", filters.TenantId).
-		WhereOr("landlord_id = ?", filters.LandlordId).
+		Where("tenant_id = ? OR ?", filters.TenantId, filters.TenantId == 0).
+		Where("landlord_id = ? OR ?", filters.LandlordId, filters.LandlordId == 0).
 		Relation("CalendarEvents").
 		Select()
 
@@ -103,4 +103,50 @@ func (s *Store) CreateBooking(booking Booking) (int, error) {
 	}
 
 	return booking.Id, nil
+}
+
+func (s *Store) PatchBooking(booking Booking) error {
+	count, err := s.db.
+		Model(&booking).
+		WherePK().
+		Count()
+
+	if err != nil {
+		return err
+	}
+
+	if count == 0 {
+		return constants.ErrBookingPatchNotFoundById
+	}
+
+	storeErr := s.db.RunInTransaction(context.Background(), func(tx *pg.Tx) error {
+		_, bookingCalendarEventsDeleteErr := tx.
+			Model(&CalendarEvent{}).
+			Where("booking_id = ?", booking.Id).
+			Delete()
+
+		if bookingCalendarEventsDeleteErr != nil {
+			return bookingCalendarEventsDeleteErr
+		}
+
+		if len(booking.CalendarEvents) > 0 {
+			// Записываем в таблицу calendar_events.
+			bookingCalendarEventsResult, bookingCalendarEventsErr := tx.
+				Model(&booking.CalendarEvents).
+				OnConflict("DO NOTHING").
+				Insert()
+
+			if bookingCalendarEventsErr != nil {
+				return bookingCalendarEventsErr
+			}
+
+			if bookingCalendarEventsResult.RowsAffected() == 0 {
+				return constants.ErrBookingPatchDbError
+			}
+		}
+
+		return nil
+	})
+
+	return storeErr
 }
