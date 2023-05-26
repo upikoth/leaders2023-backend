@@ -14,7 +14,9 @@ type convertCaledarResponseData struct {
 }
 
 func ConvertCalendarResponseFromCalendarEvents(events []*ical.VEvent) convertCaledarResponseData {
-	res := convertCaledarResponseData{}
+	res := convertCaledarResponseData{
+		Events: []convertCaledarResponseEvent{},
+	}
 
 	for _, event := range events {
 		startAt, _ := event.GetStartAt()
@@ -41,7 +43,9 @@ type convertCaledarFromLinkResponseData struct {
 }
 
 func ConvertCalendarFromLinkResponseFromCalendarEvents(events []*ical.VEvent) convertCaledarFromLinkResponseData {
-	res := convertCaledarFromLinkResponseData{}
+	res := convertCaledarFromLinkResponseData{
+		Events: []convertCaledarFromLinkResponseEvent{},
+	}
 
 	for _, event := range events {
 		startAt, _ := event.GetStartAt()

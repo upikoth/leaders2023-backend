@@ -11,6 +11,46 @@ import (
 	"github.com/upikoth/leaders2023-backend/internal/app/store"
 )
 
+// GetBookings godoc
+// @Summary      Возвращает список бронирований
+// @Accept       json
+// @Produce      json
+// @Param        Authorization  header  string  true  "Authentication header"
+// @Success      200  {object}  model.ResponseSuccess{data=responses.getBookingsResponseData}
+// @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
+// @Router       /api/v1/bookings [get].
+func (h *HandlerV1) GetBookings(c *gin.Context) {
+	userData, isClaimsValid := c.MustGet("userData").(model.JwtTokenUserData)
+
+	if !isClaimsValid {
+		c.Set("responseCode", http.StatusBadRequest)
+		c.Set("responseErrorCode", constants.ErrBookingsGetNotValidRequestData)
+		return
+	}
+
+	bookingFilter := store.BookingsFilter{}
+
+	switch userData.UserRole {
+	case model.RoleTenant:
+		bookingFilter.TenantId = userData.UserId
+	case model.RoleLandlord:
+		bookingFilter.LandlordId = userData.UserId
+	case model.RoleAdmin:
+	default:
+	}
+
+	bookings, err := h.store.GetBookings(bookingFilter)
+
+	if err != nil {
+		c.Set("responseErrorCode", constants.ErrBookingsGetDbError)
+		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	responseData := responses.GetBookingsResponseFromStoreData(bookings)
+	c.Set("responseData", responseData)
+}
+
 // CreateBooking godoc
 // @Summary      Бронирование креативной площадки
 // @Accept       json

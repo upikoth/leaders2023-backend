@@ -5,4 +5,5 @@ type CalendarEvent struct {
 	Id              int      `pg:"id"`
 	Date            string   `pg:"date"`
 	CreativeSpaceId int      `pg:"creative_space_id"`
+	BookingId       int      `pg:"booking_id"`
 }

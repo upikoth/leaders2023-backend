@@ -16,7 +16,9 @@ type getUsersResponseData struct {
 }
 
 func GetUsersResponseFromStoreData(users []store.User) getUsersResponseData {
-	res := getUsersResponseData{}
+	res := getUsersResponseData{
+		Users: []getUsersResponseUser{},
+	}
 
 	for _, user := range users {
 		resUser := getUsersResponseUser{

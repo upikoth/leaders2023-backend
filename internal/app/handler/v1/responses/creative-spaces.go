@@ -42,7 +42,9 @@ type getCreativeSpacesResponseData struct {
 }
 
 func GetCreativeSpacesResponseFromStoreData(creativeSpaces []store.CreativeSpace) getCreativeSpacesResponseData {
-	res := getCreativeSpacesResponseData{}
+	res := getCreativeSpacesResponseData{
+		CreativeSpaces: []getCreativeSpacesResponseCreativeSpace{},
+	}
 
 	for _, creativeSpace := range creativeSpaces {
 		resMetroStations := []getCreativeSpacesResponseMetroStation{}

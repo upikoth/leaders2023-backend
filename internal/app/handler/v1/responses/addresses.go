@@ -15,7 +15,9 @@ type getAddressesResponseData struct {
 }
 
 func GetAddressesResponseFromStoreData(addresses []*suggest.AddressSuggestion) getAddressesResponseData {
-	res := getAddressesResponseData{}
+	res := getAddressesResponseData{
+		Addresses: []getAddressesResponseUser{},
+	}
 
 	for _, address := range addresses {
 		resAddress := getAddressesResponseUser{

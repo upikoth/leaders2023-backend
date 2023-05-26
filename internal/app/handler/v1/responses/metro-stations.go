@@ -13,7 +13,9 @@ type getMetroStationsResponseData struct {
 }
 
 func GetMetroStationsResponseFromStoreData(metroStations []store.MetroStation) getMetroStationsResponseData {
-	res := getMetroStationsResponseData{}
+	res := getMetroStationsResponseData{
+		MetroStations: []getMetroStationsResponseMetroStation{},
+	}
 
 	for _, station := range metroStations {
 		resStation := getMetroStationsResponseMetroStation{

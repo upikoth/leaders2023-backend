@@ -60,6 +60,7 @@ func (s *ApiServer) initRoutes() {
 	authorized.POST("/api/v1/calendar/convert", s.handler.V1.ConverCalendar)
 	authorized.POST("/api/v1/calendar/convertFromLink", s.handler.V1.ConverCalendarFromLink)
 
+	authorized.GET("/api/v1/bookings", s.handler.V1.GetBookings)
 	authorized.POST("/api/v1/booking", s.handler.V1.CreateBooking)
 
 	s.router.NoRoute(func(c *gin.Context) {

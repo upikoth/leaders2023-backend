@@ -19,6 +19,28 @@ type Booking struct {
 	CalendarEvents  []*CalendarEvent   `pg:"rel:has-many"`
 }
 
+type BookingsFilter struct {
+	TenantId   int `pg:"tenant_id"`
+	LandlordId int `pg:"landlord_id"`
+}
+
+func (s *Store) GetBookings(filters BookingsFilter) ([]Booking, error) {
+	bookings := []Booking{}
+
+	err := s.db.
+		Model(&bookings).
+		Relation("CalendarEvents").
+		Where("tenant_id = ?", filters.TenantId).
+		WhereOr("landlord_id = ?", filters.LandlordId).
+		Select()
+
+	if err != nil {
+		return nil, err
+	}
+
+	return bookings, nil
+}
+
 func (s *Store) CreateBooking(booking Booking) (int, error) {
 	storeErr := s.db.RunInTransaction(context.Background(), func(tx *pg.Tx) error {
 		// Записываем в таблицу bookings.
@@ -36,6 +58,10 @@ func (s *Store) CreateBooking(booking Booking) (int, error) {
 		}
 
 		if len(booking.CalendarEvents) > 0 {
+			for i := range booking.CalendarEvents {
+				booking.CalendarEvents[i].BookingId = booking.Id
+			}
+
 			// Записываем в таблицу calendar_events.
 			bookingCalendarEventsResult, bookingCalendarEventsErr := tx.
 				Model(&booking.CalendarEvents).
