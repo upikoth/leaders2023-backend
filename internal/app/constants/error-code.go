@@ -61,21 +61,25 @@ var (
 	ErrCreativeSpacePatchDbError             = errors.New("2302")
 	ErrPatchSpacePostForbidden               = errors.New("2303")
 
-	ErrSessionGetNotValidRequestData = errors.New("1400")
+	ErrSessionGetNotValidRequestData = errors.New("2400")
 
-	ErrAddressesGetNotValidRequestData = errors.New("1500")
-	ErrAddressesGetDadataError         = errors.New("1501")
+	ErrAddressesGetNotValidRequestData = errors.New("2500")
+	ErrAddressesGetDadataError         = errors.New("2501")
 
-	ErrFilePostNotValidRequestData = errors.New("1600")
-	ErrFilePostOpenFileError       = errors.New("1601")
-	ErrFilePostS3Error             = errors.New("1602")
+	ErrFilePostNotValidRequestData = errors.New("2600")
+	ErrFilePostOpenFileError       = errors.New("2601")
+	ErrFilePostS3Error             = errors.New("2602")
 
-	ErrFileDeleteNotValidRequestData = errors.New("1700")
-	ErrFileDeleteS3Error             = errors.New("1701")
+	ErrFileDeleteNotValidRequestData = errors.New("2700")
+	ErrFileDeleteS3Error             = errors.New("2701")
 
-	ErrCalendarConvertNotValidRequestData = errors.New("1800")
+	ErrCalendarConvertNotValidRequestData = errors.New("2800")
 
-	ErrCalendarConvertFromLinkNotValidRequestData = errors.New("1900")
+	ErrCalendarConvertFromLinkNotValidRequestData = errors.New("2900")
+
+	ErrBookingPostDbError             = errors.New("3000")
+	ErrBookingPostNotValidRequestData = errors.New("3001")
+	ErrBookingPostForbidden           = errors.New("3002")
 )
 
 //nolint:gochecknoglobals // Пока добавил в игнор.
@@ -151,4 +155,8 @@ var ErrDescriptionByCode = map[error]string{
 	ErrCalendarConvertNotValidRequestData: "Ошбика при валидации параметров запроса",
 
 	ErrCalendarConvertFromLinkNotValidRequestData: "Ошбика при валидации параметров запроса",
+
+	ErrBookingPostDbError:             "Ошибка при бронировании площадки",
+	ErrBookingPostNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrBookingPostForbidden:           "Недостаточно прав",
 }

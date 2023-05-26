@@ -4,6 +4,14 @@ type Role string
 
 const (
 	RoleAdmin    Role = "admin"
-	RoleRenter   Role = "renter"
+	RoleTenant   Role = "tenant"
 	RoleLandlord Role = "landlord"
+)
+
+type BookingStaus string
+
+const (
+	BookingStausConfirmationByLandlord BookingStaus = "confirmation"
+	BookingStausConfirmedByLandlord    BookingStaus = "confirmed"
+	BookingStausFinishedByTenant       BookingStaus = "finished"
 )

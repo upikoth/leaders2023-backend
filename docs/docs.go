@@ -62,6 +62,54 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/api/v1/booking": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Бронирование креативной площадки",
+                "parameters": [
+                    {
+                        "description": "Параметры запроса",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.createBookingRequestData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.ResponseSuccess"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.createBookingResponseData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Коды ошибок: [1100]",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/calendar/convert": {
             "post": {
                 "consumes": [
@@ -830,6 +878,35 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "requests.createBookingRequestCalendarEvent": {
+            "type": "object",
+            "required": [
+                "date"
+            ],
+            "properties": {
+                "date": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.createBookingRequestData": {
+            "type": "object",
+            "required": [
+                "calendarEvents",
+                "creativeSpaceId"
+            ],
+            "properties": {
+                "calendarEvents": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/requests.createBookingRequestCalendarEvent"
+                    }
+                },
+                "creativeSpaceId": {
+                    "type": "integer"
+                }
+            }
+        },
         "requests.createCreativeSpaceRequestCalendar": {
             "type": "object",
             "required": [
@@ -1118,6 +1195,22 @@ const docTemplate_swagger = `{
             "properties": {
                 "date": {
                     "type": "string"
+                }
+            }
+        },
+        "responses.createBookingResponseBooking": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "responses.createBookingResponseData": {
+            "type": "object",
+            "properties": {
+                "booking": {
+                    "$ref": "#/definitions/responses.createBookingResponseBooking"
                 }
             }
         },

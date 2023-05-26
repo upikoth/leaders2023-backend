@@ -23,6 +23,25 @@ definitions:
         default: true
         type: boolean
     type: object
+  requests.createBookingRequestCalendarEvent:
+    properties:
+      date:
+        type: string
+    required:
+    - date
+    type: object
+  requests.createBookingRequestData:
+    properties:
+      calendarEvents:
+        items:
+          $ref: '#/definitions/requests.createBookingRequestCalendarEvent'
+        type: array
+      creativeSpaceId:
+        type: integer
+    required:
+    - calendarEvents
+    - creativeSpaceId
+    type: object
   requests.createCreativeSpaceRequestCalendar:
     properties:
       events:
@@ -214,6 +233,16 @@ definitions:
     properties:
       date:
         type: string
+    type: object
+  responses.createBookingResponseBooking:
+    properties:
+      id:
+        type: integer
+    type: object
+  responses.createBookingResponseData:
+    properties:
+      booking:
+        $ref: '#/definitions/responses.createBookingResponseBooking'
     type: object
   responses.createCreativeSpaceResponseCreativeSpace:
     properties:
@@ -491,6 +520,34 @@ paths:
           schema:
             $ref: '#/definitions/model.ResponseError'
       summary: Возвращает список пользователей
+  /api/v1/booking:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Параметры запроса
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.createBookingRequestData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.ResponseSuccess'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.createBookingResponseData'
+              type: object
+        "403":
+          description: 'Коды ошибок: [1100]'
+          schema:
+            $ref: '#/definitions/model.ResponseError'
+      summary: Бронирование креативной площадки
   /api/v1/calendar/convert:
     post:
       consumes:
