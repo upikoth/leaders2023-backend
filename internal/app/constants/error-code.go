@@ -92,6 +92,11 @@ var (
 	ErrBookingPatchDbError             = errors.New("3301")
 	ErrBookingPatchForbidden           = errors.New("3302")
 	ErrBookingPatchNotFoundById        = errors.New("3303")
+
+	ErrBookingDeleteNotValidRequestData = errors.New("3400")
+	ErrBookingDeleteDbError             = errors.New("3401")
+	ErrBookingDeleteNotFoundById        = errors.New("3402")
+	ErrBookingDeleteForbidden           = errors.New("3402")
 )
 
 //nolint:gochecknoglobals // Пока добавил в игнор.
@@ -183,4 +188,9 @@ var ErrDescriptionByCode = map[error]string{
 	ErrBookingPatchDbError:             "Не удалось обновить информацию о бронировании",
 	ErrBookingPatchForbidden:           "Недостаточно прав",
 	ErrBookingPatchNotFoundById:        "Бронирование с указанным id не найдено",
+
+	ErrBookingDeleteNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrBookingDeleteDbError:             "Не удалось удалить информацию о бронировании",
+	ErrBookingDeleteNotFoundById:        "Бронирование с указанным id не найдено",
+	ErrBookingDeleteForbidden:           "Недостаточно прав",
 }

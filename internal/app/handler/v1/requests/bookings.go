@@ -79,3 +79,19 @@ func PatchBookingDataFromRequest(c *gin.Context) (patchBookingRequestData, error
 
 	return data, nil
 }
+
+type deleteBookingRequestData struct {
+	Id int `uri:"id" binding:"required"`
+}
+
+func DeleteBookingDataFromRequest(c *gin.Context) (deleteBookingRequestData, error) {
+	data := deleteBookingRequestData{}
+
+	err := c.BindUri(&data)
+
+	if err != nil {
+		return deleteBookingRequestData{}, err
+	}
+
+	return data, nil
+}

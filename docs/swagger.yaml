@@ -625,6 +625,27 @@ paths:
             $ref: '#/definitions/model.ResponseError'
       summary: Бронирование креативной площадки
   /api/v1/booking/:id:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Id бронирования
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "403":
+          description: 'Коды ошибок: [1100]'
+          schema:
+            $ref: '#/definitions/model.ResponseError'
+      summary: Удаление информации о бронировании
     get:
       consumes:
       - application/json

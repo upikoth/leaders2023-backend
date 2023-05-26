@@ -211,3 +211,37 @@ func (h *HandlerV1) PatchBooking(c *gin.Context) {
 		return
 	}
 }
+
+// DeleteBooking godoc
+// @Summary      Удаление информации о бронировании
+// @Accept       json
+// @Produce      json
+// @Param        id  path  string  true  "Id бронирования"
+// @Success      200  {object}  model.ResponseSuccess
+// @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
+// @Router       /api/v1/booking/:id [delete].
+func (h *HandlerV1) DeleteBooking(c *gin.Context) {
+	reqData, err := requests.DeleteBookingDataFromRequest(c)
+	userData, isClaimsValid := c.MustGet("userData").(model.JwtTokenUserData)
+
+	if err != nil || !isClaimsValid {
+		c.Set("responseCode", http.StatusBadRequest)
+		c.Set("responseErrorCode", constants.ErrBookingDeleteNotValidRequestData)
+		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	if userData.UserRole != model.RoleAdmin {
+		c.Set("responseCode", http.StatusForbidden)
+		c.Set("responseErrorCode", constants.ErrBookingDeleteForbidden)
+		return
+	}
+
+	err = h.store.DeleteBooking(reqData.Id)
+
+	if err != nil {
+		c.Set("responseErrorCode", constants.ErrBookingDeleteDbError)
+		c.Set("responseErrorDetails", err)
+		return
+	}
+}

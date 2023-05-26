@@ -150,3 +150,45 @@ func (s *Store) PatchBooking(booking Booking) error {
 
 	return storeErr
 }
+
+func (s *Store) DeleteBooking(id int) error {
+	booking := Booking{
+		Id: id,
+	}
+
+	creativeSpaceCalendarEvent := CalendarEvent{
+		BookingId: id,
+	}
+
+	storeErr := s.db.RunInTransaction(context.Background(), func(tx *pg.Tx) error {
+		_, calendarEventErr := tx.
+			Model(&creativeSpaceCalendarEvent).
+			Where("booking_id = ?", creativeSpaceCalendarEvent.BookingId).
+			Delete()
+
+		if calendarEventErr != nil {
+			return calendarEventErr
+		}
+
+		result, err := tx.
+			Model(&booking).
+			WherePK().
+			Delete()
+
+		if err != nil {
+			return err
+		}
+
+		if result.RowsAffected() == 0 {
+			return constants.ErrBookingDeleteNotFoundById
+		}
+
+		return nil
+	})
+
+	if storeErr != nil {
+		return storeErr
+	}
+
+	return nil
+}
