@@ -51,6 +51,48 @@ func (h *HandlerV1) GetBookings(c *gin.Context) {
 	c.Set("responseData", responseData)
 }
 
+// GetBooking godoc
+// @Summary      Возвращает бронирование по id
+// @Accept       json
+// @Produce      json
+// @Param        Authorization  header  string  true  "Authentication header"
+// @Success      200  {object}  model.ResponseSuccess{data=responses.getBookingResponseData}
+// @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
+// @Router       /api/v1/booking/:id [get].
+func (h *HandlerV1) GetBooking(c *gin.Context) {
+	reqData, err := requests.GetBookingDataFromRequest(c)
+	userData, isClaimsValid := c.MustGet("userData").(model.JwtTokenUserData)
+
+	if err != nil || !isClaimsValid {
+		c.Set("responseCode", http.StatusBadRequest)
+		c.Set("responseErrorCode", constants.ErrBookingGetNotValidRequestData)
+		return
+	}
+
+	booking, err := h.store.GetBookingById(reqData.Id)
+
+	if err != nil {
+		c.Set("responseErrorCode", constants.ErrBookingGetDbError)
+		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	if userData.UserRole == model.RoleLandlord && booking.LandlordId != userData.UserId {
+		c.Set("responseCode", http.StatusForbidden)
+		c.Set("responseErrorCode", constants.ErrBookingGetForbidden)
+		return
+	}
+
+	if userData.UserRole == model.RoleTenant && booking.TenantId != userData.UserId {
+		c.Set("responseCode", http.StatusForbidden)
+		c.Set("responseErrorCode", constants.ErrBookingGetForbidden)
+		return
+	}
+
+	responseData := responses.GetBookingResponseFromStoreData(booking)
+	c.Set("responseData", responseData)
+}
+
 // CreateBooking godoc
 // @Summary      Бронирование креативной площадки
 // @Accept       json

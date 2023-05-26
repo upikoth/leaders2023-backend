@@ -304,6 +304,35 @@ definitions:
       value:
         type: string
     type: object
+  responses.getBookingResponseBooking:
+    properties:
+      calendarEvents:
+        items:
+          $ref: '#/definitions/responses.getBookingResponseCalendarEvent'
+        type: array
+      creativeSpaceId:
+        type: integer
+      fullPrice:
+        type: integer
+      id:
+        type: integer
+      landlordId:
+        type: integer
+      status:
+        type: string
+      tenantId:
+        type: integer
+    type: object
+  responses.getBookingResponseCalendarEvent:
+    properties:
+      date:
+        type: string
+    type: object
+  responses.getBookingResponseData:
+    properties:
+      booking:
+        $ref: '#/definitions/responses.getBookingResponseBooking'
+    type: object
   responses.getBookingsResponseBooking:
     properties:
       calendarEvents:
@@ -579,6 +608,33 @@ paths:
           schema:
             $ref: '#/definitions/model.ResponseError'
       summary: Бронирование креативной площадки
+  /api/v1/booking/:id:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.ResponseSuccess'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.getBookingResponseData'
+              type: object
+        "403":
+          description: 'Коды ошибок: [1100]'
+          schema:
+            $ref: '#/definitions/model.ResponseError'
+      summary: Возвращает бронирование по id
   /api/v1/bookings:
     get:
       consumes:

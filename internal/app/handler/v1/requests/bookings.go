@@ -22,3 +22,19 @@ func CreateBookingDataFromRequest(c *gin.Context) (createBookingRequestData, err
 
 	return data, nil
 }
+
+type getBookingRequestData struct {
+	Id int `uri:"id" binding:"required"`
+}
+
+func GetBookingDataFromRequest(c *gin.Context) (getBookingRequestData, error) {
+	data := getBookingRequestData{}
+
+	err := c.BindUri(&data)
+
+	if err != nil {
+		return getBookingRequestData{}, err
+	}
+
+	return data, nil
+}

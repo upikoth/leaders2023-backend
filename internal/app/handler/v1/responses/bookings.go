@@ -51,6 +51,48 @@ func GetBookingsResponseFromStoreData(bookings []store.Booking) getBookingsRespo
 	return res
 }
 
+type getBookingResponseCalendarEvent struct {
+	Date string `json:"date"`
+}
+
+type getBookingResponseBooking struct {
+	Id              int                               `json:"id"`
+	TenantId        int                               `json:"tenantId"`
+	LandlordId      int                               `json:"landlordId"`
+	CreativeSpaceId int                               `json:"creativeSpaceId"`
+	Status          model.BookingStaus                `json:"status"`
+	FullPrice       int                               `json:"fullPrice"`
+	CalendarEvents  []getBookingResponseCalendarEvent `json:"calendarEvents"`
+}
+
+type getBookingResponseData struct {
+	Booking getBookingResponseBooking `json:"booking"`
+}
+
+func GetBookingResponseFromStoreData(booking store.Booking) getBookingResponseData {
+	res := getBookingResponseData{}
+
+	resCalendarEvents := []getBookingResponseCalendarEvent{}
+
+	for _, calendarEvent := range booking.CalendarEvents {
+		resCalendarEvents = append(resCalendarEvents, getBookingResponseCalendarEvent{
+			Date: calendarEvent.Date,
+		})
+	}
+
+	res.Booking = getBookingResponseBooking{
+		Id:              booking.Id,
+		TenantId:        booking.TenantId,
+		LandlordId:      booking.LandlordId,
+		CreativeSpaceId: booking.CreativeSpaceId,
+		Status:          booking.Status,
+		FullPrice:       booking.FullPrice,
+		CalendarEvents:  resCalendarEvents,
+	}
+
+	return res
+}
+
 type createBookingResponseBooking struct {
 	Id int `json:"id"`
 }

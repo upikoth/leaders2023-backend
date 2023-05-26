@@ -82,7 +82,7 @@ type patchCreativeSpaceRequestMetroStation struct {
 }
 
 type patchCreativeSpaceRequestUri struct {
-	Id int `json:"id" uri:"id" binding:"required"`
+	Id int `uri:"id" binding:"required"`
 }
 
 type patchCreativeSpaceRequestBody struct {
@@ -146,7 +146,7 @@ func PatchCreativeSpaceDataFromRequest(c *gin.Context) (patchCreativeSpaceReques
 }
 
 type deleteCreativeSpaceRequestData struct {
-	Id int `json:"id" uri:"id" binding:"required"`
+	Id int `uri:"id" binding:"required"`
 }
 
 func DeleteCreativeSpaceDataFromRequest(c *gin.Context) (deleteCreativeSpaceRequestData, error) {

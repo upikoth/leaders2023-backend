@@ -83,6 +83,10 @@ var (
 
 	ErrBookingsGetNotValidRequestData = errors.New("3100")
 	ErrBookingsGetDbError             = errors.New("3101")
+
+	ErrBookingGetNotValidRequestData = errors.New("3200")
+	ErrBookingGetDbError             = errors.New("3201")
+	ErrBookingGetForbidden           = errors.New("3202")
 )
 
 //nolint:gochecknoglobals // Пока добавил в игнор.
@@ -164,4 +168,9 @@ var ErrDescriptionByCode = map[error]string{
 	ErrBookingPostForbidden:           "Недостаточно прав",
 
 	ErrBookingsGetNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrBookingsGetDbError:             "Не удалось получить список бронирований",
+
+	ErrBookingGetNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrBookingGetDbError:             "Не удалось получить информацию о бронировании",
+	ErrBookingGetForbidden:           "Недостаточно прав",
 }

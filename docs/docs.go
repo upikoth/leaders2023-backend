@@ -110,6 +110,52 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/api/v1/booking/:id": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Возвращает бронирование по id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.ResponseSuccess"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.getBookingResponseData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Коды ошибок: [1100]",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/bookings": {
             "get": {
                 "consumes": [
@@ -1352,6 +1398,51 @@ const docTemplate_swagger = `{
                 },
                 "value": {
                     "type": "string"
+                }
+            }
+        },
+        "responses.getBookingResponseBooking": {
+            "type": "object",
+            "properties": {
+                "calendarEvents": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.getBookingResponseCalendarEvent"
+                    }
+                },
+                "creativeSpaceId": {
+                    "type": "integer"
+                },
+                "fullPrice": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "landlordId": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "tenantId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "responses.getBookingResponseCalendarEvent": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.getBookingResponseData": {
+            "type": "object",
+            "properties": {
+                "booking": {
+                    "$ref": "#/definitions/responses.getBookingResponseBooking"
                 }
             }
         },

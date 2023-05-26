@@ -29,9 +29,9 @@ func (s *Store) GetBookings(filters BookingsFilter) ([]Booking, error) {
 
 	err := s.db.
 		Model(&bookings).
-		Relation("CalendarEvents").
 		Where("tenant_id = ?", filters.TenantId).
 		WhereOr("landlord_id = ?", filters.LandlordId).
+		Relation("CalendarEvents").
 		Select()
 
 	if err != nil {
@@ -39,6 +39,24 @@ func (s *Store) GetBookings(filters BookingsFilter) ([]Booking, error) {
 	}
 
 	return bookings, nil
+}
+
+func (s *Store) GetBookingById(bookingId int) (Booking, error) {
+	booking := Booking{
+		Id: bookingId,
+	}
+
+	err := s.db.
+		Model(&booking).
+		WherePK().
+		Relation("CalendarEvents").
+		Select()
+
+	if err != nil {
+		return Booking{}, err
+	}
+
+	return booking, nil
 }
 
 func (s *Store) CreateBooking(booking Booking) (int, error) {
