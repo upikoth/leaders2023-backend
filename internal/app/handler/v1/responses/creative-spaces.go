@@ -93,7 +93,8 @@ func GetCreativeSpacesResponseFromStoreData(creativeSpaces []store.CreativeSpace
 }
 
 type getCreativeSpaceResponseCalendarEvent struct {
-	Date string `json:"date"`
+	Date      string `json:"date"`
+	BookingId int    `json:"bookingId"`
 }
 
 type getCreativeSpaceResponseCalendar struct {
@@ -148,7 +149,8 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 
 	for _, calendarEvent := range creativeSpace.CalendarEvents {
 		resCalendarEvents = append(resCalendarEvents, getCreativeSpaceResponseCalendarEvent{
-			Date: calendarEvent.Date,
+			Date:      calendarEvent.Date,
+			BookingId: calendarEvent.BookingId,
 		})
 	}
 
