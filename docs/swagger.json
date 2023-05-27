@@ -1187,13 +1187,31 @@
                 "role"
             ],
             "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "inn": {
+                    "type": "string"
+                },
+                "legalEntityName": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
                 "password": {
+                    "type": "string"
+                },
+                "patronymic": {
                     "type": "string"
                 },
                 "phone": {
                     "type": "string"
                 },
                 "role": {
+                    "type": "string"
+                },
+                "surname": {
                     "type": "string"
                 }
             }
@@ -1231,6 +1249,9 @@
                 },
                 "id": {
                     "type": "integer"
+                },
+                "status": {
+                    "type": "string"
                 }
             }
         },
@@ -1306,6 +1327,9 @@
                 "pricePerDay": {
                     "type": "integer"
                 },
+                "status": {
+                    "type": "string"
+                },
                 "title": {
                     "type": "string"
                 }
@@ -1325,10 +1349,28 @@
         "requests.patchUserRequestData": {
             "type": "object",
             "properties": {
+                "email": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
+                "inn": {
+                    "type": "string"
+                },
+                "legalEntityName": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "patronymic": {
+                    "type": "string"
+                },
                 "phone": {
+                    "type": "string"
+                },
+                "surname": {
                     "type": "string"
                 }
             }
@@ -1644,6 +1686,9 @@
         "responses.getCreativeSpaceResponseCalendarEvent": {
             "type": "object",
             "properties": {
+                "bookingId": {
+                    "type": "integer"
+                },
                 "date": {
                     "type": "string"
                 }
@@ -1695,6 +1740,9 @@
                 },
                 "pricePerDay": {
                     "type": "integer"
+                },
+                "status": {
+                    "type": "string"
                 },
                 "title": {
                     "type": "string"
@@ -1801,6 +1849,9 @@
                 "pricePerDay": {
                     "type": "integer"
                 },
+                "status": {
+                    "type": "string"
+                },
                 "title": {
                     "type": "string"
                 }
@@ -1870,13 +1921,31 @@
         "responses.getUserResponseUser": {
             "type": "object",
             "properties": {
+                "email": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
+                },
+                "inn": {
+                    "type": "string"
+                },
+                "legalEntityName": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "patronymic": {
+                    "type": "string"
                 },
                 "phone": {
                     "type": "string"
                 },
                 "role": {
+                    "type": "string"
+                },
+                "surname": {
                     "type": "string"
                 }
             }
@@ -1895,13 +1964,31 @@
         "responses.getUsersResponseUser": {
             "type": "object",
             "properties": {
+                "email": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
+                },
+                "inn": {
+                    "type": "string"
+                },
+                "legalEntityName": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "patronymic": {
+                    "type": "string"
                 },
                 "phone": {
                     "type": "string"
                 },
                 "role": {
+                    "type": "string"
+                },
+                "surname": {
                     "type": "string"
                 }
             }

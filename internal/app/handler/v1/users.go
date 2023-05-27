@@ -111,9 +111,15 @@ func (h *HandlerV1) CreateUser(c *gin.Context) {
 	}
 
 	user := store.User{
-		Phone:        reqData.Phone,
-		Role:         reqData.Role,
-		PasswordHash: string(hashedBytes),
+		Phone:           reqData.Phone,
+		Role:            reqData.Role,
+		PasswordHash:    string(hashedBytes),
+		Name:            reqData.Name,
+		Surname:         reqData.Surname,
+		Patronymic:      reqData.Patronymic,
+		Email:           reqData.Email,
+		Inn:             reqData.Inn,
+		LegalEntityName: reqData.LegalEntityName,
 	}
 
 	createdUserId, err := h.store.CreateUser(user)
@@ -155,8 +161,14 @@ func (h *HandlerV1) PatchUser(c *gin.Context) {
 	}
 
 	user := store.User{
-		Id:    reqData.Id,
-		Phone: reqData.Phone,
+		Id:              reqData.Id,
+		Phone:           reqData.Phone,
+		Name:            reqData.Name,
+		Surname:         reqData.Surname,
+		Patronymic:      reqData.Patronymic,
+		Email:           reqData.Email,
+		Inn:             reqData.Inn,
+		LegalEntityName: reqData.LegalEntityName,
 	}
 
 	storeErr := h.store.PatchUser(user)

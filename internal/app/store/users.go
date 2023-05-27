@@ -6,11 +6,17 @@ import (
 )
 
 type User struct {
-	tableName    struct{}   `pg:"users"` //nolint:unused // Имя таблицы
-	Id           int        `pg:"id"`
-	Phone        string     `pg:"phone"`
-	Role         model.Role `pg:"role"`
-	PasswordHash string     `pg:"password_hash"`
+	tableName       struct{}   `pg:"users"` //nolint:unused // Имя таблицы
+	Id              int        `pg:"id"`
+	Name            string     `pg:"name"`
+	Surname         string     `pg:"surname"`
+	Patronymic      string     `pg:"patronymic"`
+	Email           string     `pg:"email"`
+	Inn             string     `pg:"inn"`
+	LegalEntityName string     `pg:"legal_entity_name"`
+	Phone           string     `pg:"phone"`
+	Role            model.Role `pg:"role"`
+	PasswordHash    string     `pg:"password_hash"`
 }
 
 func (s *Store) GetUsers() ([]User, error) {

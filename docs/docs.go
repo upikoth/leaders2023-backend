@@ -1197,13 +1197,31 @@ const docTemplate_swagger = `{
                 "role"
             ],
             "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "inn": {
+                    "type": "string"
+                },
+                "legalEntityName": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
                 "password": {
+                    "type": "string"
+                },
+                "patronymic": {
                     "type": "string"
                 },
                 "phone": {
                     "type": "string"
                 },
                 "role": {
+                    "type": "string"
+                },
+                "surname": {
                     "type": "string"
                 }
             }
@@ -1241,6 +1259,9 @@ const docTemplate_swagger = `{
                 },
                 "id": {
                     "type": "integer"
+                },
+                "status": {
+                    "type": "string"
                 }
             }
         },
@@ -1316,6 +1337,9 @@ const docTemplate_swagger = `{
                 "pricePerDay": {
                     "type": "integer"
                 },
+                "status": {
+                    "type": "string"
+                },
                 "title": {
                     "type": "string"
                 }
@@ -1335,10 +1359,28 @@ const docTemplate_swagger = `{
         "requests.patchUserRequestData": {
             "type": "object",
             "properties": {
+                "email": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
+                "inn": {
+                    "type": "string"
+                },
+                "legalEntityName": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "patronymic": {
+                    "type": "string"
+                },
                 "phone": {
+                    "type": "string"
+                },
+                "surname": {
                     "type": "string"
                 }
             }
@@ -1654,6 +1696,9 @@ const docTemplate_swagger = `{
         "responses.getCreativeSpaceResponseCalendarEvent": {
             "type": "object",
             "properties": {
+                "bookingId": {
+                    "type": "integer"
+                },
                 "date": {
                     "type": "string"
                 }
@@ -1705,6 +1750,9 @@ const docTemplate_swagger = `{
                 },
                 "pricePerDay": {
                     "type": "integer"
+                },
+                "status": {
+                    "type": "string"
                 },
                 "title": {
                     "type": "string"
@@ -1811,6 +1859,9 @@ const docTemplate_swagger = `{
                 "pricePerDay": {
                     "type": "integer"
                 },
+                "status": {
+                    "type": "string"
+                },
                 "title": {
                     "type": "string"
                 }
@@ -1880,13 +1931,31 @@ const docTemplate_swagger = `{
         "responses.getUserResponseUser": {
             "type": "object",
             "properties": {
+                "email": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
+                },
+                "inn": {
+                    "type": "string"
+                },
+                "legalEntityName": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "patronymic": {
+                    "type": "string"
                 },
                 "phone": {
                     "type": "string"
                 },
                 "role": {
+                    "type": "string"
+                },
+                "surname": {
                     "type": "string"
                 }
             }
@@ -1905,13 +1974,31 @@ const docTemplate_swagger = `{
         "responses.getUsersResponseUser": {
             "type": "object",
             "properties": {
+                "email": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
+                },
+                "inn": {
+                    "type": "string"
+                },
+                "legalEntityName": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "patronymic": {
+                    "type": "string"
                 },
                 "phone": {
                     "type": "string"
                 },
                 "role": {
+                    "type": "string"
+                },
+                "surname": {
                     "type": "string"
                 }
             }
