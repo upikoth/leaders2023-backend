@@ -139,7 +139,7 @@ func (h *HandlerV1) CreateBooking(c *gin.Context) {
 		TenantId:        userData.UserId,
 		LandlordId:      creativeSpace.LandlordId,
 		CreativeSpaceId: creativeSpace.Id,
-		Status:          model.BookingStausConfirmationByLandlord,
+		Status:          model.BookingStatusConfirmationByLandlord,
 		FullPrice:       creativeSpace.PricePerDay * len(reqData.CalendarEvents),
 		CalendarEvents:  bookingCalendarEvents,
 	}

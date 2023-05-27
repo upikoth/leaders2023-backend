@@ -9,15 +9,15 @@ import (
 )
 
 type Booking struct {
-	tableName       struct{}           `pg:"bookings,alias:bookings"` //nolint:unused // Имя таблицы
-	Id              int                `pg:"id"`
-	TenantId        int                `pg:"tenant_id"`
-	LandlordId      int                `pg:"landlord_id"`
-	CreativeSpaceId int                `pg:"creative_space_id"`
-	Status          model.BookingStaus `pg:"status"`
-	FullPrice       int                `pg:"full_price"`
-	CalendarEvents  []*CalendarEvent   `pg:"rel:has-many"`
-	CreativeSpace   *CreativeSpace     `pg:"rel:has-one"`
+	tableName       struct{}            `pg:"bookings,alias:bookings"` //nolint:unused // Имя таблицы
+	Id              int                 `pg:"id"`
+	TenantId        int                 `pg:"tenant_id"`
+	LandlordId      int                 `pg:"landlord_id"`
+	CreativeSpaceId int                 `pg:"creative_space_id"`
+	Status          model.BookingStatus `pg:"status"`
+	FullPrice       int                 `pg:"full_price"`
+	CalendarEvents  []*CalendarEvent    `pg:"rel:has-many"`
+	CreativeSpace   *CreativeSpace      `pg:"rel:has-one"`
 }
 
 type BookingsFilter struct {
@@ -123,6 +123,16 @@ func (s *Store) PatchBooking(booking Booking) error {
 	}
 
 	storeErr := s.db.RunInTransaction(context.Background(), func(tx *pg.Tx) error {
+		_, bookingUpdateErr := tx.
+			Model(&booking).
+			WherePK().
+			OnConflict("DO NOTHING").
+			UpdateNotZero()
+
+		if bookingUpdateErr != nil {
+			return bookingUpdateErr
+		}
+
 		_, bookingCalendarEventsDeleteErr := tx.
 			Model(&CalendarEvent{}).
 			Where("booking_id = ?", booking.Id).

@@ -21,7 +21,7 @@ type getBookingsResponseBooking struct {
 	Id             int                                `json:"id"`
 	TenantId       int                                `json:"tenantId"`
 	LandlordId     int                                `json:"landlordId"`
-	Status         model.BookingStaus                 `json:"status"`
+	Status         model.BookingStatus                `json:"status"`
 	FullPrice      int                                `json:"fullPrice"`
 	CalendarEvents []getBookingsResponseCalendarEvent `json:"calendarEvents"`
 	CreativeSpace  getBookingsResponseCreativeSpace   `json:"creativeSpace"`
@@ -83,7 +83,7 @@ type getBookingResponseBooking struct {
 	Id             int                               `json:"id"`
 	TenantId       int                               `json:"tenantId"`
 	LandlordId     int                               `json:"landlordId"`
-	Status         model.BookingStaus                `json:"status"`
+	Status         model.BookingStatus               `json:"status"`
 	FullPrice      int                               `json:"fullPrice"`
 	CalendarEvents []getBookingResponseCalendarEvent `json:"calendarEvents"`
 	CreativeSpace  getBookingResponseCreativeSpace   `json:"creativeSpace"`

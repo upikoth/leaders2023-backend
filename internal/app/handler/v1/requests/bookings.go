@@ -52,13 +52,13 @@ type patchBookingRequestCalendarEvent struct {
 
 type patchBookingRequestDataBody struct {
 	CalendarEvents []patchBookingRequestCalendarEvent `json:"calendarEvents"`
-	Status         model.BookingStaus                 `json:"status"`
+	Status         model.BookingStatus                `json:"status"`
 }
 
 type patchBookingRequestData struct {
 	Id             int                                `json:"id"`
 	CalendarEvents []patchBookingRequestCalendarEvent `json:"calendarEvents"`
-	Status         model.BookingStaus                 `json:"status"`
+	Status         model.BookingStatus                `json:"status"`
 }
 
 func PatchBookingDataFromRequest(c *gin.Context) (patchBookingRequestData, error) {

@@ -8,9 +8,9 @@ const (
 	RoleLandlord Role = "landlord"
 )
 
-type BookingStaus string
+type BookingStatus string
 
 const (
-	BookingStausConfirmationByLandlord BookingStaus = "confirmation"
-	BookingStausConfirmedByLandlord    BookingStaus = "confirmed"
+	BookingStatusConfirmationByLandlord BookingStatus = "confirmation"
+	BookingStatusConfirmedByLandlord    BookingStatus = "confirmed"
 )
