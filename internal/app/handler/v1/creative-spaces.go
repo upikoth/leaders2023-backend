@@ -199,8 +199,11 @@ func (h *HandlerV1) PatchCreativeSpace(c *gin.Context) {
 		Description:            reqData.Description,
 		CalendarLink:           reqData.Calendar.Link,
 		CalendarWorkDayIndexes: reqData.Calendar.WorkDayIndexes,
-		CalendarEvents:         creativeSpaceCalendarEvents,
 		MetroStations:          creativeSpaceMetroStations,
+	}
+
+	if reqData.Calendar.Events != nil {
+		creativeSpace.CalendarEvents = creativeSpaceCalendarEvents
 	}
 
 	storeErr := h.store.PatchCreativeSpace(creativeSpace)

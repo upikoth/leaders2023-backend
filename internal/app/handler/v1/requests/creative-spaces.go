@@ -70,7 +70,7 @@ type patchCreativeSpaceRequestCalendarEvent struct {
 
 type patchCreativeSpaceRequestCalendar struct {
 	WorkDayIndexes []int                                    `json:"workDayIndexes"`
-	Events         []patchCreativeSpaceRequestCalendarEvent `json:"events"`
+	Events         []patchCreativeSpaceRequestCalendarEvent `json:"events" default:"nil"`
 	Link           string                                   `json:"link"`
 }
 
