@@ -1,6 +1,9 @@
 package requests
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/upikoth/leaders2023-backend/internal/app/model"
+)
 
 type getBookingRequestData struct {
 	Id int `uri:"id" binding:"required"`
@@ -49,11 +52,13 @@ type patchBookingRequestCalendarEvent struct {
 
 type patchBookingRequestDataBody struct {
 	CalendarEvents []patchBookingRequestCalendarEvent `json:"calendarEvents"`
+	Status         model.BookingStaus                 `json:"status"`
 }
 
 type patchBookingRequestData struct {
 	Id             int                                `json:"id"`
 	CalendarEvents []patchBookingRequestCalendarEvent `json:"calendarEvents"`
+	Status         model.BookingStaus                 `json:"status"`
 }
 
 func PatchBookingDataFromRequest(c *gin.Context) (patchBookingRequestData, error) {
@@ -75,6 +80,7 @@ func PatchBookingDataFromRequest(c *gin.Context) (patchBookingRequestData, error
 	data := patchBookingRequestData{
 		Id:             dataFromUri.Id,
 		CalendarEvents: dataFromBody.CalendarEvents,
+		Status:         dataFromBody.Status,
 	}
 
 	return data, nil

@@ -176,13 +176,13 @@ func (h *HandlerV1) PatchBooking(c *gin.Context) {
 		return
 	}
 
-	if userData.UserRole != model.RoleAdmin {
+	booking, err := h.store.GetBookingById(reqData.Id)
+
+	if userData.UserRole != model.RoleAdmin && booking.LandlordId != userData.UserId {
 		c.Set("responseCode", http.StatusForbidden)
 		c.Set("responseErrorCode", constants.ErrBookingPatchForbidden)
 		return
 	}
-
-	booking, err := h.store.GetBookingById(reqData.Id)
 
 	if err != nil {
 		c.Set("responseErrorCode", constants.ErrBookingPatchDbError)
@@ -201,6 +201,10 @@ func (h *HandlerV1) PatchBooking(c *gin.Context) {
 	}
 
 	booking.CalendarEvents = bookingCalendarEvents
+
+	if reqData.Status != "" {
+		booking.Status = reqData.Status
+	}
 
 	storeErr := h.store.PatchBooking(booking)
 
