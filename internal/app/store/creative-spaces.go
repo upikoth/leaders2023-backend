@@ -5,12 +5,14 @@ import (
 
 	"github.com/go-pg/pg/v10"
 	"github.com/upikoth/leaders2023-backend/internal/app/constants"
+	"github.com/upikoth/leaders2023-backend/internal/app/model"
 )
 
 type CreativeSpace struct {
 	tableName              struct{}                     `pg:"creative_spaces"` //nolint:unused // Имя таблицы
 	Id                     int                          `pg:"id"`
 	Title                  string                       `pg:"title"`
+	Status                 model.CreativeSpaceStatus    `pg:"status"`
 	Address                string                       `pg:"address"`
 	LandlordId             int                          `pg:"landlord_id"`
 	Photos                 []string                     `pg:"photos,array"`

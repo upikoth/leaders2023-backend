@@ -14,3 +14,10 @@ const (
 	BookingStatusConfirmationByLandlord BookingStatus = "confirmation"
 	BookingStatusConfirmedByLandlord    BookingStatus = "confirmed"
 )
+
+type CreativeSpaceStatus string
+
+const (
+	CreativeSpaceStatusConfirmationByAdmin CreativeSpaceStatus = "confirmation"
+	CreativeSpaceStatusConfirmedByAdmin    CreativeSpaceStatus = "confirmed"
+)

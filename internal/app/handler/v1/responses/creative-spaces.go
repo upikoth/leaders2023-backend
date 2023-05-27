@@ -1,6 +1,9 @@
 package responses
 
-import "github.com/upikoth/leaders2023-backend/internal/app/store"
+import (
+	"github.com/upikoth/leaders2023-backend/internal/app/model"
+	"github.com/upikoth/leaders2023-backend/internal/app/store"
+)
 
 type getCreativeSpacesResponseCalendarEvent struct {
 	Date string `json:"date"`
@@ -28,6 +31,7 @@ type getCreativeSpacesResponseCreativeSpace struct {
 	Id            int                                     `json:"id"`
 	Title         string                                  `json:"title"`
 	Address       string                                  `json:"address"`
+	Status        model.CreativeSpaceStatus               `json:"status"`
 	LandlordId    int                                     `json:"landlordId"`
 	Description   string                                  `json:"description"`
 	Photos        []string                                `json:"photos"`
@@ -76,6 +80,7 @@ func GetCreativeSpacesResponseFromStoreData(creativeSpaces []store.CreativeSpace
 			Id:          creativeSpace.Id,
 			Title:       creativeSpace.Title,
 			Address:     creativeSpace.Address,
+			Status:      creativeSpace.Status,
 			LandlordId:  creativeSpace.LandlordId,
 			Description: creativeSpace.Description,
 			Photos:      creativeSpace.Photos,
@@ -119,6 +124,7 @@ type getCreativeSpaceResponseCreativeSpace struct {
 	Id            int                                    `json:"id"`
 	Title         string                                 `json:"title"`
 	Address       string                                 `json:"address"`
+	Status        model.CreativeSpaceStatus              `json:"status"`
 	LandlordId    int                                    `json:"landlordId"`
 	Description   string                                 `json:"description"`
 	Photos        []string                               `json:"photos"`
@@ -158,6 +164,7 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 		Id:          creativeSpace.Id,
 		Title:       creativeSpace.Title,
 		Address:     creativeSpace.Address,
+		Status:      creativeSpace.Status,
 		LandlordId:  creativeSpace.LandlordId,
 		Description: creativeSpace.Description,
 		Photos:      creativeSpace.Photos,

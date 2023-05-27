@@ -1,6 +1,9 @@
 package requests
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/upikoth/leaders2023-backend/internal/app/model"
+)
 
 type getCreativeSpaceRequestData struct {
 	Id int `json:"id" uri:"id" binding:"required"`
@@ -88,6 +91,7 @@ type patchCreativeSpaceRequestUri struct {
 type patchCreativeSpaceRequestBody struct {
 	Title         string                                  `json:"title"`
 	Address       string                                  `json:"address"`
+	Status        model.CreativeSpaceStatus               `json:"status"`
 	Description   string                                  `json:"description"`
 	Photos        []string                                `json:"photos"`
 	PricePerDay   int                                     `json:"pricePerDay"`
@@ -100,6 +104,7 @@ type patchCreativeSpaceRequestData struct {
 	Id            int                                     `json:"id"`
 	Title         string                                  `json:"title"`
 	Address       string                                  `json:"address"`
+	Status        model.CreativeSpaceStatus               `json:"status"`
 	Description   string                                  `json:"description"`
 	Photos        []string                                `json:"photos"`
 	PricePerDay   int                                     `json:"pricePerDay"`
@@ -130,6 +135,7 @@ func PatchCreativeSpaceDataFromRequest(c *gin.Context) (patchCreativeSpaceReques
 
 	data.Title = dataFromBody.Title
 	data.Address = dataFromBody.Address
+	data.Status = dataFromBody.Status
 	data.Description = dataFromBody.Description
 	data.Photos = dataFromBody.Photos
 	data.PricePerDay = dataFromBody.PricePerDay
