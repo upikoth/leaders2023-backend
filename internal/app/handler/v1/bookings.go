@@ -200,7 +200,9 @@ func (h *HandlerV1) PatchBooking(c *gin.Context) {
 		})
 	}
 
-	booking.CalendarEvents = bookingCalendarEvents
+	if len(booking.CalendarEvents) > 0 {
+		booking.CalendarEvents = bookingCalendarEvents
+	}
 
 	if reqData.Status != "" {
 		booking.Status = reqData.Status
