@@ -243,6 +243,14 @@ func (h *HandlerV1) DeleteCreativeSpace(c *gin.Context) {
 		return
 	}
 
+	err = h.store.DeleteCreativeSpace(reqData.Id)
+
+	if err != nil {
+		c.Set("responseErrorCode", constants.ErrCreativeSpaceDeleteDbError)
+		c.Set("responseErrorDetails", err)
+		return
+	}
+
 	photos := []*s3.ObjectIdentifier{}
 
 	for _, photo := range creativeSpaceToDelete.Photos {
@@ -251,24 +259,11 @@ func (h *HandlerV1) DeleteCreativeSpace(c *gin.Context) {
 		})
 	}
 
-	_, s3Error := h.s3.DeleteObjects(&s3.DeleteObjectsInput{
+	//nolint:errcheck //Если ошибка при удалении с s3, ничего не делаем.
+	h.s3.DeleteObjects(&s3.DeleteObjectsInput{
 		Bucket: aws.String(constants.FilesBucketName),
 		Delete: &s3.Delete{
 			Objects: photos,
 		},
 	})
-
-	if s3Error != nil {
-		c.Set("responseErrorCode", constants.ErrCreativeSpaceDeleteS3Error)
-		c.Set("responseErrorDetails", s3Error)
-		return
-	}
-
-	err = h.store.DeleteCreativeSpace(reqData.Id)
-
-	if err != nil {
-		c.Set("responseErrorCode", constants.ErrCreativeSpaceDeleteDbError)
-		c.Set("responseErrorDetails", err)
-		return
-	}
 }
