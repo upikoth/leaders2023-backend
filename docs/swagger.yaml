@@ -326,8 +326,8 @@ definitions:
         items:
           $ref: '#/definitions/responses.getBookingResponseCalendarEvent'
         type: array
-      creativeSpaceId:
-        type: integer
+      creativeSpace:
+        $ref: '#/definitions/responses.getBookingResponseCreativeSpace'
       fullPrice:
         type: integer
       id:
@@ -344,6 +344,21 @@ definitions:
       date:
         type: string
     type: object
+  responses.getBookingResponseCreativeSpace:
+    properties:
+      address:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      photos:
+        items:
+          type: string
+        type: array
+      title:
+        type: string
+    type: object
   responses.getBookingResponseData:
     properties:
       booking:
@@ -355,8 +370,8 @@ definitions:
         items:
           $ref: '#/definitions/responses.getBookingsResponseCalendarEvent'
         type: array
-      creativeSpaceId:
-        type: integer
+      creativeSpace:
+        $ref: '#/definitions/responses.getBookingsResponseCreativeSpace'
       fullPrice:
         type: integer
       id:
@@ -371,6 +386,21 @@ definitions:
   responses.getBookingsResponseCalendarEvent:
     properties:
       date:
+        type: string
+    type: object
+  responses.getBookingsResponseCreativeSpace:
+    properties:
+      address:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      photos:
+        items:
+          type: string
+        type: array
+      title:
         type: string
     type: object
   responses.getBookingsResponseData:

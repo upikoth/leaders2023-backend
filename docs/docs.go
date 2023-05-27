@@ -1501,8 +1501,8 @@ const docTemplate_swagger = `{
                         "$ref": "#/definitions/responses.getBookingResponseCalendarEvent"
                     }
                 },
-                "creativeSpaceId": {
-                    "type": "integer"
+                "creativeSpace": {
+                    "$ref": "#/definitions/responses.getBookingResponseCreativeSpace"
                 },
                 "fullPrice": {
                     "type": "integer"
@@ -1529,6 +1529,29 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "responses.getBookingResponseCreativeSpace": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "photos": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "responses.getBookingResponseData": {
             "type": "object",
             "properties": {
@@ -1546,8 +1569,8 @@ const docTemplate_swagger = `{
                         "$ref": "#/definitions/responses.getBookingsResponseCalendarEvent"
                     }
                 },
-                "creativeSpaceId": {
-                    "type": "integer"
+                "creativeSpace": {
+                    "$ref": "#/definitions/responses.getBookingsResponseCreativeSpace"
                 },
                 "fullPrice": {
                     "type": "integer"
@@ -1570,6 +1593,29 @@ const docTemplate_swagger = `{
             "type": "object",
             "properties": {
                 "date": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.getBookingsResponseCreativeSpace": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "photos": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "title": {
                     "type": "string"
                 }
             }

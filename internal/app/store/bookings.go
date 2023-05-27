@@ -9,7 +9,7 @@ import (
 )
 
 type Booking struct {
-	tableName       struct{}           `pg:"bookings"` //nolint:unused // Имя таблицы
+	tableName       struct{}           `pg:"bookings,alias:bookings"` //nolint:unused // Имя таблицы
 	Id              int                `pg:"id"`
 	TenantId        int                `pg:"tenant_id"`
 	LandlordId      int                `pg:"landlord_id"`
@@ -17,6 +17,7 @@ type Booking struct {
 	Status          model.BookingStaus `pg:"status"`
 	FullPrice       int                `pg:"full_price"`
 	CalendarEvents  []*CalendarEvent   `pg:"rel:has-many"`
+	CreativeSpace   *CreativeSpace     `pg:"rel:has-one"`
 }
 
 type BookingsFilter struct {
@@ -29,9 +30,10 @@ func (s *Store) GetBookings(filters BookingsFilter) ([]Booking, error) {
 
 	err := s.db.
 		Model(&bookings).
-		Where("tenant_id = ? OR ?", filters.TenantId, filters.TenantId == 0).
-		Where("landlord_id = ? OR ?", filters.LandlordId, filters.LandlordId == 0).
+		Where("bookings.tenant_id = ? OR ?", filters.TenantId, filters.TenantId == 0).
+		Where("bookings.landlord_id = ? OR ?", filters.LandlordId, filters.LandlordId == 0).
 		Relation("CalendarEvents").
+		Relation("CreativeSpace").
 		Select()
 
 	if err != nil {
