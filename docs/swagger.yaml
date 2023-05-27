@@ -654,7 +654,34 @@ paths:
           schema:
             $ref: '#/definitions/model.ResponseError'
       summary: Бронирование креативной площадки
-  /api/v1/booking/:id:
+  /api/v1/bookings:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Authentication header
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.ResponseSuccess'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.getBookingsResponseData'
+              type: object
+        "403":
+          description: 'Коды ошибок: [1100]'
+          schema:
+            $ref: '#/definitions/model.ResponseError'
+      summary: Возвращает список бронирований
+  /api/v1/bookings/:id:
     delete:
       consumes:
       - application/json
@@ -724,33 +751,6 @@ paths:
           schema:
             $ref: '#/definitions/model.ResponseError'
       summary: Изменение дат бронирования креативной площадки
-  /api/v1/bookings:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: Authentication header
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/model.ResponseSuccess'
-            - properties:
-                data:
-                  $ref: '#/definitions/responses.getBookingsResponseData'
-              type: object
-        "403":
-          description: 'Коды ошибок: [1100]'
-          schema:
-            $ref: '#/definitions/model.ResponseError'
-      summary: Возвращает список бронирований
   /api/v1/calendar/convert:
     post:
       consumes:

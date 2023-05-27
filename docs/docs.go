@@ -110,7 +110,53 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "/api/v1/booking/:id": {
+        "/api/v1/bookings": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Возвращает список бронирований",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authentication header",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.ResponseSuccess"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.getBookingsResponseData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Коды ошибок: [1100]",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/bookings/:id": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -211,52 +257,6 @@ const docTemplate_swagger = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/model.ResponseSuccess"
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/bookings": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Возвращает список бронирований",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication header",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.ResponseSuccess"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.getBookingsResponseData"
-                                        }
-                                    }
-                                }
-                            ]
                         }
                     },
                     "403": {

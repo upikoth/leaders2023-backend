@@ -62,10 +62,10 @@ func (s *ApiServer) initRoutes() {
 
 	authorized.GET("/api/v1/bookings", s.handler.V1.GetBookings)
 
-	authorized.GET("/api/v1/booking/:id", s.handler.V1.GetBooking)
+	authorized.GET("/api/v1/bookings/:id", s.handler.V1.GetBooking)
 	authorized.POST("/api/v1/booking", s.handler.V1.CreateBooking)
-	authorized.PATCH("/api/v1/booking/:id", s.handler.V1.PatchBooking)
-	authorized.DELETE("/api/v1/booking/:id", s.handler.V1.DeleteBooking)
+	authorized.PATCH("/api/v1/bookings/:id", s.handler.V1.PatchBooking)
+	authorized.DELETE("/api/v1/bookings/:id", s.handler.V1.DeleteBooking)
 
 	s.router.NoRoute(func(c *gin.Context) {
 		c.Set("responseCode", http.StatusNotFound)

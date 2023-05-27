@@ -58,7 +58,7 @@ func (h *HandlerV1) GetBookings(c *gin.Context) {
 // @Param        Authorization  header  string  true  "Authentication header"
 // @Success      200  {object}  model.ResponseSuccess{data=responses.getBookingResponseData}
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
-// @Router       /api/v1/booking/:id [get].
+// @Router       /api/v1/bookings/:id [get].
 func (h *HandlerV1) GetBooking(c *gin.Context) {
 	reqData, err := requests.GetBookingDataFromRequest(c)
 	userData, isClaimsValid := c.MustGet("userData").(model.JwtTokenUserData)
@@ -164,7 +164,7 @@ func (h *HandlerV1) CreateBooking(c *gin.Context) {
 // @Param        body body  requests.patchBookingRequestData true "Параметры запроса"
 // @Success      200  {object}  model.ResponseSuccess
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
-// @Router       /api/v1/booking/:id [patch].
+// @Router       /api/v1/bookings/:id [patch].
 func (h *HandlerV1) PatchBooking(c *gin.Context) {
 	reqData, err := requests.PatchBookingDataFromRequest(c)
 	userData, isClaimsValid := c.MustGet("userData").(model.JwtTokenUserData)
@@ -219,7 +219,7 @@ func (h *HandlerV1) PatchBooking(c *gin.Context) {
 // @Param        id  path  string  true  "Id бронирования"
 // @Success      200  {object}  model.ResponseSuccess
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
-// @Router       /api/v1/booking/:id [delete].
+// @Router       /api/v1/bookings/:id [delete].
 func (h *HandlerV1) DeleteBooking(c *gin.Context) {
 	reqData, err := requests.DeleteBookingDataFromRequest(c)
 	userData, isClaimsValid := c.MustGet("userData").(model.JwtTokenUserData)
