@@ -52,6 +52,7 @@ func (s *Store) GetBookingById(bookingId int) (Booking, error) {
 		Model(&booking).
 		WherePK().
 		Relation("CalendarEvents").
+		Relation("CreativeSpace").
 		Select()
 
 	if err != nil {
