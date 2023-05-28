@@ -102,6 +102,18 @@ type getCreativeSpaceResponseCalendarEvent struct {
 	BookingId int    `json:"bookingId"`
 }
 
+type getCreativeSpaceResponseLandlordInfo struct {
+	Id              int        `json:"id"`
+	Phone           string     `json:"phone"`
+	Role            model.Role `json:"role"`
+	Name            string     `json:"name"`
+	Surname         string     `json:"surname"`
+	Patronymic      string     `json:"patronymic"`
+	Email           string     `json:"email"`
+	Inn             string     `json:"inn"`
+	LegalEntityName string     `json:"legalEntityName"`
+}
+
 type getCreativeSpaceResponseCalendar struct {
 	WorkDayIndexes []int                                   `json:"workDayIndexes"`
 	Events         []getCreativeSpaceResponseCalendarEvent `json:"events"`
@@ -125,13 +137,13 @@ type getCreativeSpaceResponseCreativeSpace struct {
 	Title         string                                 `json:"title"`
 	Address       string                                 `json:"address"`
 	Status        model.CreativeSpaceStatus              `json:"status"`
-	LandlordId    int                                    `json:"landlordId"`
 	Description   string                                 `json:"description"`
 	Photos        []string                               `json:"photos"`
 	PricePerDay   int                                    `json:"pricePerDay"`
 	MetroStations []getCreativeSpaceResponseMetroStation `json:"metroStations"`
 	Coordinate    getCreativeSpaceResponseCoordinate     `json:"coordinate"`
 	Calendar      getCreativeSpaceResponseCalendar       `json:"calendar"`
+	LandlordInfo  getCreativeSpaceResponseLandlordInfo   `json:"landlordInfo"`
 }
 
 type getCreativeSpaceResponseData struct {
@@ -165,7 +177,6 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 		Title:       creativeSpace.Title,
 		Address:     creativeSpace.Address,
 		Status:      creativeSpace.Status,
-		LandlordId:  creativeSpace.LandlordId,
 		Description: creativeSpace.Description,
 		Photos:      creativeSpace.Photos,
 		PricePerDay: creativeSpace.PricePerDay,
@@ -178,6 +189,17 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 			WorkDayIndexes: creativeSpace.CalendarWorkDayIndexes,
 			Events:         resCalendarEvents,
 			Link:           creativeSpace.CalendarLink,
+		},
+		LandlordInfo: getCreativeSpaceResponseLandlordInfo{
+			Id:              creativeSpace.LandlordInfo.Id,
+			Phone:           creativeSpace.LandlordInfo.Phone,
+			Role:            creativeSpace.LandlordInfo.Role,
+			Name:            creativeSpace.LandlordInfo.Name,
+			Surname:         creativeSpace.LandlordInfo.Surname,
+			Patronymic:      creativeSpace.LandlordInfo.Patronymic,
+			Email:           creativeSpace.LandlordInfo.Email,
+			Inn:             creativeSpace.LandlordInfo.Inn,
+			LegalEntityName: creativeSpace.LandlordInfo.LegalEntityName,
 		},
 	}
 

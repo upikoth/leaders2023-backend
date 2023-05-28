@@ -24,6 +24,7 @@ type CreativeSpace struct {
 	CalendarWorkDayIndexes []int                        `pg:"calendar_work_day_indexes,array"`
 	CalendarEvents         []*CalendarEvent             `pg:"rel:has-many"`
 	MetroStations          []*CreativeSpaceMetroStation `pg:"rel:has-many"`
+	LandlordInfo           *User                        `pg:"rel:has-one,fk:landlord_id"`
 }
 
 func (s *Store) GetCreativeSpaces() ([]CreativeSpace, error) {
@@ -56,6 +57,7 @@ func (s *Store) GetCreativeSpaceById(id int) (CreativeSpace, error) {
 			return q.Relation("MetroStation"), nil
 		}).
 		Relation("CalendarEvents").
+		Relation("LandlordInfo").
 		SelectAndCount()
 
 	if err != nil {
