@@ -137,7 +137,6 @@ definitions:
         type: integer
     required:
     - bookingId
-    - comment
     - creativeSpaceId
     - rating
     type: object
@@ -403,6 +402,8 @@ definitions:
         type: integer
       landlordInfo:
         $ref: '#/definitions/responses.getBookingResponseLandlordInfo'
+      scoreId:
+        type: integer
       status:
         type: string
       tenantInfo:
@@ -485,6 +486,8 @@ definitions:
         type: integer
       landlordInfo:
         $ref: '#/definitions/responses.getBookingsResponseLandlordInfo'
+      scoreId:
+        type: integer
       status:
         type: string
       tenantInfo:
@@ -588,6 +591,8 @@ definitions:
         type: string
       area:
         type: integer
+      averageRating:
+        type: integer
       calendar:
         $ref: '#/definitions/responses.getCreativeSpaceResponseCalendar'
       capacity:
@@ -610,6 +615,10 @@ definitions:
         type: array
       pricePerDay:
         type: integer
+      scores:
+        items:
+          $ref: '#/definitions/responses.getCreativeSpaceResponseScore'
+        type: array
       spaceType:
         type: string
       status:
@@ -654,6 +663,28 @@ definitions:
       name:
         type: string
     type: object
+  responses.getCreativeSpaceResponseScore:
+    properties:
+      comment:
+        type: string
+      id:
+        type: integer
+      rating:
+        type: integer
+      user:
+        $ref: '#/definitions/responses.getCreativeSpaceResponseScoreUser'
+    type: object
+  responses.getCreativeSpaceResponseScoreUser:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      patronymic:
+        type: string
+      surname:
+        type: string
+    type: object
   responses.getCreativeSpacesResponseCalendar:
     properties:
       events:
@@ -685,6 +716,8 @@ definitions:
         type: string
       area:
         type: integer
+      averageRating:
+        type: integer
       calendar:
         $ref: '#/definitions/responses.getCreativeSpacesResponseCalendar'
       capacity:
@@ -707,6 +740,10 @@ definitions:
         type: array
       pricePerDay:
         type: integer
+      scores:
+        items:
+          $ref: '#/definitions/responses.getCreativeSpacesResponseScore'
+        type: array
       spaceType:
         type: string
       status:
@@ -730,6 +767,28 @@ definitions:
       id:
         type: integer
       name:
+        type: string
+    type: object
+  responses.getCreativeSpacesResponseScore:
+    properties:
+      comment:
+        type: string
+      id:
+        type: integer
+      rating:
+        type: integer
+      user:
+        $ref: '#/definitions/responses.getCreativeSpacesResponseScoreUser'
+    type: object
+  responses.getCreativeSpacesResponseScoreUser:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      patronymic:
+        type: string
+      surname:
         type: string
     type: object
   responses.getMetroStationsResponseData:

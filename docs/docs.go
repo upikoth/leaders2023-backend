@@ -1238,7 +1238,6 @@ const docTemplate_swagger = `{
             "type": "object",
             "required": [
                 "bookingId",
-                "comment",
                 "creativeSpaceId",
                 "rating"
             ],
@@ -1663,6 +1662,9 @@ const docTemplate_swagger = `{
                 "landlordInfo": {
                     "$ref": "#/definitions/responses.getBookingResponseLandlordInfo"
                 },
+                "scoreId": {
+                    "type": "integer"
+                },
                 "status": {
                     "type": "string"
                 },
@@ -1788,6 +1790,9 @@ const docTemplate_swagger = `{
                 },
                 "landlordInfo": {
                     "$ref": "#/definitions/responses.getBookingsResponseLandlordInfo"
+                },
+                "scoreId": {
+                    "type": "integer"
                 },
                 "status": {
                     "type": "string"
@@ -1948,6 +1953,9 @@ const docTemplate_swagger = `{
                 "area": {
                     "type": "integer"
                 },
+                "averageRating": {
+                    "type": "integer"
+                },
                 "calendar": {
                     "$ref": "#/definitions/responses.getCreativeSpaceResponseCalendar"
                 },
@@ -1980,6 +1988,12 @@ const docTemplate_swagger = `{
                 },
                 "pricePerDay": {
                     "type": "integer"
+                },
+                "scores": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.getCreativeSpaceResponseScore"
+                    }
                 },
                 "spaceType": {
                     "type": "string"
@@ -2049,6 +2063,40 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "responses.getCreativeSpaceResponseScore": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "rating": {
+                    "type": "integer"
+                },
+                "user": {
+                    "$ref": "#/definitions/responses.getCreativeSpaceResponseScoreUser"
+                }
+            }
+        },
+        "responses.getCreativeSpaceResponseScoreUser": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "patronymic": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                }
+            }
+        },
         "responses.getCreativeSpacesResponseCalendar": {
             "type": "object",
             "properties": {
@@ -2097,6 +2145,9 @@ const docTemplate_swagger = `{
                 "area": {
                     "type": "integer"
                 },
+                "averageRating": {
+                    "type": "integer"
+                },
                 "calendar": {
                     "$ref": "#/definitions/responses.getCreativeSpacesResponseCalendar"
                 },
@@ -2129,6 +2180,12 @@ const docTemplate_swagger = `{
                 },
                 "pricePerDay": {
                     "type": "integer"
+                },
+                "scores": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.getCreativeSpacesResponseScore"
+                    }
                 },
                 "spaceType": {
                     "type": "string"
@@ -2165,6 +2222,40 @@ const docTemplate_swagger = `{
                     "type": "integer"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.getCreativeSpacesResponseScore": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "rating": {
+                    "type": "integer"
+                },
+                "user": {
+                    "$ref": "#/definitions/responses.getCreativeSpacesResponseScoreUser"
+                }
+            }
+        },
+        "responses.getCreativeSpacesResponseScoreUser": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "patronymic": {
+                    "type": "string"
+                },
+                "surname": {
                     "type": "string"
                 }
             }

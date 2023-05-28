@@ -1228,7 +1228,6 @@
             "type": "object",
             "required": [
                 "bookingId",
-                "comment",
                 "creativeSpaceId",
                 "rating"
             ],
@@ -1653,6 +1652,9 @@
                 "landlordInfo": {
                     "$ref": "#/definitions/responses.getBookingResponseLandlordInfo"
                 },
+                "scoreId": {
+                    "type": "integer"
+                },
                 "status": {
                     "type": "string"
                 },
@@ -1778,6 +1780,9 @@
                 },
                 "landlordInfo": {
                     "$ref": "#/definitions/responses.getBookingsResponseLandlordInfo"
+                },
+                "scoreId": {
+                    "type": "integer"
                 },
                 "status": {
                     "type": "string"
@@ -1938,6 +1943,9 @@
                 "area": {
                     "type": "integer"
                 },
+                "averageRating": {
+                    "type": "integer"
+                },
                 "calendar": {
                     "$ref": "#/definitions/responses.getCreativeSpaceResponseCalendar"
                 },
@@ -1970,6 +1978,12 @@
                 },
                 "pricePerDay": {
                     "type": "integer"
+                },
+                "scores": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.getCreativeSpaceResponseScore"
+                    }
                 },
                 "spaceType": {
                     "type": "string"
@@ -2039,6 +2053,40 @@
                 }
             }
         },
+        "responses.getCreativeSpaceResponseScore": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "rating": {
+                    "type": "integer"
+                },
+                "user": {
+                    "$ref": "#/definitions/responses.getCreativeSpaceResponseScoreUser"
+                }
+            }
+        },
+        "responses.getCreativeSpaceResponseScoreUser": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "patronymic": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                }
+            }
+        },
         "responses.getCreativeSpacesResponseCalendar": {
             "type": "object",
             "properties": {
@@ -2087,6 +2135,9 @@
                 "area": {
                     "type": "integer"
                 },
+                "averageRating": {
+                    "type": "integer"
+                },
                 "calendar": {
                     "$ref": "#/definitions/responses.getCreativeSpacesResponseCalendar"
                 },
@@ -2119,6 +2170,12 @@
                 },
                 "pricePerDay": {
                     "type": "integer"
+                },
+                "scores": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.getCreativeSpacesResponseScore"
+                    }
                 },
                 "spaceType": {
                     "type": "string"
@@ -2155,6 +2212,40 @@
                     "type": "integer"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.getCreativeSpacesResponseScore": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "rating": {
+                    "type": "integer"
+                },
+                "user": {
+                    "$ref": "#/definitions/responses.getCreativeSpacesResponseScoreUser"
+                }
+            }
+        },
+        "responses.getCreativeSpacesResponseScoreUser": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "patronymic": {
+                    "type": "string"
+                },
+                "surname": {
                     "type": "string"
                 }
             }
