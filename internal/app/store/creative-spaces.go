@@ -28,6 +28,7 @@ type CreativeSpace struct {
 	CalendarEvents         []*CalendarEvent             `pg:"rel:has-many"`
 	MetroStations          []*CreativeSpaceMetroStation `pg:"rel:has-many"`
 	LandlordInfo           *User                        `pg:"rel:has-one,fk:landlord_id"`
+	Scores                 []*Score                     `pg:"rel:has-many"`
 }
 
 func (s *Store) GetCreativeSpaces() ([]CreativeSpace, error) {
@@ -39,6 +40,9 @@ func (s *Store) GetCreativeSpaces() ([]CreativeSpace, error) {
 			return q.Relation("MetroStation"), nil
 		}).
 		Relation("CalendarEvents").
+		Relation("Scores", func(q *pg.Query) (*pg.Query, error) {
+			return q.Relation("User"), nil
+		}).
 		Select()
 
 	if err != nil {
@@ -61,6 +65,9 @@ func (s *Store) GetCreativeSpaceById(id int) (CreativeSpace, error) {
 		}).
 		Relation("CalendarEvents").
 		Relation("LandlordInfo").
+		Relation("Scores", func(q *pg.Query) (*pg.Query, error) {
+			return q.Relation("User"), nil
+		}).
 		SelectAndCount()
 
 	if err != nil {

@@ -27,6 +27,20 @@ type getCreativeSpacesResponseMetroStation struct {
 	DistanceInMinutes int    `json:"distanceInMinutes"`
 }
 
+type getCreativeSpacesResponseScoreUser struct {
+	Id         int    `json:"id"`
+	Name       string `json:"name"`
+	Surname    string `json:"surname"`
+	Patronymic string `json:"patronymic"`
+}
+
+type getCreativeSpacesResponseScore struct {
+	Id      int                                `json:"id"`
+	Comment string                             `json:"comment"`
+	Rating  int                                `json:"rating"`
+	User    getCreativeSpacesResponseScoreUser `json:"user"`
+}
+
 type getCreativeSpacesResponseCreativeSpace struct {
 	Id            int                                     `json:"id"`
 	SpaceType     string                                  `json:"spaceType"`
@@ -42,6 +56,7 @@ type getCreativeSpacesResponseCreativeSpace struct {
 	MetroStations []getCreativeSpacesResponseMetroStation `json:"metroStations"`
 	Coordinate    getCreativeSpacesResponseCoordinate     `json:"coordinate"`
 	Calendar      getCreativeSpacesResponseCalendar       `json:"calendar"`
+	Scores        []getCreativeSpacesResponseScore        `json:"scores"`
 }
 
 type getCreativeSpacesResponseData struct {
@@ -62,6 +77,22 @@ func GetCreativeSpacesResponseFromStoreData(creativeSpaces []store.CreativeSpace
 				Name:              metroStation.MetroStation.Name,
 				Color:             metroStation.MetroStation.Color,
 				DistanceInMinutes: metroStation.DistanceInMinutes,
+			})
+		}
+
+		resScores := []getCreativeSpacesResponseScore{}
+
+		for _, score := range creativeSpace.Scores {
+			resScores = append(resScores, getCreativeSpacesResponseScore{
+				Id:      score.Id,
+				Rating:  score.Rating,
+				Comment: score.Comment,
+				User: getCreativeSpacesResponseScoreUser{
+					Id:         score.User.Id,
+					Name:       score.User.Name,
+					Surname:    score.User.Surname,
+					Patronymic: score.User.Patronymic,
+				},
 			})
 		}
 
@@ -97,6 +128,7 @@ func GetCreativeSpacesResponseFromStoreData(creativeSpaces []store.CreativeSpace
 			},
 			MetroStations: resMetroStations,
 			Calendar:      resCalendar,
+			Scores:        resScores,
 		})
 	}
 
@@ -138,6 +170,20 @@ type getCreativeSpaceResponseMetroStation struct {
 	DistanceInMinutes int    `json:"distanceInMinutes"`
 }
 
+type getCreativeSpaceResponseScoreUser struct {
+	Id         int    `json:"id"`
+	Name       string `json:"name"`
+	Surname    string `json:"surname"`
+	Patronymic string `json:"patronymic"`
+}
+
+type getCreativeSpaceResponseScore struct {
+	Id      int                               `json:"id"`
+	Comment string                            `json:"comment"`
+	Rating  int                               `json:"rating"`
+	User    getCreativeSpaceResponseScoreUser `json:"user"`
+}
+
 type getCreativeSpaceResponseCreativeSpace struct {
 	Id            int                                    `json:"id"`
 	SpaceType     string                                 `json:"spaceType"`
@@ -153,6 +199,7 @@ type getCreativeSpaceResponseCreativeSpace struct {
 	Coordinate    getCreativeSpaceResponseCoordinate     `json:"coordinate"`
 	Calendar      getCreativeSpaceResponseCalendar       `json:"calendar"`
 	LandlordInfo  getCreativeSpaceResponseLandlordInfo   `json:"landlordInfo"`
+	Scores        []getCreativeSpaceResponseScore        `json:"scores"`
 }
 
 type getCreativeSpaceResponseData struct {
@@ -178,6 +225,22 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 		resCalendarEvents = append(resCalendarEvents, getCreativeSpaceResponseCalendarEvent{
 			Date:      calendarEvent.Date,
 			BookingId: calendarEvent.BookingId,
+		})
+	}
+
+	resScores := []getCreativeSpaceResponseScore{}
+
+	for _, score := range creativeSpace.Scores {
+		resScores = append(resScores, getCreativeSpaceResponseScore{
+			Id:      score.Id,
+			Rating:  score.Rating,
+			Comment: score.Comment,
+			User: getCreativeSpaceResponseScoreUser{
+				Id:         score.User.Id,
+				Name:       score.User.Name,
+				Surname:    score.User.Surname,
+				Patronymic: score.User.Patronymic,
+			},
 		})
 	}
 
@@ -213,6 +276,7 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 			Inn:             creativeSpace.LandlordInfo.Inn,
 			LegalEntityName: creativeSpace.LandlordInfo.LegalEntityName,
 		},
+		Scores: resScores,
 	}
 
 	return res

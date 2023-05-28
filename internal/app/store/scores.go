@@ -15,6 +15,7 @@ type Score struct {
 	BookingId       int      `pg:"booking_id"`
 	Comment         string   `pg:"comment"`
 	Rating          int      `pg:"rating"`
+	User            *User    `pg:"rel:has-one,fk:user_id"`
 }
 
 func (s *Store) CreateScore(score Score) (int, error) {
