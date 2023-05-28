@@ -47,6 +47,7 @@ type getBookingsResponseBooking struct {
 	CreativeSpace  getBookingsResponseCreativeSpace   `json:"creativeSpace"`
 	LandlordInfo   getBookingsResponseLandlordInfo    `json:"landlordInfo"`
 	TenantInfo     getBookingsResponseTenantInfo      `json:"tenantInfo"`
+	ScoreId        int                                `json:"scoreId"`
 }
 
 type getBookingsResponseData struct {
@@ -75,12 +76,19 @@ func GetBookingsResponseFromStoreData(bookings []store.Booking) getBookingsRespo
 			Photos:      booking.CreativeSpace.Photos,
 		}
 
+		scoreId := 0
+
+		if booking.Score != nil {
+			scoreId = booking.Score.Id
+		}
+
 		res.Bookings = append(res.Bookings, getBookingsResponseBooking{
 			Id:             booking.Id,
 			Status:         booking.Status,
 			FullPrice:      booking.FullPrice,
 			CalendarEvents: resCalendarEvents,
 			CreativeSpace:  resCreativeSpace,
+			ScoreId:        scoreId,
 			LandlordInfo: getBookingsResponseLandlordInfo{
 				Id:              booking.LandlordInfo.Id,
 				Phone:           booking.LandlordInfo.Phone,
@@ -149,6 +157,7 @@ type getBookingResponseBooking struct {
 	CreativeSpace  getBookingResponseCreativeSpace   `json:"creativeSpace"`
 	LandlordInfo   getBookingResponseLandlordInfo    `json:"landlordInfo"`
 	TenantInfo     getBookingResponseTenantInfo      `json:"tenantInfo"`
+	ScoreId        int                               `json:"scoreId"`
 }
 
 type getBookingResponseData struct {
@@ -174,8 +183,15 @@ func GetBookingResponseFromStoreData(booking store.Booking) getBookingResponseDa
 		Photos:      booking.CreativeSpace.Photos,
 	}
 
+	scoreId := 0
+
+	if booking.Score != nil {
+		scoreId = booking.Score.Id
+	}
+
 	res.Booking = getBookingResponseBooking{
 		Id:             booking.Id,
+		ScoreId:        scoreId,
 		Status:         booking.Status,
 		FullPrice:      booking.FullPrice,
 		CalendarEvents: resCalendarEvents,

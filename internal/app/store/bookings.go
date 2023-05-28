@@ -20,6 +20,7 @@ type Booking struct {
 	CreativeSpace   *CreativeSpace      `pg:"rel:has-one"`
 	TenantInfo      *User               `pg:"rel:has-one,fk:tenant_id"`
 	LandlordInfo    *User               `pg:"rel:has-one,fk:landlord_id"`
+	Score           *Score              `pg:"join_fk:booking_id"`
 }
 
 type BookingsFilter struct {
@@ -38,6 +39,7 @@ func (s *Store) GetBookings(filters BookingsFilter) ([]Booking, error) {
 		Relation("CreativeSpace").
 		Relation("TenantInfo").
 		Relation("LandlordInfo").
+		Relation("Score").
 		Select()
 
 	if err != nil {
@@ -59,6 +61,7 @@ func (s *Store) GetBookingById(bookingId int) (Booking, error) {
 		Relation("CreativeSpace").
 		Relation("TenantInfo").
 		Relation("LandlordInfo").
+		Relation("Score").
 		Select()
 
 	if err != nil {
