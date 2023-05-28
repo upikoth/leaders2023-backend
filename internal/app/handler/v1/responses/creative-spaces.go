@@ -29,6 +29,9 @@ type getCreativeSpacesResponseMetroStation struct {
 
 type getCreativeSpacesResponseCreativeSpace struct {
 	Id            int                                     `json:"id"`
+	SpaceType     string                                  `json:"spaceType"`
+	Area          int                                     `json:"area"`
+	Capacity      int                                     `json:"capacity"`
 	Title         string                                  `json:"title"`
 	Address       string                                  `json:"address"`
 	Status        model.CreativeSpaceStatus               `json:"status"`
@@ -78,6 +81,9 @@ func GetCreativeSpacesResponseFromStoreData(creativeSpaces []store.CreativeSpace
 
 		res.CreativeSpaces = append(res.CreativeSpaces, getCreativeSpacesResponseCreativeSpace{
 			Id:          creativeSpace.Id,
+			SpaceType:   creativeSpace.SpaceType,
+			Area:        creativeSpace.Area,
+			Capacity:    creativeSpace.Capacity,
 			Title:       creativeSpace.Title,
 			Address:     creativeSpace.Address,
 			Status:      creativeSpace.Status,
@@ -134,6 +140,9 @@ type getCreativeSpaceResponseMetroStation struct {
 
 type getCreativeSpaceResponseCreativeSpace struct {
 	Id            int                                    `json:"id"`
+	SpaceType     string                                 `json:"spaceType"`
+	Area          int                                    `json:"area"`
+	Capacity      int                                    `json:"capacity"`
 	Title         string                                 `json:"title"`
 	Address       string                                 `json:"address"`
 	Status        model.CreativeSpaceStatus              `json:"status"`
@@ -174,6 +183,9 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 
 	res.CreativeSpace = getCreativeSpaceResponseCreativeSpace{
 		Id:          creativeSpace.Id,
+		SpaceType:   creativeSpace.SpaceType,
+		Area:        creativeSpace.Area,
+		Capacity:    creativeSpace.Capacity,
 		Title:       creativeSpace.Title,
 		Address:     creativeSpace.Address,
 		Status:      creativeSpace.Status,

@@ -42,6 +42,9 @@ type createCreativeSpaceRequestMetroStation struct {
 }
 
 type createCreativeSpaceRequestData struct {
+	SpaceType     string                                   `json:"spaceType" binding:"required"`
+	Area          int                                      `json:"area" binding:"required"`
+	Capacity      int                                      `json:"capacity" binding:"required"`
 	Title         string                                   `json:"title" binding:"required"`
 	Address       string                                   `json:"address" binding:"required"`
 	Description   string                                   `json:"description" binding:"required"`
@@ -89,6 +92,9 @@ type patchCreativeSpaceRequestUri struct {
 }
 
 type patchCreativeSpaceRequestBody struct {
+	SpaceType     string                                  `json:"spaceType"`
+	Area          int                                     `json:"area"`
+	Capacity      int                                     `json:"capacity"`
 	Title         string                                  `json:"title"`
 	Address       string                                  `json:"address"`
 	Status        model.CreativeSpaceStatus               `json:"status"`
@@ -102,6 +108,9 @@ type patchCreativeSpaceRequestBody struct {
 
 type patchCreativeSpaceRequestData struct {
 	Id            int                                     `json:"id"`
+	SpaceType     string                                  `json:"spaceType"`
+	Area          int                                     `json:"area"`
+	Capacity      int                                     `json:"capacity"`
 	Title         string                                  `json:"title"`
 	Address       string                                  `json:"address"`
 	Status        model.CreativeSpaceStatus               `json:"status"`
@@ -133,6 +142,9 @@ func PatchCreativeSpaceDataFromRequest(c *gin.Context) (patchCreativeSpaceReques
 
 	data.Id = dataFromUri.Id
 
+	data.SpaceType = dataFromBody.SpaceType
+	data.Area = dataFromBody.Area
+	data.Capacity = dataFromBody.Capacity
 	data.Title = dataFromBody.Title
 	data.Address = dataFromBody.Address
 	data.Status = dataFromBody.Status

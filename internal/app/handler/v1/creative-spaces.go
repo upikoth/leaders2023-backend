@@ -108,6 +108,9 @@ func (h *HandlerV1) CreateCreativeSpace(c *gin.Context) {
 	creativeSpace := store.CreativeSpace{
 		LandlordId:             userData.UserId,
 		Title:                  reqData.Title,
+		SpaceType:              reqData.SpaceType,
+		Area:                   reqData.Area,
+		Capacity:               reqData.Capacity,
 		Address:                reqData.Address,
 		Status:                 model.CreativeSpaceStatusConfirmationByAdmin,
 		Photos:                 reqData.Photos,
@@ -189,6 +192,9 @@ func (h *HandlerV1) PatchCreativeSpace(c *gin.Context) {
 
 	creativeSpace := store.CreativeSpace{
 		Id:                     reqData.Id,
+		SpaceType:              reqData.SpaceType,
+		Area:                   reqData.Area,
+		Capacity:               reqData.Capacity,
 		Title:                  reqData.Title,
 		Address:                reqData.Address,
 		Status:                 reqData.Status,

@@ -11,6 +11,9 @@ import (
 type CreativeSpace struct {
 	tableName              struct{}                     `pg:"creative_spaces"` //nolint:unused // Имя таблицы
 	Id                     int                          `pg:"id"`
+	SpaceType              string                       `pg:"space_type"`
+	Area                   int                          `pg:"area"`
+	Capacity               int                          `pg:"capacity"`
 	Title                  string                       `pg:"title"`
 	Status                 model.CreativeSpaceStatus    `pg:"status"`
 	Address                string                       `pg:"address"`
