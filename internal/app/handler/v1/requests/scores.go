@@ -3,7 +3,7 @@ package requests
 import "github.com/gin-gonic/gin"
 
 type createScoreRequestData struct {
-	Comment         string `json:"comment" binding:"required"`
+	Comment         string `json:"comment"`
 	Rating          int    `json:"rating" binding:"required"`
 	BookingId       int    `json:"bookingId" binding:"required"`
 	CreativeSpaceId int    `json:"creativeSpaceId" binding:"required"`
