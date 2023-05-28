@@ -1,6 +1,8 @@
 package responses
 
 import (
+	"math"
+
 	"github.com/upikoth/leaders2023-backend/internal/app/model"
 	"github.com/upikoth/leaders2023-backend/internal/app/store"
 )
@@ -57,7 +59,7 @@ type getCreativeSpacesResponseCreativeSpace struct {
 	Coordinate    getCreativeSpacesResponseCoordinate     `json:"coordinate"`
 	Calendar      getCreativeSpacesResponseCalendar       `json:"calendar"`
 	Scores        []getCreativeSpacesResponseScore        `json:"scores"`
-	AverageRating int                                     `json:"averageRating"`
+	AverageRating float64                                 `json:"averageRating"`
 }
 
 type getCreativeSpacesResponseData struct {
@@ -83,7 +85,7 @@ func GetCreativeSpacesResponseFromStoreData(creativeSpaces []store.CreativeSpace
 
 		resScores := []getCreativeSpacesResponseScore{}
 		totalRating := 0
-		averageRating := 0
+		averageRating := 0.0
 
 		for _, score := range creativeSpace.Scores {
 			resScores = append(resScores, getCreativeSpacesResponseScore{
@@ -102,7 +104,9 @@ func GetCreativeSpacesResponseFromStoreData(creativeSpaces []store.CreativeSpace
 		}
 
 		if len(resScores) > 0 {
-			averageRating = totalRating / len(resScores)
+			averageRating = float64(totalRating) / float64(len(resScores))
+			//nolint:gomnd // Оставляем 1 знак после зяпятой.
+			averageRating = math.Round(averageRating*10) / 10
 		}
 
 		resCalendarEvents := []getCreativeSpacesResponseCalendarEvent{}
@@ -210,7 +214,7 @@ type getCreativeSpaceResponseCreativeSpace struct {
 	Calendar      getCreativeSpaceResponseCalendar       `json:"calendar"`
 	LandlordInfo  getCreativeSpaceResponseLandlordInfo   `json:"landlordInfo"`
 	Scores        []getCreativeSpaceResponseScore        `json:"scores"`
-	AverageRating int                                    `json:"averageRating"`
+	AverageRating float64                                `json:"averageRating"`
 }
 
 type getCreativeSpaceResponseData struct {
@@ -241,7 +245,7 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 
 	resScores := []getCreativeSpaceResponseScore{}
 	totalRating := 0
-	averageRating := 0
+	averageRating := 0.0
 
 	for _, score := range creativeSpace.Scores {
 		resScores = append(resScores, getCreativeSpaceResponseScore{
@@ -260,7 +264,9 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 	}
 
 	if len(resScores) > 0 {
-		averageRating = totalRating / len(resScores)
+		averageRating = float64(totalRating) / float64(len(resScores))
+		//nolint:gomnd // Оставляем 1 знак после зяпятой.
+		averageRating = math.Round(averageRating*10) / 10
 	}
 
 	res.CreativeSpace = getCreativeSpaceResponseCreativeSpace{
