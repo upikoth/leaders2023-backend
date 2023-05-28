@@ -210,6 +210,8 @@ func (h *HandlerV1) PatchCreativeSpace(c *gin.Context) {
 
 	if reqData.Calendar.Events != nil {
 		creativeSpace.CalendarEvents = creativeSpaceCalendarEvents
+	} else {
+		creativeSpace.CalendarEvents = creativeSpaceToUpdate.CalendarEvents
 	}
 
 	storeErr := h.store.PatchCreativeSpace(creativeSpace)
