@@ -18,6 +18,8 @@ type Booking struct {
 	FullPrice       int                 `pg:"full_price"`
 	CalendarEvents  []*CalendarEvent    `pg:"rel:has-many"`
 	CreativeSpace   *CreativeSpace      `pg:"rel:has-one"`
+	TenantInfo      *User               `pg:"rel:has-one,fk:tenant_id"`
+	LandlordInfo    *User               `pg:"rel:has-one,fk:landlord_id"`
 }
 
 type BookingsFilter struct {
@@ -34,6 +36,8 @@ func (s *Store) GetBookings(filters BookingsFilter) ([]Booking, error) {
 		Where("bookings.landlord_id = ? OR ?", filters.LandlordId, filters.LandlordId == 0).
 		Relation("CalendarEvents").
 		Relation("CreativeSpace").
+		Relation("TenantInfo").
+		Relation("LandlordInfo").
 		Select()
 
 	if err != nil {
@@ -53,6 +57,8 @@ func (s *Store) GetBookingById(bookingId int) (Booking, error) {
 		WherePK().
 		Relation("CalendarEvents").
 		Relation("CreativeSpace").
+		Relation("TenantInfo").
+		Relation("LandlordInfo").
 		Select()
 
 	if err != nil {

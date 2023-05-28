@@ -17,14 +17,36 @@ type getBookingsResponseCreativeSpace struct {
 	Photos      []string `json:"photos"`
 }
 
+type getBookingsResponseLandlordInfo struct {
+	Id              int        `json:"id"`
+	Phone           string     `json:"phone"`
+	Role            model.Role `json:"role"`
+	Name            string     `json:"name"`
+	Surname         string     `json:"surname"`
+	Patronymic      string     `json:"patronymic"`
+	Email           string     `json:"email"`
+	Inn             string     `json:"inn"`
+	LegalEntityName string     `json:"legalEntityName"`
+}
+
+type getBookingsResponseTenantInfo struct {
+	Id         int        `json:"id"`
+	Phone      string     `json:"phone"`
+	Role       model.Role `json:"role"`
+	Name       string     `json:"name"`
+	Surname    string     `json:"surname"`
+	Patronymic string     `json:"patronymic"`
+	Email      string     `json:"email"`
+}
+
 type getBookingsResponseBooking struct {
 	Id             int                                `json:"id"`
-	TenantId       int                                `json:"tenantId"`
-	LandlordId     int                                `json:"landlordId"`
 	Status         model.BookingStatus                `json:"status"`
 	FullPrice      int                                `json:"fullPrice"`
 	CalendarEvents []getBookingsResponseCalendarEvent `json:"calendarEvents"`
 	CreativeSpace  getBookingsResponseCreativeSpace   `json:"creativeSpace"`
+	LandlordInfo   getBookingsResponseLandlordInfo    `json:"landlordInfo"`
+	TenantInfo     getBookingsResponseTenantInfo      `json:"tenantInfo"`
 }
 
 type getBookingsResponseData struct {
@@ -55,12 +77,30 @@ func GetBookingsResponseFromStoreData(bookings []store.Booking) getBookingsRespo
 
 		res.Bookings = append(res.Bookings, getBookingsResponseBooking{
 			Id:             booking.Id,
-			TenantId:       booking.TenantId,
-			LandlordId:     booking.LandlordId,
 			Status:         booking.Status,
 			FullPrice:      booking.FullPrice,
 			CalendarEvents: resCalendarEvents,
 			CreativeSpace:  resCreativeSpace,
+			LandlordInfo: getBookingsResponseLandlordInfo{
+				Id:              booking.LandlordInfo.Id,
+				Phone:           booking.LandlordInfo.Phone,
+				Role:            booking.LandlordInfo.Role,
+				Name:            booking.LandlordInfo.Name,
+				Surname:         booking.LandlordInfo.Surname,
+				Patronymic:      booking.LandlordInfo.Patronymic,
+				Email:           booking.LandlordInfo.Email,
+				Inn:             booking.LandlordInfo.Inn,
+				LegalEntityName: booking.LandlordInfo.LegalEntityName,
+			},
+			TenantInfo: getBookingsResponseTenantInfo{
+				Id:         booking.TenantInfo.Id,
+				Phone:      booking.TenantInfo.Phone,
+				Role:       booking.TenantInfo.Role,
+				Name:       booking.TenantInfo.Name,
+				Surname:    booking.TenantInfo.Surname,
+				Patronymic: booking.TenantInfo.Patronymic,
+				Email:      booking.TenantInfo.Email,
+			},
 		})
 	}
 
@@ -79,14 +119,36 @@ type getBookingResponseCreativeSpace struct {
 	Photos      []string `json:"photos"`
 }
 
+type getBookingResponseLandlordInfo struct {
+	Id              int        `json:"id"`
+	Phone           string     `json:"phone"`
+	Role            model.Role `json:"role"`
+	Name            string     `json:"name"`
+	Surname         string     `json:"surname"`
+	Patronymic      string     `json:"patronymic"`
+	Email           string     `json:"email"`
+	Inn             string     `json:"inn"`
+	LegalEntityName string     `json:"legalEntityName"`
+}
+
+type getBookingResponseTenantInfo struct {
+	Id         int        `json:"id"`
+	Phone      string     `json:"phone"`
+	Role       model.Role `json:"role"`
+	Name       string     `json:"name"`
+	Surname    string     `json:"surname"`
+	Patronymic string     `json:"patronymic"`
+	Email      string     `json:"email"`
+}
+
 type getBookingResponseBooking struct {
 	Id             int                               `json:"id"`
-	TenantId       int                               `json:"tenantId"`
-	LandlordId     int                               `json:"landlordId"`
 	Status         model.BookingStatus               `json:"status"`
 	FullPrice      int                               `json:"fullPrice"`
 	CalendarEvents []getBookingResponseCalendarEvent `json:"calendarEvents"`
 	CreativeSpace  getBookingResponseCreativeSpace   `json:"creativeSpace"`
+	LandlordInfo   getBookingResponseLandlordInfo    `json:"landlordInfo"`
+	TenantInfo     getBookingResponseTenantInfo      `json:"tenantInfo"`
 }
 
 type getBookingResponseData struct {
@@ -114,12 +176,30 @@ func GetBookingResponseFromStoreData(booking store.Booking) getBookingResponseDa
 
 	res.Booking = getBookingResponseBooking{
 		Id:             booking.Id,
-		TenantId:       booking.TenantId,
-		LandlordId:     booking.LandlordId,
 		Status:         booking.Status,
 		FullPrice:      booking.FullPrice,
 		CalendarEvents: resCalendarEvents,
 		CreativeSpace:  resCreativeSpace,
+		LandlordInfo: getBookingResponseLandlordInfo{
+			Id:              booking.LandlordInfo.Id,
+			Phone:           booking.LandlordInfo.Phone,
+			Role:            booking.LandlordInfo.Role,
+			Name:            booking.LandlordInfo.Name,
+			Surname:         booking.LandlordInfo.Surname,
+			Patronymic:      booking.LandlordInfo.Patronymic,
+			Email:           booking.LandlordInfo.Email,
+			Inn:             booking.LandlordInfo.Inn,
+			LegalEntityName: booking.LandlordInfo.LegalEntityName,
+		},
+		TenantInfo: getBookingResponseTenantInfo{
+			Id:         booking.TenantInfo.Id,
+			Phone:      booking.TenantInfo.Phone,
+			Role:       booking.TenantInfo.Role,
+			Name:       booking.TenantInfo.Name,
+			Surname:    booking.TenantInfo.Surname,
+			Patronymic: booking.TenantInfo.Patronymic,
+			Email:      booking.TenantInfo.Email,
+		},
 	}
 
 	return res
