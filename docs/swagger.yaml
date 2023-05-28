@@ -79,8 +79,12 @@ definitions:
     properties:
       address:
         type: string
+      area:
+        type: integer
       calendar:
         $ref: '#/definitions/requests.createCreativeSpaceRequestCalendar'
+      capacity:
+        type: integer
       coordinate:
         $ref: '#/definitions/requests.createCreativeSpaceRequestCoordinate'
       description:
@@ -95,15 +99,20 @@ definitions:
         type: array
       pricePerDay:
         type: integer
+      spaceType:
+        type: string
       title:
         type: string
     required:
     - address
+    - area
     - calendar
+    - capacity
     - coordinate
     - description
     - photos
     - pricePerDay
+    - spaceType
     - title
     type: object
   requests.createCreativeSpaceRequestMetroStation:
@@ -115,6 +124,22 @@ definitions:
     required:
     - distanceInMinutes
     - id
+    type: object
+  requests.createScoreRequestData:
+    properties:
+      bookingId:
+        type: integer
+      comment:
+        type: string
+      creativeSpaceId:
+        type: integer
+      rating:
+        type: integer
+    required:
+    - bookingId
+    - comment
+    - creativeSpaceId
+    - rating
     type: object
   requests.createSessionRequestData:
     properties:
@@ -205,8 +230,12 @@ definitions:
     properties:
       address:
         type: string
+      area:
+        type: integer
       calendar:
         $ref: '#/definitions/requests.patchCreativeSpaceRequestCalendar'
+      capacity:
+        type: integer
       coordinate:
         $ref: '#/definitions/requests.patchCreativeSpaceRequestCoordinate'
       description:
@@ -223,6 +252,8 @@ definitions:
         type: array
       pricePerDay:
         type: integer
+      spaceType:
+        type: string
       status:
         type: string
       title:
@@ -308,6 +339,16 @@ definitions:
       file:
         $ref: '#/definitions/responses.createFileResponseFile'
     type: object
+  responses.createScoreResponseData:
+    properties:
+      score:
+        $ref: '#/definitions/responses.createScoreResponseScore'
+    type: object
+  responses.createScoreResponseScore:
+    properties:
+      id:
+        type: integer
+    type: object
   responses.createSessionResponseData:
     properties:
       user:
@@ -360,12 +401,12 @@ definitions:
         type: integer
       id:
         type: integer
-      landlordId:
-        type: integer
+      landlordInfo:
+        $ref: '#/definitions/responses.getBookingResponseLandlordInfo'
       status:
         type: string
-      tenantId:
-        type: integer
+      tenantInfo:
+        $ref: '#/definitions/responses.getBookingResponseTenantInfo'
     type: object
   responses.getBookingResponseCalendarEvent:
     properties:
@@ -392,6 +433,44 @@ definitions:
       booking:
         $ref: '#/definitions/responses.getBookingResponseBooking'
     type: object
+  responses.getBookingResponseLandlordInfo:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      inn:
+        type: string
+      legalEntityName:
+        type: string
+      name:
+        type: string
+      patronymic:
+        type: string
+      phone:
+        type: string
+      role:
+        type: string
+      surname:
+        type: string
+    type: object
+  responses.getBookingResponseTenantInfo:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      patronymic:
+        type: string
+      phone:
+        type: string
+      role:
+        type: string
+      surname:
+        type: string
+    type: object
   responses.getBookingsResponseBooking:
     properties:
       calendarEvents:
@@ -404,12 +483,12 @@ definitions:
         type: integer
       id:
         type: integer
-      landlordId:
-        type: integer
+      landlordInfo:
+        $ref: '#/definitions/responses.getBookingsResponseLandlordInfo'
       status:
         type: string
-      tenantId:
-        type: integer
+      tenantInfo:
+        $ref: '#/definitions/responses.getBookingsResponseTenantInfo'
     type: object
   responses.getBookingsResponseCalendarEvent:
     properties:
@@ -437,6 +516,44 @@ definitions:
         items:
           $ref: '#/definitions/responses.getBookingsResponseBooking'
         type: array
+    type: object
+  responses.getBookingsResponseLandlordInfo:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      inn:
+        type: string
+      legalEntityName:
+        type: string
+      name:
+        type: string
+      patronymic:
+        type: string
+      phone:
+        type: string
+      role:
+        type: string
+      surname:
+        type: string
+    type: object
+  responses.getBookingsResponseTenantInfo:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      patronymic:
+        type: string
+      phone:
+        type: string
+      role:
+        type: string
+      surname:
+        type: string
     type: object
   responses.getCreativeSpaceResponseCalendar:
     properties:
@@ -469,16 +586,20 @@ definitions:
     properties:
       address:
         type: string
+      area:
+        type: integer
       calendar:
         $ref: '#/definitions/responses.getCreativeSpaceResponseCalendar'
+      capacity:
+        type: integer
       coordinate:
         $ref: '#/definitions/responses.getCreativeSpaceResponseCoordinate'
       description:
         type: string
       id:
         type: integer
-      landlordId:
-        type: integer
+      landlordInfo:
+        $ref: '#/definitions/responses.getCreativeSpaceResponseLandlordInfo'
       metroStations:
         items:
           $ref: '#/definitions/responses.getCreativeSpaceResponseMetroStation'
@@ -489,6 +610,8 @@ definitions:
         type: array
       pricePerDay:
         type: integer
+      spaceType:
+        type: string
       status:
         type: string
       title:
@@ -498,6 +621,27 @@ definitions:
     properties:
       creativeSpace:
         $ref: '#/definitions/responses.getCreativeSpaceResponseCreativeSpace'
+    type: object
+  responses.getCreativeSpaceResponseLandlordInfo:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      inn:
+        type: string
+      legalEntityName:
+        type: string
+      name:
+        type: string
+      patronymic:
+        type: string
+      phone:
+        type: string
+      role:
+        type: string
+      surname:
+        type: string
     type: object
   responses.getCreativeSpaceResponseMetroStation:
     properties:
@@ -539,8 +683,12 @@ definitions:
     properties:
       address:
         type: string
+      area:
+        type: integer
       calendar:
         $ref: '#/definitions/responses.getCreativeSpacesResponseCalendar'
+      capacity:
+        type: integer
       coordinate:
         $ref: '#/definitions/responses.getCreativeSpacesResponseCoordinate'
       description:
@@ -559,6 +707,8 @@ definitions:
         type: array
       pricePerDay:
         type: integer
+      spaceType:
+        type: string
       status:
         type: string
       title:
@@ -1077,6 +1227,34 @@ paths:
           schema:
             $ref: '#/definitions/model.ResponseError'
       summary: Возвращает полный список станций метро
+  /api/v1/score:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Параметры запроса
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/requests.createScoreRequestData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/model.ResponseSuccess'
+            - properties:
+                data:
+                  $ref: '#/definitions/responses.createScoreResponseData'
+              type: object
+        "403":
+          description: 'Коды ошибок: [1100]'
+          schema:
+            $ref: '#/definitions/model.ResponseError'
+      summary: Бронирование креативной площадки
   /api/v1/session:
     delete:
       responses:

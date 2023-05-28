@@ -712,6 +712,54 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/api/v1/score": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Бронирование креативной площадки",
+                "parameters": [
+                    {
+                        "description": "Параметры запроса",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.createScoreRequestData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/model.ResponseSuccess"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/responses.createScoreResponseData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "403": {
+                        "description": "Коды ошибок: [1100]",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/session": {
             "get": {
                 "summary": "Получение сессии",
@@ -1119,19 +1167,28 @@ const docTemplate_swagger = `{
             "type": "object",
             "required": [
                 "address",
+                "area",
                 "calendar",
+                "capacity",
                 "coordinate",
                 "description",
                 "photos",
                 "pricePerDay",
+                "spaceType",
                 "title"
             ],
             "properties": {
                 "address": {
                     "type": "string"
                 },
+                "area": {
+                    "type": "integer"
+                },
                 "calendar": {
                     "$ref": "#/definitions/requests.createCreativeSpaceRequestCalendar"
+                },
+                "capacity": {
+                    "type": "integer"
                 },
                 "coordinate": {
                     "$ref": "#/definitions/requests.createCreativeSpaceRequestCoordinate"
@@ -1154,6 +1211,9 @@ const docTemplate_swagger = `{
                 "pricePerDay": {
                     "type": "integer"
                 },
+                "spaceType": {
+                    "type": "string"
+                },
                 "title": {
                     "type": "string"
                 }
@@ -1170,6 +1230,29 @@ const docTemplate_swagger = `{
                     "type": "integer"
                 },
                 "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "requests.createScoreRequestData": {
+            "type": "object",
+            "required": [
+                "bookingId",
+                "comment",
+                "creativeSpaceId",
+                "rating"
+            ],
+            "properties": {
+                "bookingId": {
+                    "type": "integer"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "creativeSpaceId": {
+                    "type": "integer"
+                },
+                "rating": {
                     "type": "integer"
                 }
             }
@@ -1310,8 +1393,14 @@ const docTemplate_swagger = `{
                 "address": {
                     "type": "string"
                 },
+                "area": {
+                    "type": "integer"
+                },
                 "calendar": {
                     "$ref": "#/definitions/requests.patchCreativeSpaceRequestCalendar"
+                },
+                "capacity": {
+                    "type": "integer"
                 },
                 "coordinate": {
                     "$ref": "#/definitions/requests.patchCreativeSpaceRequestCoordinate"
@@ -1336,6 +1425,9 @@ const docTemplate_swagger = `{
                 },
                 "pricePerDay": {
                     "type": "integer"
+                },
+                "spaceType": {
+                    "type": "string"
                 },
                 "status": {
                     "type": "string"
@@ -1471,6 +1563,22 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "responses.createScoreResponseData": {
+            "type": "object",
+            "properties": {
+                "score": {
+                    "$ref": "#/definitions/responses.createScoreResponseScore"
+                }
+            }
+        },
+        "responses.createScoreResponseScore": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
         "responses.createSessionResponseData": {
             "type": "object",
             "properties": {
@@ -1552,14 +1660,14 @@ const docTemplate_swagger = `{
                 "id": {
                     "type": "integer"
                 },
-                "landlordId": {
-                    "type": "integer"
+                "landlordInfo": {
+                    "$ref": "#/definitions/responses.getBookingResponseLandlordInfo"
                 },
                 "status": {
                     "type": "string"
                 },
-                "tenantId": {
-                    "type": "integer"
+                "tenantInfo": {
+                    "$ref": "#/definitions/responses.getBookingResponseTenantInfo"
                 }
             }
         },
@@ -1602,6 +1710,64 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "responses.getBookingResponseLandlordInfo": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "inn": {
+                    "type": "string"
+                },
+                "legalEntityName": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "patronymic": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.getBookingResponseTenantInfo": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "patronymic": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                }
+            }
+        },
         "responses.getBookingsResponseBooking": {
             "type": "object",
             "properties": {
@@ -1620,14 +1786,14 @@ const docTemplate_swagger = `{
                 "id": {
                     "type": "integer"
                 },
-                "landlordId": {
-                    "type": "integer"
+                "landlordInfo": {
+                    "$ref": "#/definitions/responses.getBookingsResponseLandlordInfo"
                 },
                 "status": {
                     "type": "string"
                 },
-                "tenantId": {
-                    "type": "integer"
+                "tenantInfo": {
+                    "$ref": "#/definitions/responses.getBookingsResponseTenantInfo"
                 }
             }
         },
@@ -1670,6 +1836,64 @@ const docTemplate_swagger = `{
                     "items": {
                         "$ref": "#/definitions/responses.getBookingsResponseBooking"
                     }
+                }
+            }
+        },
+        "responses.getBookingsResponseLandlordInfo": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "inn": {
+                    "type": "string"
+                },
+                "legalEntityName": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "patronymic": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.getBookingsResponseTenantInfo": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "patronymic": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
                 }
             }
         },
@@ -1721,8 +1945,14 @@ const docTemplate_swagger = `{
                 "address": {
                     "type": "string"
                 },
+                "area": {
+                    "type": "integer"
+                },
                 "calendar": {
                     "$ref": "#/definitions/responses.getCreativeSpaceResponseCalendar"
+                },
+                "capacity": {
+                    "type": "integer"
                 },
                 "coordinate": {
                     "$ref": "#/definitions/responses.getCreativeSpaceResponseCoordinate"
@@ -1733,8 +1963,8 @@ const docTemplate_swagger = `{
                 "id": {
                     "type": "integer"
                 },
-                "landlordId": {
-                    "type": "integer"
+                "landlordInfo": {
+                    "$ref": "#/definitions/responses.getCreativeSpaceResponseLandlordInfo"
                 },
                 "metroStations": {
                     "type": "array",
@@ -1751,6 +1981,9 @@ const docTemplate_swagger = `{
                 "pricePerDay": {
                     "type": "integer"
                 },
+                "spaceType": {
+                    "type": "string"
+                },
                 "status": {
                     "type": "string"
                 },
@@ -1764,6 +1997,38 @@ const docTemplate_swagger = `{
             "properties": {
                 "creativeSpace": {
                     "$ref": "#/definitions/responses.getCreativeSpaceResponseCreativeSpace"
+                }
+            }
+        },
+        "responses.getCreativeSpaceResponseLandlordInfo": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "inn": {
+                    "type": "string"
+                },
+                "legalEntityName": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "patronymic": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
                 }
             }
         },
@@ -1829,8 +2094,14 @@ const docTemplate_swagger = `{
                 "address": {
                     "type": "string"
                 },
+                "area": {
+                    "type": "integer"
+                },
                 "calendar": {
                     "$ref": "#/definitions/responses.getCreativeSpacesResponseCalendar"
+                },
+                "capacity": {
+                    "type": "integer"
                 },
                 "coordinate": {
                     "$ref": "#/definitions/responses.getCreativeSpacesResponseCoordinate"
@@ -1858,6 +2129,9 @@ const docTemplate_swagger = `{
                 },
                 "pricePerDay": {
                     "type": "integer"
+                },
+                "spaceType": {
+                    "type": "string"
                 },
                 "status": {
                     "type": "string"

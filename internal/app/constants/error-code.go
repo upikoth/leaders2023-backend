@@ -97,6 +97,10 @@ var (
 	ErrBookingDeleteDbError             = errors.New("3401")
 	ErrBookingDeleteNotFoundById        = errors.New("3402")
 	ErrBookingDeleteForbidden           = errors.New("3402")
+
+	ErrScorePostDbError             = errors.New("5000")
+	ErrScorePostNotValidRequestData = errors.New("5001")
+	ErrScorePostForbidden           = errors.New("5002")
 )
 
 //nolint:gochecknoglobals // Пока добавил в игнор.
@@ -193,4 +197,8 @@ var ErrDescriptionByCode = map[error]string{
 	ErrBookingDeleteDbError:             "Не удалось удалить информацию о бронировании",
 	ErrBookingDeleteNotFoundById:        "Бронирование с указанным id не найдено",
 	ErrBookingDeleteForbidden:           "Недостаточно прав",
+
+	ErrScorePostDbError:             "Не удалось создать оценку",
+	ErrScorePostNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrScorePostForbidden:           "Недостаточно прав",
 }

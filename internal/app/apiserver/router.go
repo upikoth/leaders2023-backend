@@ -67,6 +67,8 @@ func (s *ApiServer) initRoutes() {
 	authorized.PATCH("/api/v1/bookings/:id", s.handler.V1.PatchBooking)
 	authorized.DELETE("/api/v1/bookings/:id", s.handler.V1.DeleteBooking)
 
+	authorized.POST("/api/v1/score", s.handler.V1.CreateScore)
+
 	s.router.NoRoute(func(c *gin.Context) {
 		c.Set("responseCode", http.StatusNotFound)
 		c.Set("responseErrorCode", constants.ErrRouteNotFound)
