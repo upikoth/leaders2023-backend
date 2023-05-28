@@ -57,6 +57,7 @@ type getCreativeSpacesResponseCreativeSpace struct {
 	Coordinate    getCreativeSpacesResponseCoordinate     `json:"coordinate"`
 	Calendar      getCreativeSpacesResponseCalendar       `json:"calendar"`
 	Scores        []getCreativeSpacesResponseScore        `json:"scores"`
+	AverageRating int                                     `json:"averageRating"`
 }
 
 type getCreativeSpacesResponseData struct {
@@ -81,6 +82,8 @@ func GetCreativeSpacesResponseFromStoreData(creativeSpaces []store.CreativeSpace
 		}
 
 		resScores := []getCreativeSpacesResponseScore{}
+		totalRating := 0
+		averageRating := 0
 
 		for _, score := range creativeSpace.Scores {
 			resScores = append(resScores, getCreativeSpacesResponseScore{
@@ -94,6 +97,12 @@ func GetCreativeSpacesResponseFromStoreData(creativeSpaces []store.CreativeSpace
 					Patronymic: score.User.Patronymic,
 				},
 			})
+
+			totalRating += score.Rating
+		}
+
+		if len(resScores) > 0 {
+			averageRating = totalRating / len(resScores)
 		}
 
 		resCalendarEvents := []getCreativeSpacesResponseCalendarEvent{}
@@ -129,6 +138,7 @@ func GetCreativeSpacesResponseFromStoreData(creativeSpaces []store.CreativeSpace
 			MetroStations: resMetroStations,
 			Calendar:      resCalendar,
 			Scores:        resScores,
+			AverageRating: averageRating,
 		})
 	}
 
@@ -200,6 +210,7 @@ type getCreativeSpaceResponseCreativeSpace struct {
 	Calendar      getCreativeSpaceResponseCalendar       `json:"calendar"`
 	LandlordInfo  getCreativeSpaceResponseLandlordInfo   `json:"landlordInfo"`
 	Scores        []getCreativeSpaceResponseScore        `json:"scores"`
+	AverageRating int                                    `json:"averageRating"`
 }
 
 type getCreativeSpaceResponseData struct {
@@ -229,6 +240,8 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 	}
 
 	resScores := []getCreativeSpaceResponseScore{}
+	totalRating := 0
+	averageRating := 0
 
 	for _, score := range creativeSpace.Scores {
 		resScores = append(resScores, getCreativeSpaceResponseScore{
@@ -242,6 +255,12 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 				Patronymic: score.User.Patronymic,
 			},
 		})
+
+		totalRating += score.Rating
+	}
+
+	if len(resScores) > 0 {
+		averageRating = totalRating / len(resScores)
 	}
 
 	res.CreativeSpace = getCreativeSpaceResponseCreativeSpace{
@@ -276,7 +295,8 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 			Inn:             creativeSpace.LandlordInfo.Inn,
 			LegalEntityName: creativeSpace.LandlordInfo.LegalEntityName,
 		},
-		Scores: resScores,
+		Scores:        resScores,
+		AverageRating: averageRating,
 	}
 
 	return res
