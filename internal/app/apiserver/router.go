@@ -25,6 +25,7 @@ func (s *ApiServer) initRoutes() {
 		log.Println(proxiesErr)
 	}
 
+	s.router.Use(CORSMiddleware())
 	s.router.Use(formatResponse())
 
 	s.router.GET("/api/v1/health", s.handler.V1.CheckHealth)
@@ -73,6 +74,19 @@ func (s *ApiServer) initRoutes() {
 		c.Set("responseCode", http.StatusNotFound)
 		c.Set("responseErrorCode", constants.ErrRouteNotFound)
 	})
+}
+
+func CORSMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+
+		if c.Request.Method == http.MethodOptions {
+			c.AbortWithStatus(http.StatusNoContent)
+			return
+		}
+
+		c.Next()
+	}
 }
 
 func formatResponse() gin.HandlerFunc {
