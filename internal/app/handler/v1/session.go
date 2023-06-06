@@ -63,6 +63,7 @@ func (h *HandlerV1) CreateSession(c *gin.Context) {
 
 	responseData := responses.CreateSessionResponseFromStoreData(user)
 	c.Set("responseData", responseData)
+	c.SetSameSite(http.SameSiteNoneMode)
 	c.SetCookie("Authorization", jwtToken, int(constants.Month/time.Second), "", "", true, true)
 }
 
@@ -72,6 +73,7 @@ func (h *HandlerV1) CreateSession(c *gin.Context) {
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
 // @Router       /api/v1/session [delete].
 func (h *HandlerV1) DeleteSession(c *gin.Context) {
+	c.SetSameSite(http.SameSiteNoneMode)
 	c.SetCookie("Authorization", "", 0, "", "", true, true)
 }
 
