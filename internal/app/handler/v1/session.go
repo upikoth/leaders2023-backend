@@ -2,7 +2,6 @@ package v1
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
@@ -61,20 +60,8 @@ func (h *HandlerV1) CreateSession(c *gin.Context) {
 		return
 	}
 
-	responseData := responses.CreateSessionResponseFromStoreData(user)
+	responseData := responses.CreateSessionResponseFromStoreData(user, jwtToken)
 	c.Set("responseData", responseData)
-	c.SetSameSite(http.SameSiteNoneMode)
-	c.SetCookie("Authorization", jwtToken, int(constants.Month/time.Second), "", "", true, true)
-}
-
-// DeleteSession godoc
-// @Summary      Удаление сессии
-// @Success      200  {object}  model.ResponseSuccess
-// @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
-// @Router       /api/v1/session [delete].
-func (h *HandlerV1) DeleteSession(c *gin.Context) {
-	c.SetSameSite(http.SameSiteNoneMode)
-	c.SetCookie("Authorization", "", 0, "", "", true, true)
 }
 
 // GetSession godoc

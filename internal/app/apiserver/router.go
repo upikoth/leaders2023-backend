@@ -35,7 +35,6 @@ func (s *ApiServer) initRoutes() {
 	authorized := s.router.Use(checkAuthorization(s.config.JwtSecret))
 
 	authorized.GET("/api/v1/session", s.handler.V1.GetSession)
-	authorized.DELETE("/api/v1/session", s.handler.V1.DeleteSession)
 
 	authorized.GET("/api/v1/users", s.handler.V1.GetUsers)
 
@@ -79,8 +78,8 @@ func (s *ApiServer) initRoutes() {
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", c.Request.Header.Get("Origin"))
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, Authorization")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PATCH")
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
 
 		if c.Request.Method == http.MethodOptions {
@@ -146,9 +145,9 @@ func formatResponse() gin.HandlerFunc {
 
 func checkAuthorization(jwtSecret []byte) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		jwtToken, err := c.Cookie("Authorization")
+		jwtToken := c.Request.Header.Get("Authorization")
 
-		if err != nil || jwtToken == "" {
+		if jwtToken == "" {
 			c.Set("responseCode", http.StatusUnauthorized)
 			c.Set("responseErrorCode", constants.ErrUserNotAuthorized)
 			c.Abort()

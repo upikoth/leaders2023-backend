@@ -9,19 +9,21 @@ type createSessionResponseUser struct {
 	Id    int        `json:"id"`
 	Phone string     `json:"phone"`
 	Role  model.Role `json:"role"`
+	Token string     `json:"token"`
 }
 
 type createSessionResponseData struct {
 	User createSessionResponseUser `json:"user"`
 }
 
-func CreateSessionResponseFromStoreData(user store.User) createSessionResponseData {
+func CreateSessionResponseFromStoreData(user store.User, jwtToken string) createSessionResponseData {
 	res := createSessionResponseData{}
 
 	res.User = createSessionResponseUser{
 		Id:    user.Id,
 		Phone: user.Phone,
 		Role:  user.Role,
+		Token: jwtToken,
 	}
 
 	return res
