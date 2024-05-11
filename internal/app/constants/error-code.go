@@ -111,94 +111,94 @@ var ErrDescriptionByCode = map[error]string{
 	ErrUsersGetDbError:   "Не удалось получить список пользователей",
 	ErrUsersGetForbidden: "Недостаточно прав",
 
-	ErrUserGetNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrUserGetNotValidRequestData: "Ошибка при валидации параметров запроса",
 	ErrUserGetNotFoundByID:        "Пользователь с указанным id не найден",
 	ErrUserGetDbError:             "Не удалось получить информацию о пользователе",
 	ErrUserGetByPhoneDbError:      "Не удалось получить информацию о пользователе",
 	ErrUserGetByPhoneUserNotExist: "Пользователя с такими телефоном не существует",
 	ErrUserGetForbidden:           "Недостаточно прав",
 
-	ErrUserPostNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrUserPostNotValidRequestData: "Ошибка при валидации параметров запроса",
 	ErrUserPostPhoneExist:          "Пользователь с переданным телефоном уже существует",
 	ErrUserPostDbError:             "Не удалось создать пользователя",
 	ErrUserPostCreateHash:          "Ошибка при создании пользователя",
 	ErrUserPostForbidden:           "Недостаточно прав",
 
-	ErrUserDeleteNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrUserDeleteNotValidRequestData: "Ошибка при валидации параметров запроса",
 	ErrUserDeleteNotFoundByID:        "Пользователь с указанным id не найден",
 	ErrUserDeleteDbError:             "Не удалось удалить пользователя",
 	ErrUserDeleteForbidden:           "Недостаточно прав",
 
-	ErrUserPatchNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrUserPatchNotValidRequestData: "Ошибка при валидации параметров запроса",
 	ErrUserPatchPhoneExist:          "Пользователь с переданным телефоном уже существует",
 	ErrUserPatchDbError:             "Не удалось обновить пользователя",
 	ErrUserPatchNotFoundByID:        "Пользователь с указанным id не найден",
 	ErrUserPatchForbidden:           "Недостаточно прав",
 
-	ErrSessionPostNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrSessionPostNotValidRequestData: "Ошибка при валидации параметров запроса",
 	ErrSessionPostUserNotExist:        "Пользователя с такими телефоном и паролем не существует",
 	ErrSessionPostCreateJwtToken:      "Ошибка при входе в систему, попробуйте позже",
 
 	ErrMetroStationsGetDbError: "Не удалось получить список станций метро",
 
-	ErrCreativeSpacePostNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrCreativeSpacePostNotValidRequestData: "Ошибка при валидации параметров запроса",
 	ErrCreativeSpacePostDbError:             "Ошибка при создании креативной площадки",
 	ErrCreativeSpacePostForbidden:           "Недостаточно прав",
 
 	ErrCreativeSpacesGetDbError: "Не удалось получить список креативных пространств",
 
-	ErrCreativeSpaceGetNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrCreativeSpaceGetNotValidRequestData: "Ошибка при валидации параметров запроса",
 	ErrCreativeSpaceGetNotFoundByID:        "Креативное пространство с указанным id не найдено",
 	ErrCreativeSpaceGetDbError:             "Не удалось получить информацию о креативной площадке",
 
-	ErrCreativeSpaceDeleteNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrCreativeSpaceDeleteNotValidRequestData: "Ошибка при валидации параметров запроса",
 	ErrCreativeSpaceDeleteNotFoundByID:        "Креативное пространство с указанным id не найдено",
 	ErrCreativeSpaceDeleteDbError:             "Не удалось удалить информацию о креативной площадке",
 	ErrCreativeSpaceDeleteS3Error:             "Не удалось удалить фотографии из s3",
 
-	ErrCreativeSpacePatchNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrCreativeSpacePatchNotValidRequestData: "Ошибка при валидации параметров запроса",
 	ErrCreativeSpacePatchNotFoundByID:        "Креативное пространство с указанным id не найдено",
 	ErrCreativeSpacePatchDbError:             "Не удалось обновить информацию о креативной площадке",
 	ErrPatchSpacePostForbidden:               "Недостаточно прав",
 
-	ErrSessionGetNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrSessionGetNotValidRequestData: "Ошибка при валидации параметров запроса",
 
-	ErrAddressesGetNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrAddressesGetNotValidRequestData: "Ошибка при валидации параметров запроса",
 	ErrAddressesGetDadataError:         "Не удалось получить список адресов",
 
-	ErrFilePostNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrFilePostNotValidRequestData: "Ошибка при валидации параметров запроса",
 	ErrFilePostOpenFileError:       "Не удалось открыть файл",
 	ErrFilePostS3Error:             "Не удалось отправить файл на s3",
 
-	ErrFileDeleteNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrFileDeleteNotValidRequestData: "Ошибка при валидации параметров запроса",
 	ErrFileDeleteS3Error:             "Не удалось удалить файл из s3",
 
-	ErrCalendarConvertNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrCalendarConvertNotValidRequestData: "Ошибка при валидации параметров запроса",
 
-	ErrCalendarConvertFromLinkNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrCalendarConvertFromLinkNotValidRequestData: "Ошибка при валидации параметров запроса",
 
 	ErrBookingPostDbError:             "Ошибка при бронировании площадки",
-	ErrBookingPostNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrBookingPostNotValidRequestData: "Ошибка при валидации параметров запроса",
 	ErrBookingPostForbidden:           "Недостаточно прав",
 
-	ErrBookingsGetNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrBookingsGetNotValidRequestData: "Ошибка при валидации параметров запроса",
 	ErrBookingsGetDbError:             "Не удалось получить список бронирований",
 
-	ErrBookingGetNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrBookingGetNotValidRequestData: "Ошибка при валидации параметров запроса",
 	ErrBookingGetDbError:             "Не удалось получить информацию о бронировании",
 	ErrBookingGetForbidden:           "Недостаточно прав",
 
-	ErrBookingPatchNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrBookingPatchNotValidRequestData: "Ошибка при валидации параметров запроса",
 	ErrBookingPatchDbError:             "Не удалось обновить информацию о бронировании",
 	ErrBookingPatchForbidden:           "Недостаточно прав",
 	ErrBookingPatchNotFoundByID:        "Бронирование с указанным id не найдено",
 
-	ErrBookingDeleteNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrBookingDeleteNotValidRequestData: "Ошибка при валидации параметров запроса",
 	ErrBookingDeleteDbError:             "Не удалось удалить информацию о бронировании",
 	ErrBookingDeleteNotFoundByID:        "Бронирование с указанным id не найдено",
 	ErrBookingDeleteForbidden:           "Недостаточно прав",
 
 	ErrScorePostDbError:             "Не удалось создать оценку",
-	ErrScorePostNotValidRequestData: "Ошбика при валидации параметров запроса",
+	ErrScorePostNotValidRequestData: "Ошибка при валидации параметров запроса",
 	ErrScorePostForbidden:           "Недостаточно прав",
 }
