@@ -12,7 +12,7 @@ var (
 	ErrUsersGetForbidden = errors.New("1201")
 
 	ErrUserGetNotValidRequestData = errors.New("1300")
-	ErrUserGetNotFoundById        = errors.New("1301")
+	ErrUserGetNotFoundByID        = errors.New("1301")
 	ErrUserGetDbError             = errors.New("1302")
 	ErrUserGetByPhoneDbError      = errors.New("1303")
 	ErrUserGetByPhoneUserNotExist = errors.New("1304")
@@ -25,14 +25,14 @@ var (
 	ErrUserPostForbidden           = errors.New("1404")
 
 	ErrUserDeleteNotValidRequestData = errors.New("1500")
-	ErrUserDeleteNotFoundById        = errors.New("1501")
+	ErrUserDeleteNotFoundByID        = errors.New("1501")
 	ErrUserDeleteDbError             = errors.New("1502")
 	ErrUserDeleteForbidden           = errors.New("1503")
 
 	ErrUserPatchNotValidRequestData = errors.New("1600")
 	ErrUserPatchPhoneExist          = errors.New("1601")
 	ErrUserPatchDbError             = errors.New("1602")
-	ErrUserPatchNotFoundById        = errors.New("1603")
+	ErrUserPatchNotFoundByID        = errors.New("1603")
 	ErrUserPatchForbidden           = errors.New("1604")
 
 	ErrSessionPostNotValidRequestData = errors.New("1700")
@@ -48,16 +48,16 @@ var (
 	ErrCreativeSpacesGetDbError = errors.New("2000")
 
 	ErrCreativeSpaceGetNotValidRequestData = errors.New("2100")
-	ErrCreativeSpaceGetNotFoundById        = errors.New("2101")
+	ErrCreativeSpaceGetNotFoundByID        = errors.New("2101")
 	ErrCreativeSpaceGetDbError             = errors.New("2102")
 
 	ErrCreativeSpaceDeleteNotValidRequestData = errors.New("2200")
-	ErrCreativeSpaceDeleteNotFoundById        = errors.New("2201")
+	ErrCreativeSpaceDeleteNotFoundByID        = errors.New("2201")
 	ErrCreativeSpaceDeleteDbError             = errors.New("2202")
 	ErrCreativeSpaceDeleteS3Error             = errors.New("2203")
 
 	ErrCreativeSpacePatchNotValidRequestData = errors.New("2300")
-	ErrCreativeSpacePatchNotFoundById        = errors.New("2301")
+	ErrCreativeSpacePatchNotFoundByID        = errors.New("2301")
 	ErrCreativeSpacePatchDbError             = errors.New("2302")
 	ErrPatchSpacePostForbidden               = errors.New("2303")
 
@@ -91,11 +91,11 @@ var (
 	ErrBookingPatchNotValidRequestData = errors.New("3300")
 	ErrBookingPatchDbError             = errors.New("3301")
 	ErrBookingPatchForbidden           = errors.New("3302")
-	ErrBookingPatchNotFoundById        = errors.New("3303")
+	ErrBookingPatchNotFoundByID        = errors.New("3303")
 
 	ErrBookingDeleteNotValidRequestData = errors.New("3400")
 	ErrBookingDeleteDbError             = errors.New("3401")
-	ErrBookingDeleteNotFoundById        = errors.New("3402")
+	ErrBookingDeleteNotFoundByID        = errors.New("3402")
 	ErrBookingDeleteForbidden           = errors.New("3402")
 
 	ErrScorePostDbError             = errors.New("5000")
@@ -112,7 +112,7 @@ var ErrDescriptionByCode = map[error]string{
 	ErrUsersGetForbidden: "Недостаточно прав",
 
 	ErrUserGetNotValidRequestData: "Ошбика при валидации параметров запроса",
-	ErrUserGetNotFoundById:        "Пользователь с указанным id не найден",
+	ErrUserGetNotFoundByID:        "Пользователь с указанным id не найден",
 	ErrUserGetDbError:             "Не удалось получить информацию о пользователе",
 	ErrUserGetByPhoneDbError:      "Не удалось получить информацию о пользователе",
 	ErrUserGetByPhoneUserNotExist: "Пользователя с такими телефоном не существует",
@@ -125,14 +125,14 @@ var ErrDescriptionByCode = map[error]string{
 	ErrUserPostForbidden:           "Недостаточно прав",
 
 	ErrUserDeleteNotValidRequestData: "Ошбика при валидации параметров запроса",
-	ErrUserDeleteNotFoundById:        "Пользователь с указанным id не найден",
+	ErrUserDeleteNotFoundByID:        "Пользователь с указанным id не найден",
 	ErrUserDeleteDbError:             "Не удалось удалить пользователя",
 	ErrUserDeleteForbidden:           "Недостаточно прав",
 
 	ErrUserPatchNotValidRequestData: "Ошбика при валидации параметров запроса",
 	ErrUserPatchPhoneExist:          "Пользователь с переданным телефоном уже существует",
 	ErrUserPatchDbError:             "Не удалось обновить пользователя",
-	ErrUserPatchNotFoundById:        "Пользователь с указанным id не найден",
+	ErrUserPatchNotFoundByID:        "Пользователь с указанным id не найден",
 	ErrUserPatchForbidden:           "Недостаточно прав",
 
 	ErrSessionPostNotValidRequestData: "Ошбика при валидации параметров запроса",
@@ -148,16 +148,16 @@ var ErrDescriptionByCode = map[error]string{
 	ErrCreativeSpacesGetDbError: "Не удалось получить список креативных пространств",
 
 	ErrCreativeSpaceGetNotValidRequestData: "Ошбика при валидации параметров запроса",
-	ErrCreativeSpaceGetNotFoundById:        "Креативное пространство с указанным id не найдено",
+	ErrCreativeSpaceGetNotFoundByID:        "Креативное пространство с указанным id не найдено",
 	ErrCreativeSpaceGetDbError:             "Не удалось получить информацию о креативной площадке",
 
 	ErrCreativeSpaceDeleteNotValidRequestData: "Ошбика при валидации параметров запроса",
-	ErrCreativeSpaceDeleteNotFoundById:        "Креативное пространство с указанным id не найдено",
+	ErrCreativeSpaceDeleteNotFoundByID:        "Креативное пространство с указанным id не найдено",
 	ErrCreativeSpaceDeleteDbError:             "Не удалось удалить информацию о креативной площадке",
 	ErrCreativeSpaceDeleteS3Error:             "Не удалось удалить фотографии из s3",
 
 	ErrCreativeSpacePatchNotValidRequestData: "Ошбика при валидации параметров запроса",
-	ErrCreativeSpacePatchNotFoundById:        "Креативное пространство с указанным id не найдено",
+	ErrCreativeSpacePatchNotFoundByID:        "Креативное пространство с указанным id не найдено",
 	ErrCreativeSpacePatchDbError:             "Не удалось обновить информацию о креативной площадке",
 	ErrPatchSpacePostForbidden:               "Недостаточно прав",
 
@@ -191,11 +191,11 @@ var ErrDescriptionByCode = map[error]string{
 	ErrBookingPatchNotValidRequestData: "Ошбика при валидации параметров запроса",
 	ErrBookingPatchDbError:             "Не удалось обновить информацию о бронировании",
 	ErrBookingPatchForbidden:           "Недостаточно прав",
-	ErrBookingPatchNotFoundById:        "Бронирование с указанным id не найдено",
+	ErrBookingPatchNotFoundByID:        "Бронирование с указанным id не найдено",
 
 	ErrBookingDeleteNotValidRequestData: "Ошбика при валидации параметров запроса",
 	ErrBookingDeleteDbError:             "Не удалось удалить информацию о бронировании",
-	ErrBookingDeleteNotFoundById:        "Бронирование с указанным id не найдено",
+	ErrBookingDeleteNotFoundByID:        "Бронирование с указанным id не найдено",
 	ErrBookingDeleteForbidden:           "Недостаточно прав",
 
 	ErrScorePostDbError:             "Не удалось создать оценку",

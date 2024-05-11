@@ -6,7 +6,7 @@ import (
 )
 
 type getUserRequestData struct {
-	Id int `json:"id" uri:"id" binding:"required"`
+	ID string `json:"id" uri:"id" binding:"required"`
 }
 
 func GetUserDataFromRequest(c *gin.Context) (getUserRequestData, error) {
@@ -45,8 +45,8 @@ func CreateUserDataFromRequest(c *gin.Context) (createUserRequestData, error) {
 	return data, nil
 }
 
-type patchUserRequestUri struct {
-	Id int `json:"id" uri:"id" binding:"required"`
+type patchUserRequestURI struct {
+	ID string `json:"id" uri:"id" binding:"required"`
 }
 
 type patchUserRequestBody struct {
@@ -60,7 +60,7 @@ type patchUserRequestBody struct {
 }
 
 type patchUserRequestData struct {
-	Id              int    `json:"id"`
+	ID              string `json:"id"`
 	Phone           string `json:"phone,omitempty"`
 	Name            string `json:"name"`
 	Surname         string `json:"surname"`
@@ -71,10 +71,10 @@ type patchUserRequestData struct {
 }
 
 func PatchUserDataFromRequest(c *gin.Context) (patchUserRequestData, error) {
-	dataFromUri := patchUserRequestUri{}
+	dataFromURI := patchUserRequestURI{}
 	dataFromBody := patchUserRequestBody{}
 
-	uriErr := c.BindUri(&dataFromUri)
+	uriErr := c.BindUri(&dataFromURI)
 
 	if uriErr != nil {
 		return patchUserRequestData{}, uriErr
@@ -87,7 +87,7 @@ func PatchUserDataFromRequest(c *gin.Context) (patchUserRequestData, error) {
 	}
 
 	data := patchUserRequestData{
-		Id:              dataFromUri.Id,
+		ID:              dataFromURI.ID,
 		Phone:           dataFromBody.Phone,
 		Name:            dataFromBody.Name,
 		Surname:         dataFromBody.Surname,
@@ -101,7 +101,7 @@ func PatchUserDataFromRequest(c *gin.Context) (patchUserRequestData, error) {
 }
 
 type deleteUserRequestData struct {
-	Id int `json:"id" uri:"id" binding:"required"`
+	ID string `json:"id" uri:"id" binding:"required"`
 }
 
 func DeleteUserDataFromRequest(c *gin.Context) (deleteUserRequestData, error) {

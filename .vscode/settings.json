@@ -4,4 +4,17 @@
 		"--fast"
 	],
 	"go.lintOnSave": "package",
+	"cSpell.words": [
+		"apiserver",
+		"ekomobile",
+		"godoc",
+		"gonic",
+		"gorm",
+		"ical",
+		"joho",
+		"kelseyhightower",
+		"mpfd",
+		"primarykey",
+		"swaggo"
+	],
 }

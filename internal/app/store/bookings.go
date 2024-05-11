@@ -1,216 +1,154 @@
 package store
 
 import (
-	"context"
-
-	"github.com/go-pg/pg/v10"
 	"github.com/upikoth/leaders2023-backend/internal/app/constants"
-	"github.com/upikoth/leaders2023-backend/internal/app/model"
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type Booking struct {
-	tableName       struct{}            `pg:"bookings,alias:bookings"` //nolint:unused // Имя таблицы
-	Id              int                 `pg:"id"`
-	TenantId        int                 `pg:"tenant_id"`
-	LandlordId      int                 `pg:"landlord_id"`
-	CreativeSpaceId int                 `pg:"creative_space_id"`
-	Status          model.BookingStatus `pg:"status"`
-	FullPrice       int                 `pg:"full_price"`
-	CalendarEvents  []*CalendarEvent    `pg:"rel:has-many"`
-	CreativeSpace   *CreativeSpace      `pg:"rel:has-one"`
-	TenantInfo      *User               `pg:"rel:has-one,fk:tenant_id"`
-	LandlordInfo    *User               `pg:"rel:has-one,fk:landlord_id"`
-	Score           *Score              `pg:"join_fk:booking_id"`
+	ID              string `gorm:"primarykey"`
+	TenantID        string
+	LandlordID      string
+	CreativeSpaceID string
+	Status          string
+	FullPrice       int
+	CalendarEvents  []*CalendarEvent `gorm:"foreignKey:BookingID;references:ID"`
+	CreativeSpace   *CreativeSpace   `gorm:"foreignKey:ID;references:CreativeSpaceID"`
+	TenantInfo      *User            `gorm:"foreignKey:ID;references:TenantID"`
+	LandlordInfo    *User            `gorm:"foreignKey:ID;references:LandlordID"`
+	Score           *Score           `gorm:"foreignKey:BookingID;references:ID"`
 }
 
 type BookingsFilter struct {
-	TenantId   int `pg:"tenant_id"`
-	LandlordId int `pg:"landlord_id"`
+	TenantID   string
+	LandlordID string
 }
 
 func (s *Store) GetBookings(filters BookingsFilter) ([]Booking, error) {
 	bookings := []Booking{}
 
-	err := s.db.
-		Model(&bookings).
-		Where("bookings.tenant_id = ? OR ?", filters.TenantId, filters.TenantId == 0).
-		Where("bookings.landlord_id = ? OR ?", filters.LandlordId, filters.LandlordId == 0).
-		Relation("CalendarEvents").
-		Relation("CreativeSpace").
-		Relation("TenantInfo").
-		Relation("LandlordInfo").
-		Relation("Score").
-		Select()
+	res := s.db.
+		Preload(clause.Associations).
+		Where("bookings.tenant_id = ? OR ?", filters.TenantID, filters.TenantID == "").
+		Where("bookings.landlord_id = ? OR ?", filters.LandlordID, filters.LandlordID == "").
+		Find(&bookings)
 
-	if err != nil {
-		return nil, err
+	if res.Error != nil {
+		return nil, res.Error
 	}
 
 	return bookings, nil
 }
 
-func (s *Store) GetBookingById(bookingId int) (Booking, error) {
-	booking := Booking{
-		Id: bookingId,
-	}
+func (s *Store) GetBookingByID(id string) (Booking, error) {
+	booking := Booking{ID: id}
 
-	err := s.db.
-		Model(&booking).
-		WherePK().
-		Relation("CalendarEvents").
-		Relation("CreativeSpace").
-		Relation("TenantInfo").
-		Relation("LandlordInfo").
-		Relation("Score").
-		Select()
+	res := s.db.
+		Preload(clause.Associations).
+		First(&booking)
 
-	if err != nil {
-		return Booking{}, err
+	if res.Error != nil {
+		return Booking{}, res.Error
 	}
 
 	return booking, nil
 }
 
-func (s *Store) CreateBooking(booking Booking) (int, error) {
-	storeErr := s.db.RunInTransaction(context.Background(), func(tx *pg.Tx) error {
-		// Записываем в таблицу bookings.
-		result, bookingErr := tx.
-			Model(&booking).
-			OnConflict("DO NOTHING").
-			Insert()
+func (s *Store) CreateBooking(booking Booking) (string, error) {
+	err := s.db.Transaction(func(tx *gorm.DB) error {
+		res := tx.Create(&booking)
 
-		if bookingErr != nil {
-			return bookingErr
-		}
-
-		if result.RowsAffected() == 0 {
-			return constants.ErrBookingPostDbError
+		if res.Error != nil {
+			return res.Error
 		}
 
 		if len(booking.CalendarEvents) > 0 {
 			for i := range booking.CalendarEvents {
-				booking.CalendarEvents[i].BookingId = booking.Id
+				booking.CalendarEvents[i].BookingID = booking.ID
 			}
 
-			// Записываем в таблицу calendar_events.
-			bookingCalendarEventsResult, bookingCalendarEventsErr := tx.
-				Model(&booking.CalendarEvents).
-				OnConflict("DO NOTHING").
-				Insert()
+			resCalendarEvents := tx.
+				Create(&booking.CalendarEvents)
 
-			if bookingCalendarEventsErr != nil {
-				return bookingCalendarEventsErr
-			}
-
-			if bookingCalendarEventsResult.RowsAffected() == 0 {
-				return constants.ErrBookingPostDbError
+			if resCalendarEvents.Error != nil {
+				return resCalendarEvents.Error
 			}
 		}
 
 		return nil
 	})
 
-	if storeErr != nil {
-		return 0, storeErr
+	if err != nil {
+		return "", constants.ErrBookingPostDbError
 	}
 
-	return booking.Id, nil
+	return booking.ID, nil
 }
 
 func (s *Store) PatchBooking(booking Booking) error {
-	count, err := s.db.
-		Model(&booking).
-		WherePK().
-		Count()
+	_, err := s.GetBookingByID(booking.ID)
 
 	if err != nil {
 		return err
 	}
 
-	if count == 0 {
-		return constants.ErrBookingPatchNotFoundById
-	}
+	err = s.db.Transaction(func(tx *gorm.DB) error {
+		res := tx.Updates(&booking)
 
-	storeErr := s.db.RunInTransaction(context.Background(), func(tx *pg.Tx) error {
-		_, bookingUpdateErr := tx.
-			Model(&booking).
-			WherePK().
-			OnConflict("DO NOTHING").
-			UpdateNotZero()
-
-		if bookingUpdateErr != nil {
-			return bookingUpdateErr
+		if res.Error != nil {
+			return res.Error
 		}
 
-		_, bookingCalendarEventsDeleteErr := tx.
-			Model(&CalendarEvent{}).
-			Where("booking_id = ?", booking.Id).
-			Delete()
+		res = tx.
+			Where("booking_id = ?", booking.ID).
+			Delete(&CalendarEvent{})
 
-		if bookingCalendarEventsDeleteErr != nil {
-			return bookingCalendarEventsDeleteErr
+		if res.Error != nil {
+			return res.Error
 		}
 
 		if len(booking.CalendarEvents) > 0 {
-			// Записываем в таблицу calendar_events.
-			bookingCalendarEventsResult, bookingCalendarEventsErr := tx.
-				Model(&booking.CalendarEvents).
-				OnConflict("DO NOTHING").
-				Insert()
+			resCalendarEvents := tx.
+				Create(&booking.CalendarEvents)
 
-			if bookingCalendarEventsErr != nil {
-				return bookingCalendarEventsErr
-			}
-
-			if bookingCalendarEventsResult.RowsAffected() == 0 {
-				return constants.ErrBookingPatchDbError
+			if resCalendarEvents.Error != nil {
+				return resCalendarEvents.Error
 			}
 		}
 
 		return nil
 	})
 
-	return storeErr
-}
-
-func (s *Store) DeleteBooking(id int) error {
-	booking := Booking{
-		Id: id,
-	}
-
-	creativeSpaceCalendarEvent := CalendarEvent{
-		BookingId: id,
-	}
-
-	storeErr := s.db.RunInTransaction(context.Background(), func(tx *pg.Tx) error {
-		_, calendarEventErr := tx.
-			Model(&creativeSpaceCalendarEvent).
-			Where("booking_id = ?", creativeSpaceCalendarEvent.BookingId).
-			Delete()
-
-		if calendarEventErr != nil {
-			return calendarEventErr
-		}
-
-		result, err := tx.
-			Model(&booking).
-			WherePK().
-			Delete()
-
-		if err != nil {
-			return err
-		}
-
-		if result.RowsAffected() == 0 {
-			return constants.ErrBookingDeleteNotFoundById
-		}
-
-		return nil
-	})
-
-	if storeErr != nil {
-		return storeErr
+	if err != nil {
+		return constants.ErrBookingPatchDbError
 	}
 
 	return nil
+}
+
+func (s *Store) DeleteBooking(id string) error {
+	booking := Booking{
+		ID: id,
+	}
+
+	err := s.db.Transaction(func(tx *gorm.DB) error {
+		res := tx.Delete(&booking)
+
+		if res.Error != nil {
+			return res.Error
+		}
+
+		res = tx.
+			Where("booking_id = ?", booking.ID).
+			Delete(&CreativeSpaceMetroStation{})
+
+		if res.Error != nil {
+			return res.Error
+		}
+
+		return nil
+	})
+
+	return err
 }

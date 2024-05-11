@@ -1,18 +1,18 @@
 package responses
 
 type createScoreResponseScore struct {
-	Id int `json:"id"`
+	ID string `json:"id"`
 }
 
 type createScoreResponseData struct {
 	Score createScoreResponseScore `json:"score"`
 }
 
-func CreateScoreResponseFromStoreData(scoreId int) createScoreResponseData {
+func CreateScoreResponseFromStoreData(scoreID string) createScoreResponseData {
 	res := createScoreResponseData{}
 
 	res.Score = createScoreResponseScore{
-		Id: scoreId,
+		ID: scoreID,
 	}
 
 	return res

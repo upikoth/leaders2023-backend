@@ -1,2362 +1,2247 @@
 {
-    "swagger": "2.0",
-    "info": {
-        "title": "Starter API",
-        "contact": {}
-    },
-    "host": "localhost:8080.",
-    "paths": {
-        "/api/v1/addresses": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Возвращает список пользователей",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication header",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
+  "swagger": "2.0",
+  "info": {
+    "title": "Starter API",
+    "contact": {}
+  },
+  "host": "localhost:8080.",
+  "paths": {
+    "/api/v1/addresses": {
+      "get": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "summary": "Возвращает список пользователей",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Authentication header",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/model.ResponseSuccess"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/responses.getAddressesResponseData"
                     }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.ResponseSuccess"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.getAddressesResponseData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
+                  }
                 }
+              ]
             }
-        },
-        "/api/v1/booking": {
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Бронирование креативной площадки",
-                "parameters": [
-                    {
-                        "description": "Параметры запроса",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/requests.createBookingRequestData"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.ResponseSuccess"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.createBookingResponseData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
             }
-        },
-        "/api/v1/bookings": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Возвращает список бронирований",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication header",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.ResponseSuccess"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.getBookingsResponseData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/bookings/:id": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Возвращает бронирование по id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication header",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.ResponseSuccess"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.getBookingResponseData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Удаление информации о бронировании",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Id бронирования",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseSuccess"
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            },
-            "patch": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Изменение дат бронирования креативной площадки",
-                "parameters": [
-                    {
-                        "description": "Параметры запроса",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/requests.patchBookingRequestData"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseSuccess"
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/calendar/convert": {
-            "post": {
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Возвращает события календаря",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication header",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.ResponseSuccess"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.convertCaledarResponseData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/calendar/convertFromLink": {
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Возвращает события календаря",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication header",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.ResponseSuccess"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.convertCaledarFromLinkResponseData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/creativeSpace": {
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Создание креативной площадки",
-                "parameters": [
-                    {
-                        "description": "Параметры запроса",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/requests.createCreativeSpaceRequestData"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.ResponseSuccess"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.createCreativeSpaceResponseData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/creativeSpaces": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Возвращает список креативных площадок",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication header",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.ResponseSuccess"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.getCreativeSpacesResponseData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/creativeSpaces/:id": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Возвращает информацию о пользователе",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Id креативной площадки",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.ResponseSuccess"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.getCreativeSpaceResponseData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Удаление информации о креативной площадке",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Id креативной площадки",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseSuccess"
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            },
-            "patch": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Обновление информации о креативном пространстве",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Id креативного пространства",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Параметры запроса",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/requests.patchCreativeSpaceRequestData"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseSuccess"
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/file": {
-            "post": {
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Возвращает ссылку на файл",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication header",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.ResponseSuccess"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.createFileStationsResponseData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/files/:fileName": {
-            "delete": {
-                "consumes": [
-                    "application/json"
-                ],
-                "summary": "Удаляет файл из s3",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication header",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "description": "Параметры запроса",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/requests.deleteFileRequestData"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseSuccess"
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/health": {
-            "get": {
-                "summary": "Проверка работоспособности сервера",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseSuccess"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/metroStations": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Возвращает полный список станций метро",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication header",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.ResponseSuccess"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.getMetroStationsResponseData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/score": {
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Бронирование креативной площадки",
-                "parameters": [
-                    {
-                        "description": "Параметры запроса",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/requests.createScoreRequestData"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.ResponseSuccess"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.createScoreResponseData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/session": {
-            "get": {
-                "summary": "Получение сессии",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseSuccess"
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Создание сессии пользователя",
-                "parameters": [
-                    {
-                        "description": "Параметры запроса",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/requests.createSessionRequestData"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.ResponseSuccess"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.createSessionResponseData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "summary": "Удаление сессии",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseSuccess"
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/user": {
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Создание пользователя",
-                "parameters": [
-                    {
-                        "description": "Параметры запроса",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/requests.createUserRequestData"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.ResponseSuccess"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.createUserResponseData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/users": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Возвращает список пользователей",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Authentication header",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.ResponseSuccess"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.getUsersResponseData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/users/:id": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Возвращает информацию о пользователе",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Id пользователя",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/model.ResponseSuccess"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/responses.getUserResponseData"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Удаление информации о пользователе",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Id пользователя",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseSuccess"
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            },
-            "patch": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Обновление информации о пользователе",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Id пользователя",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Параметры запроса",
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/requests.patchUserRequestData"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseSuccess"
-                        }
-                    },
-                    "403": {
-                        "description": "Коды ошибок: [1100]",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseError"
-                        }
-                    }
-                }
-            }
+          }
         }
+      }
     },
-    "definitions": {
-        "model.ResponseError": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "$ref": "#/definitions/model.ResponseErrorField"
+    "/api/v1/booking": {
+      "post": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "summary": "Бронирование креативной площадки",
+        "parameters": [
+          {
+            "description": "Параметры запроса",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/requests.createBookingRequestData"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/model.ResponseSuccess"
                 },
-                "success": {
-                    "type": "boolean",
-                    "default": false
-                }
-            }
-        },
-        "model.ResponseErrorField": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "details": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.ResponseSuccess": {
-            "type": "object",
-            "properties": {
-                "data": {},
-                "success": {
-                    "type": "boolean",
-                    "default": true
-                }
-            }
-        },
-        "requests.createBookingRequestCalendarEvent": {
-            "type": "object",
-            "required": [
-                "date"
-            ],
-            "properties": {
-                "date": {
-                    "type": "string"
-                }
-            }
-        },
-        "requests.createBookingRequestData": {
-            "type": "object",
-            "required": [
-                "calendarEvents",
-                "creativeSpaceId"
-            ],
-            "properties": {
-                "calendarEvents": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/requests.createBookingRequestCalendarEvent"
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/responses.createBookingResponseData"
                     }
-                },
-                "creativeSpaceId": {
-                    "type": "integer"
+                  }
                 }
+              ]
             }
-        },
-        "requests.createCreativeSpaceRequestCalendar": {
-            "type": "object",
-            "required": [
-                "events",
-                "workDayIndexes"
-            ],
-            "properties": {
-                "events": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/requests.createCreativeSpaceRequestCalendarEvent"
-                    }
-                },
-                "link": {
-                    "type": "string"
-                },
-                "workDayIndexes": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                }
-            }
-        },
-        "requests.createCreativeSpaceRequestCalendarEvent": {
-            "type": "object",
-            "required": [
-                "date"
-            ],
-            "properties": {
-                "date": {
-                    "type": "string"
-                }
-            }
-        },
-        "requests.createCreativeSpaceRequestCoordinate": {
-            "type": "object",
-            "required": [
-                "latitude",
-                "longitude"
-            ],
-            "properties": {
-                "latitude": {
-                    "type": "number"
-                },
-                "longitude": {
-                    "type": "number"
-                }
-            }
-        },
-        "requests.createCreativeSpaceRequestData": {
-            "type": "object",
-            "required": [
-                "address",
-                "area",
-                "calendar",
-                "capacity",
-                "coordinate",
-                "description",
-                "photos",
-                "pricePerDay",
-                "spaceType",
-                "title"
-            ],
-            "properties": {
-                "address": {
-                    "type": "string"
-                },
-                "area": {
-                    "type": "integer"
-                },
-                "calendar": {
-                    "$ref": "#/definitions/requests.createCreativeSpaceRequestCalendar"
-                },
-                "capacity": {
-                    "type": "integer"
-                },
-                "coordinate": {
-                    "$ref": "#/definitions/requests.createCreativeSpaceRequestCoordinate"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "metroStations": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/requests.createCreativeSpaceRequestMetroStation"
-                    }
-                },
-                "photos": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "pricePerDay": {
-                    "type": "integer"
-                },
-                "spaceType": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "requests.createCreativeSpaceRequestMetroStation": {
-            "type": "object",
-            "required": [
-                "distanceInMinutes",
-                "id"
-            ],
-            "properties": {
-                "distanceInMinutes": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "requests.createScoreRequestData": {
-            "type": "object",
-            "required": [
-                "bookingId",
-                "creativeSpaceId",
-                "rating"
-            ],
-            "properties": {
-                "bookingId": {
-                    "type": "integer"
-                },
-                "comment": {
-                    "type": "string"
-                },
-                "creativeSpaceId": {
-                    "type": "integer"
-                },
-                "rating": {
-                    "type": "integer"
-                }
-            }
-        },
-        "requests.createSessionRequestData": {
-            "type": "object",
-            "required": [
-                "password",
-                "phone"
-            ],
-            "properties": {
-                "password": {
-                    "type": "string"
-                },
-                "phone": {
-                    "type": "string"
-                }
-            }
-        },
-        "requests.createUserRequestData": {
-            "type": "object",
-            "required": [
-                "password",
-                "phone",
-                "role"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "inn": {
-                    "type": "string"
-                },
-                "legalEntityName": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "patronymic": {
-                    "type": "string"
-                },
-                "phone": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "string"
-                },
-                "surname": {
-                    "type": "string"
-                }
-            }
-        },
-        "requests.deleteFileRequestData": {
-            "type": "object",
-            "required": [
-                "fileName"
-            ],
-            "properties": {
-                "fileName": {
-                    "type": "string"
-                }
-            }
-        },
-        "requests.patchBookingRequestCalendarEvent": {
-            "type": "object",
-            "required": [
-                "date"
-            ],
-            "properties": {
-                "date": {
-                    "type": "string"
-                }
-            }
-        },
-        "requests.patchBookingRequestData": {
-            "type": "object",
-            "properties": {
-                "calendarEvents": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/requests.patchBookingRequestCalendarEvent"
-                    }
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "status": {
-                    "type": "string"
-                }
-            }
-        },
-        "requests.patchCreativeSpaceRequestCalendar": {
-            "type": "object",
-            "properties": {
-                "events": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/requests.patchCreativeSpaceRequestCalendarEvent"
-                    }
-                },
-                "link": {
-                    "type": "string"
-                },
-                "workDayIndexes": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                }
-            }
-        },
-        "requests.patchCreativeSpaceRequestCalendarEvent": {
-            "type": "object",
-            "properties": {
-                "date": {
-                    "type": "string"
-                }
-            }
-        },
-        "requests.patchCreativeSpaceRequestCoordinate": {
-            "type": "object",
-            "properties": {
-                "latitude": {
-                    "type": "number"
-                },
-                "longitude": {
-                    "type": "number"
-                }
-            }
-        },
-        "requests.patchCreativeSpaceRequestData": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "type": "string"
-                },
-                "area": {
-                    "type": "integer"
-                },
-                "calendar": {
-                    "$ref": "#/definitions/requests.patchCreativeSpaceRequestCalendar"
-                },
-                "capacity": {
-                    "type": "integer"
-                },
-                "coordinate": {
-                    "$ref": "#/definitions/requests.patchCreativeSpaceRequestCoordinate"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "metroStations": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/requests.patchCreativeSpaceRequestMetroStation"
-                    }
-                },
-                "photos": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "pricePerDay": {
-                    "type": "integer"
-                },
-                "spaceType": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "requests.patchCreativeSpaceRequestMetroStation": {
-            "type": "object",
-            "properties": {
-                "distanceInMinutes": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "requests.patchUserRequestData": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "inn": {
-                    "type": "string"
-                },
-                "legalEntityName": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "patronymic": {
-                    "type": "string"
-                },
-                "phone": {
-                    "type": "string"
-                },
-                "surname": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.convertCaledarFromLinkResponseData": {
-            "type": "object",
-            "properties": {
-                "events": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/responses.convertCaledarFromLinkResponseEvent"
-                    }
-                }
-            }
-        },
-        "responses.convertCaledarFromLinkResponseEvent": {
-            "type": "object",
-            "properties": {
-                "date": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.convertCaledarResponseData": {
-            "type": "object",
-            "properties": {
-                "events": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/responses.convertCaledarResponseEvent"
-                    }
-                }
-            }
-        },
-        "responses.convertCaledarResponseEvent": {
-            "type": "object",
-            "properties": {
-                "date": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.createBookingResponseBooking": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "responses.createBookingResponseData": {
-            "type": "object",
-            "properties": {
-                "booking": {
-                    "$ref": "#/definitions/responses.createBookingResponseBooking"
-                }
-            }
-        },
-        "responses.createCreativeSpaceResponseCreativeSpace": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "responses.createCreativeSpaceResponseData": {
-            "type": "object",
-            "properties": {
-                "creativeSpace": {
-                    "$ref": "#/definitions/responses.createCreativeSpaceResponseCreativeSpace"
-                }
-            }
-        },
-        "responses.createFileResponseFile": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.createFileStationsResponseData": {
-            "type": "object",
-            "properties": {
-                "file": {
-                    "$ref": "#/definitions/responses.createFileResponseFile"
-                }
-            }
-        },
-        "responses.createScoreResponseData": {
-            "type": "object",
-            "properties": {
-                "score": {
-                    "$ref": "#/definitions/responses.createScoreResponseScore"
-                }
-            }
-        },
-        "responses.createScoreResponseScore": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "responses.createSessionResponseData": {
-            "type": "object",
-            "properties": {
-                "user": {
-                    "$ref": "#/definitions/responses.createSessionResponseUser"
-                }
-            }
-        },
-        "responses.createSessionResponseUser": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "phone": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.createUserResponseData": {
-            "type": "object",
-            "properties": {
-                "user": {
-                    "$ref": "#/definitions/responses.createUserResponseUser"
-                }
-            }
-        },
-        "responses.createUserResponseUser": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "responses.getAddressesResponseData": {
-            "type": "object",
-            "properties": {
-                "addresses": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/responses.getAddressesResponseUser"
-                    }
-                }
-            }
-        },
-        "responses.getAddressesResponseUser": {
-            "type": "object",
-            "properties": {
-                "latitude": {
-                    "type": "string"
-                },
-                "longitude": {
-                    "type": "string"
-                },
-                "value": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getBookingResponseBooking": {
-            "type": "object",
-            "properties": {
-                "calendarEvents": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/responses.getBookingResponseCalendarEvent"
-                    }
-                },
-                "creativeSpace": {
-                    "$ref": "#/definitions/responses.getBookingResponseCreativeSpace"
-                },
-                "fullPrice": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "landlordInfo": {
-                    "$ref": "#/definitions/responses.getBookingResponseLandlordInfo"
-                },
-                "scoreId": {
-                    "type": "integer"
-                },
-                "status": {
-                    "type": "string"
-                },
-                "tenantInfo": {
-                    "$ref": "#/definitions/responses.getBookingResponseTenantInfo"
-                }
-            }
-        },
-        "responses.getBookingResponseCalendarEvent": {
-            "type": "object",
-            "properties": {
-                "date": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getBookingResponseCreativeSpace": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "photos": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getBookingResponseData": {
-            "type": "object",
-            "properties": {
-                "booking": {
-                    "$ref": "#/definitions/responses.getBookingResponseBooking"
-                }
-            }
-        },
-        "responses.getBookingResponseLandlordInfo": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "inn": {
-                    "type": "string"
-                },
-                "legalEntityName": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "patronymic": {
-                    "type": "string"
-                },
-                "phone": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "string"
-                },
-                "surname": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getBookingResponseTenantInfo": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "patronymic": {
-                    "type": "string"
-                },
-                "phone": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "string"
-                },
-                "surname": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getBookingsResponseBooking": {
-            "type": "object",
-            "properties": {
-                "calendarEvents": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/responses.getBookingsResponseCalendarEvent"
-                    }
-                },
-                "creativeSpace": {
-                    "$ref": "#/definitions/responses.getBookingsResponseCreativeSpace"
-                },
-                "fullPrice": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "landlordInfo": {
-                    "$ref": "#/definitions/responses.getBookingsResponseLandlordInfo"
-                },
-                "scoreId": {
-                    "type": "integer"
-                },
-                "status": {
-                    "type": "string"
-                },
-                "tenantInfo": {
-                    "$ref": "#/definitions/responses.getBookingsResponseTenantInfo"
-                }
-            }
-        },
-        "responses.getBookingsResponseCalendarEvent": {
-            "type": "object",
-            "properties": {
-                "date": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getBookingsResponseCreativeSpace": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "photos": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getBookingsResponseData": {
-            "type": "object",
-            "properties": {
-                "bookings": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/responses.getBookingsResponseBooking"
-                    }
-                }
-            }
-        },
-        "responses.getBookingsResponseLandlordInfo": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "inn": {
-                    "type": "string"
-                },
-                "legalEntityName": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "patronymic": {
-                    "type": "string"
-                },
-                "phone": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "string"
-                },
-                "surname": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getBookingsResponseTenantInfo": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "patronymic": {
-                    "type": "string"
-                },
-                "phone": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "string"
-                },
-                "surname": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getCreativeSpaceResponseCalendar": {
-            "type": "object",
-            "properties": {
-                "events": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/responses.getCreativeSpaceResponseCalendarEvent"
-                    }
-                },
-                "link": {
-                    "type": "string"
-                },
-                "workDayIndexes": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                }
-            }
-        },
-        "responses.getCreativeSpaceResponseCalendarEvent": {
-            "type": "object",
-            "properties": {
-                "bookingId": {
-                    "type": "integer"
-                },
-                "date": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getCreativeSpaceResponseCoordinate": {
-            "type": "object",
-            "properties": {
-                "latitude": {
-                    "type": "number"
-                },
-                "longitude": {
-                    "type": "number"
-                }
-            }
-        },
-        "responses.getCreativeSpaceResponseCreativeSpace": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "type": "string"
-                },
-                "area": {
-                    "type": "integer"
-                },
-                "averageRating": {
-                    "type": "integer"
-                },
-                "calendar": {
-                    "$ref": "#/definitions/responses.getCreativeSpaceResponseCalendar"
-                },
-                "capacity": {
-                    "type": "integer"
-                },
-                "coordinate": {
-                    "$ref": "#/definitions/responses.getCreativeSpaceResponseCoordinate"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "landlordInfo": {
-                    "$ref": "#/definitions/responses.getCreativeSpaceResponseLandlordInfo"
-                },
-                "metroStations": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/responses.getCreativeSpaceResponseMetroStation"
-                    }
-                },
-                "photos": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "pricePerDay": {
-                    "type": "integer"
-                },
-                "scores": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/responses.getCreativeSpaceResponseScore"
-                    }
-                },
-                "spaceType": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getCreativeSpaceResponseData": {
-            "type": "object",
-            "properties": {
-                "creativeSpace": {
-                    "$ref": "#/definitions/responses.getCreativeSpaceResponseCreativeSpace"
-                }
-            }
-        },
-        "responses.getCreativeSpaceResponseLandlordInfo": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "inn": {
-                    "type": "string"
-                },
-                "legalEntityName": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "patronymic": {
-                    "type": "string"
-                },
-                "phone": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "string"
-                },
-                "surname": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getCreativeSpaceResponseMetroStation": {
-            "type": "object",
-            "properties": {
-                "color": {
-                    "type": "string"
-                },
-                "distanceInMinutes": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getCreativeSpaceResponseScore": {
-            "type": "object",
-            "properties": {
-                "comment": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "rating": {
-                    "type": "integer"
-                },
-                "user": {
-                    "$ref": "#/definitions/responses.getCreativeSpaceResponseScoreUser"
-                }
-            }
-        },
-        "responses.getCreativeSpaceResponseScoreUser": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "patronymic": {
-                    "type": "string"
-                },
-                "surname": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getCreativeSpacesResponseCalendar": {
-            "type": "object",
-            "properties": {
-                "events": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/responses.getCreativeSpacesResponseCalendarEvent"
-                    }
-                },
-                "link": {
-                    "type": "string"
-                },
-                "workDayIndexes": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                }
-            }
-        },
-        "responses.getCreativeSpacesResponseCalendarEvent": {
-            "type": "object",
-            "properties": {
-                "date": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getCreativeSpacesResponseCoordinate": {
-            "type": "object",
-            "properties": {
-                "latitude": {
-                    "type": "number"
-                },
-                "longitude": {
-                    "type": "number"
-                }
-            }
-        },
-        "responses.getCreativeSpacesResponseCreativeSpace": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "type": "string"
-                },
-                "area": {
-                    "type": "integer"
-                },
-                "averageRating": {
-                    "type": "integer"
-                },
-                "calendar": {
-                    "$ref": "#/definitions/responses.getCreativeSpacesResponseCalendar"
-                },
-                "capacity": {
-                    "type": "integer"
-                },
-                "coordinate": {
-                    "$ref": "#/definitions/responses.getCreativeSpacesResponseCoordinate"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "landlordId": {
-                    "type": "integer"
-                },
-                "metroStations": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/responses.getCreativeSpacesResponseMetroStation"
-                    }
-                },
-                "photos": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "pricePerDay": {
-                    "type": "integer"
-                },
-                "scores": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/responses.getCreativeSpacesResponseScore"
-                    }
-                },
-                "spaceType": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getCreativeSpacesResponseData": {
-            "type": "object",
-            "properties": {
-                "creativeSpaces": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/responses.getCreativeSpacesResponseCreativeSpace"
-                    }
-                }
-            }
-        },
-        "responses.getCreativeSpacesResponseMetroStation": {
-            "type": "object",
-            "properties": {
-                "color": {
-                    "type": "string"
-                },
-                "distanceInMinutes": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getCreativeSpacesResponseScore": {
-            "type": "object",
-            "properties": {
-                "comment": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "rating": {
-                    "type": "integer"
-                },
-                "user": {
-                    "$ref": "#/definitions/responses.getCreativeSpacesResponseScoreUser"
-                }
-            }
-        },
-        "responses.getCreativeSpacesResponseScoreUser": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "patronymic": {
-                    "type": "string"
-                },
-                "surname": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getMetroStationsResponseData": {
-            "type": "object",
-            "properties": {
-                "metroStations": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/responses.getMetroStationsResponseMetroStation"
-                    }
-                }
-            }
-        },
-        "responses.getMetroStationsResponseMetroStation": {
-            "type": "object",
-            "properties": {
-                "color": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getUserResponseData": {
-            "type": "object",
-            "properties": {
-                "user": {
-                    "$ref": "#/definitions/responses.getUserResponseUser"
-                }
-            }
-        },
-        "responses.getUserResponseUser": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "inn": {
-                    "type": "string"
-                },
-                "legalEntityName": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "patronymic": {
-                    "type": "string"
-                },
-                "phone": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "string"
-                },
-                "surname": {
-                    "type": "string"
-                }
-            }
-        },
-        "responses.getUsersResponseData": {
-            "type": "object",
-            "properties": {
-                "users": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/responses.getUsersResponseUser"
-                    }
-                }
-            }
-        },
-        "responses.getUsersResponseUser": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "inn": {
-                    "type": "string"
-                },
-                "legalEntityName": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "patronymic": {
-                    "type": "string"
-                },
-                "phone": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "string"
-                },
-                "surname": {
-                    "type": "string"
-                }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
             }
+          }
         }
+      }
+    },
+    "/api/v1/bookings": {
+      "get": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "summary": "Возвращает список бронирований",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Authentication header",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/model.ResponseSuccess"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/responses.getBookingsResponseData"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/bookings/:id": {
+      "get": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "summary": "Возвращает бронирование по id",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Authentication header",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/model.ResponseSuccess"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/responses.getBookingResponseData"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
+            }
+          }
+        }
+      },
+      "delete": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "summary": "Удаление информации о бронировании",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Id бронирования",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseSuccess"
+            }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
+            }
+          }
+        }
+      },
+      "patch": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "summary": "Изменение дат бронирования креативной площадки",
+        "parameters": [
+          {
+            "description": "Параметры запроса",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/requests.patchBookingRequestData"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseSuccess"
+            }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/calendar/convert": {
+      "post": {
+        "consumes": ["multipart/form-data"],
+        "produces": ["application/json"],
+        "summary": "Возвращает события календаря",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Authentication header",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/model.ResponseSuccess"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/responses.convertCalendarResponseData"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/calendar/convertFromLink": {
+      "post": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "summary": "Возвращает события календаря",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Authentication header",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/model.ResponseSuccess"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/responses.convertCalendarFromLinkResponseData"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/creativeSpace": {
+      "post": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "summary": "Создание креативной площадки",
+        "parameters": [
+          {
+            "description": "Параметры запроса",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/requests.createCreativeSpaceRequestData"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/model.ResponseSuccess"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/responses.createCreativeSpaceResponseData"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/creativeSpaces": {
+      "get": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "summary": "Возвращает список креативных площадок",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Authentication header",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/model.ResponseSuccess"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/responses.getCreativeSpacesResponseData"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/creativeSpaces/:id": {
+      "get": {
+        "produces": ["application/json"],
+        "summary": "Возвращает информацию о пользователе",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Id креативной площадки",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/model.ResponseSuccess"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/responses.getCreativeSpaceResponseData"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
+            }
+          }
+        }
+      },
+      "delete": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "summary": "Удаление информации о креативной площадке",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Id креативной площадки",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseSuccess"
+            }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
+            }
+          }
+        }
+      },
+      "patch": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "summary": "Обновление информации о креативном пространстве",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Id креативного пространства",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Параметры запроса",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/requests.patchCreativeSpaceRequestData"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseSuccess"
+            }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/file": {
+      "post": {
+        "consumes": ["multipart/form-data"],
+        "produces": ["application/json"],
+        "summary": "Возвращает ссылку на файл",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Authentication header",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/model.ResponseSuccess"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/responses.createFileStationsResponseData"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/files/:fileName": {
+      "delete": {
+        "consumes": ["application/json"],
+        "summary": "Удаляет файл из s3",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Authentication header",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          },
+          {
+            "description": "Параметры запроса",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/requests.deleteFileRequestData"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseSuccess"
+            }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/health": {
+      "get": {
+        "summary": "Проверка работоспособности сервера",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseSuccess"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/metroStations": {
+      "get": {
+        "produces": ["application/json"],
+        "summary": "Возвращает полный список станций метро",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Authentication header",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/model.ResponseSuccess"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/responses.getMetroStationsResponseData"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/score": {
+      "post": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "summary": "Бронирование креативной площадки",
+        "parameters": [
+          {
+            "description": "Параметры запроса",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/requests.createScoreRequestData"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/model.ResponseSuccess"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/responses.createScoreResponseData"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/session": {
+      "get": {
+        "summary": "Получение сессии",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseSuccess"
+            }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
+            }
+          }
+        }
+      },
+      "post": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "summary": "Создание сессии пользователя",
+        "parameters": [
+          {
+            "description": "Параметры запроса",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/requests.createSessionRequestData"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/model.ResponseSuccess"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/responses.createSessionResponseData"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Удаление сессии",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseSuccess"
+            }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user": {
+      "post": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "summary": "Создание пользователя",
+        "parameters": [
+          {
+            "description": "Параметры запроса",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/requests.createUserRequestData"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/model.ResponseSuccess"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/responses.createUserResponseData"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users": {
+      "get": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "summary": "Возвращает список пользователей",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Authentication header",
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/model.ResponseSuccess"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/responses.getUsersResponseData"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/:id": {
+      "get": {
+        "produces": ["application/json"],
+        "summary": "Возвращает информацию о пользователе",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Id пользователя",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/model.ResponseSuccess"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/responses.getUserResponseData"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
+            }
+          }
+        }
+      },
+      "delete": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "summary": "Удаление информации о пользователе",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Id пользователя",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseSuccess"
+            }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
+            }
+          }
+        }
+      },
+      "patch": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "summary": "Обновление информации о пользователе",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Id пользователя",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Параметры запроса",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/requests.patchUserRequestData"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseSuccess"
+            }
+          },
+          "403": {
+            "description": "Коды ошибок: [1100]",
+            "schema": {
+              "$ref": "#/definitions/model.ResponseError"
+            }
+          }
+        }
+      }
     }
+  },
+  "definitions": {
+    "model.ResponseError": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "$ref": "#/definitions/model.ResponseErrorField"
+        },
+        "success": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "model.ResponseErrorField": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "details": {
+          "type": "string"
+        }
+      }
+    },
+    "model.ResponseSuccess": {
+      "type": "object",
+      "properties": {
+        "data": {},
+        "success": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "requests.createBookingRequestCalendarEvent": {
+      "type": "object",
+      "required": ["date"],
+      "properties": {
+        "date": {
+          "type": "string"
+        }
+      }
+    },
+    "requests.createBookingRequestData": {
+      "type": "object",
+      "required": ["calendarEvents", "creativeSpaceId"],
+      "properties": {
+        "calendarEvents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/requests.createBookingRequestCalendarEvent"
+          }
+        },
+        "creativeSpaceId": {
+          "type": "integer"
+        }
+      }
+    },
+    "requests.createCreativeSpaceRequestCalendar": {
+      "type": "object",
+      "required": ["events", "workDayIndexes"],
+      "properties": {
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/requests.createCreativeSpaceRequestCalendarEvent"
+          }
+        },
+        "link": {
+          "type": "string"
+        },
+        "workDayIndexes": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "requests.createCreativeSpaceRequestCalendarEvent": {
+      "type": "object",
+      "required": ["date"],
+      "properties": {
+        "date": {
+          "type": "string"
+        }
+      }
+    },
+    "requests.createCreativeSpaceRequestCoordinate": {
+      "type": "object",
+      "required": ["latitude", "longitude"],
+      "properties": {
+        "latitude": {
+          "type": "number"
+        },
+        "longitude": {
+          "type": "number"
+        }
+      }
+    },
+    "requests.createCreativeSpaceRequestData": {
+      "type": "object",
+      "required": [
+        "address",
+        "area",
+        "calendar",
+        "capacity",
+        "coordinate",
+        "description",
+        "photos",
+        "pricePerDay",
+        "spaceType",
+        "title"
+      ],
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "area": {
+          "type": "integer"
+        },
+        "calendar": {
+          "$ref": "#/definitions/requests.createCreativeSpaceRequestCalendar"
+        },
+        "capacity": {
+          "type": "integer"
+        },
+        "coordinate": {
+          "$ref": "#/definitions/requests.createCreativeSpaceRequestCoordinate"
+        },
+        "description": {
+          "type": "string"
+        },
+        "metroStations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/requests.createCreativeSpaceRequestMetroStation"
+          }
+        },
+        "photos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pricePerDay": {
+          "type": "integer"
+        },
+        "spaceType": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "requests.createCreativeSpaceRequestMetroStation": {
+      "type": "object",
+      "required": ["distanceInMinutes", "id"],
+      "properties": {
+        "distanceInMinutes": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "integer"
+        }
+      }
+    },
+    "requests.createScoreRequestData": {
+      "type": "object",
+      "required": ["bookingId", "creativeSpaceId", "rating"],
+      "properties": {
+        "bookingId": {
+          "type": "integer"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "creativeSpaceId": {
+          "type": "integer"
+        },
+        "rating": {
+          "type": "integer"
+        }
+      }
+    },
+    "requests.createSessionRequestData": {
+      "type": "object",
+      "required": ["password", "phone"],
+      "properties": {
+        "password": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        }
+      }
+    },
+    "requests.createUserRequestData": {
+      "type": "object",
+      "required": ["password", "phone", "role"],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "inn": {
+          "type": "string"
+        },
+        "legalEntityName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "patronymic": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        }
+      }
+    },
+    "requests.deleteFileRequestData": {
+      "type": "object",
+      "required": ["fileName"],
+      "properties": {
+        "fileName": {
+          "type": "string"
+        }
+      }
+    },
+    "requests.patchBookingRequestCalendarEvent": {
+      "type": "object",
+      "required": ["date"],
+      "properties": {
+        "date": {
+          "type": "string"
+        }
+      }
+    },
+    "requests.patchBookingRequestData": {
+      "type": "object",
+      "properties": {
+        "calendarEvents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/requests.patchBookingRequestCalendarEvent"
+          }
+        },
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "requests.patchCreativeSpaceRequestCalendar": {
+      "type": "object",
+      "properties": {
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/requests.patchCreativeSpaceRequestCalendarEvent"
+          }
+        },
+        "link": {
+          "type": "string"
+        },
+        "workDayIndexes": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "requests.patchCreativeSpaceRequestCalendarEvent": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        }
+      }
+    },
+    "requests.patchCreativeSpaceRequestCoordinate": {
+      "type": "object",
+      "properties": {
+        "latitude": {
+          "type": "number"
+        },
+        "longitude": {
+          "type": "number"
+        }
+      }
+    },
+    "requests.patchCreativeSpaceRequestData": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "area": {
+          "type": "integer"
+        },
+        "calendar": {
+          "$ref": "#/definitions/requests.patchCreativeSpaceRequestCalendar"
+        },
+        "capacity": {
+          "type": "integer"
+        },
+        "coordinate": {
+          "$ref": "#/definitions/requests.patchCreativeSpaceRequestCoordinate"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "metroStations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/requests.patchCreativeSpaceRequestMetroStation"
+          }
+        },
+        "photos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pricePerDay": {
+          "type": "integer"
+        },
+        "spaceType": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "requests.patchCreativeSpaceRequestMetroStation": {
+      "type": "object",
+      "properties": {
+        "distanceInMinutes": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "integer"
+        }
+      }
+    },
+    "requests.patchUserRequestData": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "inn": {
+          "type": "string"
+        },
+        "legalEntityName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "patronymic": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.convertCalendarFromLinkResponseData": {
+      "type": "object",
+      "properties": {
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/responses.convertCaledarFromLinkResponseEvent"
+          }
+        }
+      }
+    },
+    "responses.convertCaledarFromLinkResponseEvent": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.convertCalendarResponseData": {
+      "type": "object",
+      "properties": {
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/responses.convertCaledarResponseEvent"
+          }
+        }
+      }
+    },
+    "responses.convertCaledarResponseEvent": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.createBookingResponseBooking": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        }
+      }
+    },
+    "responses.createBookingResponseData": {
+      "type": "object",
+      "properties": {
+        "booking": {
+          "$ref": "#/definitions/responses.createBookingResponseBooking"
+        }
+      }
+    },
+    "responses.createCreativeSpaceResponseCreativeSpace": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        }
+      }
+    },
+    "responses.createCreativeSpaceResponseData": {
+      "type": "object",
+      "properties": {
+        "creativeSpace": {
+          "$ref": "#/definitions/responses.createCreativeSpaceResponseCreativeSpace"
+        }
+      }
+    },
+    "responses.createFileResponseFile": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.createFileStationsResponseData": {
+      "type": "object",
+      "properties": {
+        "file": {
+          "$ref": "#/definitions/responses.createFileResponseFile"
+        }
+      }
+    },
+    "responses.createScoreResponseData": {
+      "type": "object",
+      "properties": {
+        "score": {
+          "$ref": "#/definitions/responses.createScoreResponseScore"
+        }
+      }
+    },
+    "responses.createScoreResponseScore": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        }
+      }
+    },
+    "responses.createSessionResponseData": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/responses.createSessionResponseUser"
+        }
+      }
+    },
+    "responses.createSessionResponseUser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.createUserResponseData": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/responses.createUserResponseUser"
+        }
+      }
+    },
+    "responses.createUserResponseUser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        }
+      }
+    },
+    "responses.getAddressesResponseData": {
+      "type": "object",
+      "properties": {
+        "addresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/responses.getAddressesResponseUser"
+          }
+        }
+      }
+    },
+    "responses.getAddressesResponseUser": {
+      "type": "object",
+      "properties": {
+        "latitude": {
+          "type": "string"
+        },
+        "longitude": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.getBookingResponseBooking": {
+      "type": "object",
+      "properties": {
+        "calendarEvents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/responses.getBookingResponseCalendarEvent"
+          }
+        },
+        "creativeSpace": {
+          "$ref": "#/definitions/responses.getBookingResponseCreativeSpace"
+        },
+        "fullPrice": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "landlordInfo": {
+          "$ref": "#/definitions/responses.getBookingResponseLandlordInfo"
+        },
+        "scoreId": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "string"
+        },
+        "tenantInfo": {
+          "$ref": "#/definitions/responses.getBookingResponseTenantInfo"
+        }
+      }
+    },
+    "responses.getBookingResponseCalendarEvent": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.getBookingResponseCreativeSpace": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "photos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.getBookingResponseData": {
+      "type": "object",
+      "properties": {
+        "booking": {
+          "$ref": "#/definitions/responses.getBookingResponseBooking"
+        }
+      }
+    },
+    "responses.getBookingResponseLandlordInfo": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "inn": {
+          "type": "string"
+        },
+        "legalEntityName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "patronymic": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.getBookingResponseTenantInfo": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "patronymic": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.getBookingsResponseBooking": {
+      "type": "object",
+      "properties": {
+        "calendarEvents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/responses.getBookingsResponseCalendarEvent"
+          }
+        },
+        "creativeSpace": {
+          "$ref": "#/definitions/responses.getBookingsResponseCreativeSpace"
+        },
+        "fullPrice": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "landlordInfo": {
+          "$ref": "#/definitions/responses.getBookingsResponseLandlordInfo"
+        },
+        "scoreId": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "string"
+        },
+        "tenantInfo": {
+          "$ref": "#/definitions/responses.getBookingsResponseTenantInfo"
+        }
+      }
+    },
+    "responses.getBookingsResponseCalendarEvent": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.getBookingsResponseCreativeSpace": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "photos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.getBookingsResponseData": {
+      "type": "object",
+      "properties": {
+        "bookings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/responses.getBookingsResponseBooking"
+          }
+        }
+      }
+    },
+    "responses.getBookingsResponseLandlordInfo": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "inn": {
+          "type": "string"
+        },
+        "legalEntityName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "patronymic": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.getBookingsResponseTenantInfo": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "patronymic": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.getCreativeSpaceResponseCalendar": {
+      "type": "object",
+      "properties": {
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/responses.getCreativeSpaceResponseCalendarEvent"
+          }
+        },
+        "link": {
+          "type": "string"
+        },
+        "workDayIndexes": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "responses.getCreativeSpaceResponseCalendarEvent": {
+      "type": "object",
+      "properties": {
+        "bookingId": {
+          "type": "integer"
+        },
+        "date": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.getCreativeSpaceResponseCoordinate": {
+      "type": "object",
+      "properties": {
+        "latitude": {
+          "type": "number"
+        },
+        "longitude": {
+          "type": "number"
+        }
+      }
+    },
+    "responses.getCreativeSpaceResponseCreativeSpace": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "area": {
+          "type": "integer"
+        },
+        "averageRating": {
+          "type": "integer"
+        },
+        "calendar": {
+          "$ref": "#/definitions/responses.getCreativeSpaceResponseCalendar"
+        },
+        "capacity": {
+          "type": "integer"
+        },
+        "coordinate": {
+          "$ref": "#/definitions/responses.getCreativeSpaceResponseCoordinate"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "landlordInfo": {
+          "$ref": "#/definitions/responses.getCreativeSpaceResponseLandlordInfo"
+        },
+        "metroStations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/responses.getCreativeSpaceResponseMetroStation"
+          }
+        },
+        "photos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pricePerDay": {
+          "type": "integer"
+        },
+        "scores": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/responses.getCreativeSpaceResponseScore"
+          }
+        },
+        "spaceType": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.getCreativeSpaceResponseData": {
+      "type": "object",
+      "properties": {
+        "creativeSpace": {
+          "$ref": "#/definitions/responses.getCreativeSpaceResponseCreativeSpace"
+        }
+      }
+    },
+    "responses.getCreativeSpaceResponseLandlordInfo": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "inn": {
+          "type": "string"
+        },
+        "legalEntityName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "patronymic": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.getCreativeSpaceResponseMetroStation": {
+      "type": "object",
+      "properties": {
+        "color": {
+          "type": "string"
+        },
+        "distanceInMinutes": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.getCreativeSpaceResponseScore": {
+      "type": "object",
+      "properties": {
+        "comment": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "rating": {
+          "type": "integer"
+        },
+        "user": {
+          "$ref": "#/definitions/responses.getCreativeSpaceResponseScoreUser"
+        }
+      }
+    },
+    "responses.getCreativeSpaceResponseScoreUser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "patronymic": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.getCreativeSpacesResponseCalendar": {
+      "type": "object",
+      "properties": {
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/responses.getCreativeSpacesResponseCalendarEvent"
+          }
+        },
+        "link": {
+          "type": "string"
+        },
+        "workDayIndexes": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "responses.getCreativeSpacesResponseCalendarEvent": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.getCreativeSpacesResponseCoordinate": {
+      "type": "object",
+      "properties": {
+        "latitude": {
+          "type": "number"
+        },
+        "longitude": {
+          "type": "number"
+        }
+      }
+    },
+    "responses.getCreativeSpacesResponseCreativeSpace": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "area": {
+          "type": "integer"
+        },
+        "averageRating": {
+          "type": "integer"
+        },
+        "calendar": {
+          "$ref": "#/definitions/responses.getCreativeSpacesResponseCalendar"
+        },
+        "capacity": {
+          "type": "integer"
+        },
+        "coordinate": {
+          "$ref": "#/definitions/responses.getCreativeSpacesResponseCoordinate"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "landlordId": {
+          "type": "integer"
+        },
+        "metroStations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/responses.getCreativeSpacesResponseMetroStation"
+          }
+        },
+        "photos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pricePerDay": {
+          "type": "integer"
+        },
+        "scores": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/responses.getCreativeSpacesResponseScore"
+          }
+        },
+        "spaceType": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.getCreativeSpacesResponseData": {
+      "type": "object",
+      "properties": {
+        "creativeSpaces": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/responses.getCreativeSpacesResponseCreativeSpace"
+          }
+        }
+      }
+    },
+    "responses.getCreativeSpacesResponseMetroStation": {
+      "type": "object",
+      "properties": {
+        "color": {
+          "type": "string"
+        },
+        "distanceInMinutes": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.getCreativeSpacesResponseScore": {
+      "type": "object",
+      "properties": {
+        "comment": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "rating": {
+          "type": "integer"
+        },
+        "user": {
+          "$ref": "#/definitions/responses.getCreativeSpacesResponseScoreUser"
+        }
+      }
+    },
+    "responses.getCreativeSpacesResponseScoreUser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "patronymic": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.getMetroStationsResponseData": {
+      "type": "object",
+      "properties": {
+        "metroStations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/responses.getMetroStationsResponseMetroStation"
+          }
+        }
+      }
+    },
+    "responses.getMetroStationsResponseMetroStation": {
+      "type": "object",
+      "properties": {
+        "color": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.getUserResponseData": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/responses.getUserResponseUser"
+        }
+      }
+    },
+    "responses.getUserResponseUser": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "inn": {
+          "type": "string"
+        },
+        "legalEntityName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "patronymic": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        }
+      }
+    },
+    "responses.getUsersResponseData": {
+      "type": "object",
+      "properties": {
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/responses.getUsersResponseUser"
+          }
+        }
+      }
+    },
+    "responses.getUsersResponseUser": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "inn": {
+          "type": "string"
+        },
+        "legalEntityName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "patronymic": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        }
+      }
+    }
+  }
 }

@@ -12,7 +12,7 @@ type getCreativeSpacesResponseCalendarEvent struct {
 }
 
 type getCreativeSpacesResponseCalendar struct {
-	WorkDayIndexes []int                                    `json:"workDayIndexes"`
+	WorkDayIndexes string                                   `json:"workDayIndexes"`
 	Events         []getCreativeSpacesResponseCalendarEvent `json:"events"`
 	Link           string                                   `json:"link"`
 }
@@ -23,37 +23,37 @@ type getCreativeSpacesResponseCoordinate struct {
 }
 
 type getCreativeSpacesResponseMetroStation struct {
-	Id                int    `json:"id"`
+	ID                string `json:"id"`
 	Name              string `json:"name"`
 	Color             string `json:"color"`
 	DistanceInMinutes int    `json:"distanceInMinutes"`
 }
 
 type getCreativeSpacesResponseScoreUser struct {
-	Id         int    `json:"id"`
+	ID         string `json:"id"`
 	Name       string `json:"name"`
 	Surname    string `json:"surname"`
 	Patronymic string `json:"patronymic"`
 }
 
 type getCreativeSpacesResponseScore struct {
-	Id      int                                `json:"id"`
+	ID      string                             `json:"id"`
 	Comment string                             `json:"comment"`
 	Rating  int                                `json:"rating"`
 	User    getCreativeSpacesResponseScoreUser `json:"user"`
 }
 
 type getCreativeSpacesResponseCreativeSpace struct {
-	Id            int                                     `json:"id"`
+	ID            string                                  `json:"id"`
 	SpaceType     string                                  `json:"spaceType"`
 	Area          int                                     `json:"area"`
 	Capacity      int                                     `json:"capacity"`
 	Title         string                                  `json:"title"`
 	Address       string                                  `json:"address"`
 	Status        model.CreativeSpaceStatus               `json:"status"`
-	LandlordId    int                                     `json:"landlordId"`
+	LandlordID    string                                  `json:"landlordId"`
 	Description   string                                  `json:"description"`
-	Photos        []string                                `json:"photos"`
+	Photos        string                                  `json:"photos"`
 	PricePerDay   int                                     `json:"pricePerDay"`
 	MetroStations []getCreativeSpacesResponseMetroStation `json:"metroStations"`
 	Coordinate    getCreativeSpacesResponseCoordinate     `json:"coordinate"`
@@ -76,7 +76,7 @@ func GetCreativeSpacesResponseFromStoreData(creativeSpaces []store.CreativeSpace
 
 		for _, metroStation := range creativeSpace.MetroStations {
 			resMetroStations = append(resMetroStations, getCreativeSpacesResponseMetroStation{
-				Id:                metroStation.MetroStationId,
+				ID:                metroStation.MetroStationID,
 				Name:              metroStation.MetroStation.Name,
 				Color:             metroStation.MetroStation.Color,
 				DistanceInMinutes: metroStation.DistanceInMinutes,
@@ -89,11 +89,11 @@ func GetCreativeSpacesResponseFromStoreData(creativeSpaces []store.CreativeSpace
 
 		for _, score := range creativeSpace.Scores {
 			resScores = append(resScores, getCreativeSpacesResponseScore{
-				Id:      score.Id,
+				ID:      score.ID,
 				Rating:  score.Rating,
 				Comment: score.Comment,
 				User: getCreativeSpacesResponseScoreUser{
-					Id:         score.User.Id,
+					ID:         score.User.ID,
 					Name:       score.User.Name,
 					Surname:    score.User.Surname,
 					Patronymic: score.User.Patronymic,
@@ -124,14 +124,14 @@ func GetCreativeSpacesResponseFromStoreData(creativeSpaces []store.CreativeSpace
 		}
 
 		res.CreativeSpaces = append(res.CreativeSpaces, getCreativeSpacesResponseCreativeSpace{
-			Id:          creativeSpace.Id,
+			ID:          creativeSpace.ID,
 			SpaceType:   creativeSpace.SpaceType,
 			Area:        creativeSpace.Area,
 			Capacity:    creativeSpace.Capacity,
 			Title:       creativeSpace.Title,
 			Address:     creativeSpace.Address,
-			Status:      creativeSpace.Status,
-			LandlordId:  creativeSpace.LandlordId,
+			Status:      model.CreativeSpaceStatus(creativeSpace.Status),
+			LandlordID:  creativeSpace.LandlordID,
 			Description: creativeSpace.Description,
 			Photos:      creativeSpace.Photos,
 			PricePerDay: creativeSpace.PricePerDay,
@@ -151,11 +151,11 @@ func GetCreativeSpacesResponseFromStoreData(creativeSpaces []store.CreativeSpace
 
 type getCreativeSpaceResponseCalendarEvent struct {
 	Date      string `json:"date"`
-	BookingId int    `json:"bookingId"`
+	BookingID string `json:"bookingId"`
 }
 
 type getCreativeSpaceResponseLandlordInfo struct {
-	Id              int        `json:"id"`
+	ID              string     `json:"id"`
 	Phone           string     `json:"phone"`
 	Role            model.Role `json:"role"`
 	Name            string     `json:"name"`
@@ -167,7 +167,7 @@ type getCreativeSpaceResponseLandlordInfo struct {
 }
 
 type getCreativeSpaceResponseCalendar struct {
-	WorkDayIndexes []int                                   `json:"workDayIndexes"`
+	WorkDayIndexes string                                  `json:"workDayIndexes"`
 	Events         []getCreativeSpaceResponseCalendarEvent `json:"events"`
 	Link           string                                  `json:"link"`
 }
@@ -178,28 +178,28 @@ type getCreativeSpaceResponseCoordinate struct {
 }
 
 type getCreativeSpaceResponseMetroStation struct {
-	Id                int    `json:"id"`
+	ID                string `json:"id"`
 	Name              string `json:"name"`
 	Color             string `json:"color"`
 	DistanceInMinutes int    `json:"distanceInMinutes"`
 }
 
 type getCreativeSpaceResponseScoreUser struct {
-	Id         int    `json:"id"`
+	ID         string `json:"id"`
 	Name       string `json:"name"`
 	Surname    string `json:"surname"`
 	Patronymic string `json:"patronymic"`
 }
 
 type getCreativeSpaceResponseScore struct {
-	Id      int                               `json:"id"`
+	ID      string                            `json:"id"`
 	Comment string                            `json:"comment"`
 	Rating  int                               `json:"rating"`
 	User    getCreativeSpaceResponseScoreUser `json:"user"`
 }
 
 type getCreativeSpaceResponseCreativeSpace struct {
-	Id            int                                    `json:"id"`
+	ID            string                                 `json:"id"`
 	SpaceType     string                                 `json:"spaceType"`
 	Area          int                                    `json:"area"`
 	Capacity      int                                    `json:"capacity"`
@@ -207,7 +207,7 @@ type getCreativeSpaceResponseCreativeSpace struct {
 	Address       string                                 `json:"address"`
 	Status        model.CreativeSpaceStatus              `json:"status"`
 	Description   string                                 `json:"description"`
-	Photos        []string                               `json:"photos"`
+	Photos        string                                 `json:"photos"`
 	PricePerDay   int                                    `json:"pricePerDay"`
 	MetroStations []getCreativeSpaceResponseMetroStation `json:"metroStations"`
 	Coordinate    getCreativeSpaceResponseCoordinate     `json:"coordinate"`
@@ -227,7 +227,7 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 
 	for _, metroStation := range creativeSpace.MetroStations {
 		resMetroStations = append(resMetroStations, getCreativeSpaceResponseMetroStation{
-			Id:                metroStation.MetroStationId,
+			ID:                metroStation.MetroStationID,
 			Name:              metroStation.MetroStation.Name,
 			Color:             metroStation.MetroStation.Color,
 			DistanceInMinutes: metroStation.DistanceInMinutes,
@@ -239,7 +239,7 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 	for _, calendarEvent := range creativeSpace.CalendarEvents {
 		resCalendarEvents = append(resCalendarEvents, getCreativeSpaceResponseCalendarEvent{
 			Date:      calendarEvent.Date,
-			BookingId: calendarEvent.BookingId,
+			BookingID: calendarEvent.BookingID,
 		})
 	}
 
@@ -249,11 +249,11 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 
 	for _, score := range creativeSpace.Scores {
 		resScores = append(resScores, getCreativeSpaceResponseScore{
-			Id:      score.Id,
+			ID:      score.ID,
 			Rating:  score.Rating,
 			Comment: score.Comment,
 			User: getCreativeSpaceResponseScoreUser{
-				Id:         score.User.Id,
+				ID:         score.User.ID,
 				Name:       score.User.Name,
 				Surname:    score.User.Surname,
 				Patronymic: score.User.Patronymic,
@@ -270,13 +270,13 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 	}
 
 	res.CreativeSpace = getCreativeSpaceResponseCreativeSpace{
-		Id:          creativeSpace.Id,
+		ID:          creativeSpace.ID,
 		SpaceType:   creativeSpace.SpaceType,
 		Area:        creativeSpace.Area,
 		Capacity:    creativeSpace.Capacity,
 		Title:       creativeSpace.Title,
 		Address:     creativeSpace.Address,
-		Status:      creativeSpace.Status,
+		Status:      model.CreativeSpaceStatus(creativeSpace.Status),
 		Description: creativeSpace.Description,
 		Photos:      creativeSpace.Photos,
 		PricePerDay: creativeSpace.PricePerDay,
@@ -291,9 +291,9 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 			Link:           creativeSpace.CalendarLink,
 		},
 		LandlordInfo: getCreativeSpaceResponseLandlordInfo{
-			Id:              creativeSpace.LandlordInfo.Id,
+			ID:              creativeSpace.LandlordInfo.ID,
 			Phone:           creativeSpace.LandlordInfo.Phone,
-			Role:            creativeSpace.LandlordInfo.Role,
+			Role:            model.Role(creativeSpace.LandlordInfo.Role),
 			Name:            creativeSpace.LandlordInfo.Name,
 			Surname:         creativeSpace.LandlordInfo.Surname,
 			Patronymic:      creativeSpace.LandlordInfo.Patronymic,
@@ -309,18 +309,18 @@ func GetCreativeSpaceResponseFromStoreData(creativeSpace store.CreativeSpace) ge
 }
 
 type createCreativeSpaceResponseCreativeSpace struct {
-	Id int `json:"id"`
+	ID string `json:"id"`
 }
 
 type createCreativeSpaceResponseData struct {
 	CreativeSpace createCreativeSpaceResponseCreativeSpace `json:"creativeSpace"`
 }
 
-func CreateCreativeSpaceResponseFromStoreData(creativeSpaceId int) createCreativeSpaceResponseData {
+func CreateCreativeSpaceResponseFromStoreData(creativeSpaceID string) createCreativeSpaceResponseData {
 	res := createCreativeSpaceResponseData{}
 
 	res.CreativeSpace = createCreativeSpaceResponseCreativeSpace{
-		Id: creativeSpaceId,
+		ID: creativeSpaceID,
 	}
 
 	return res

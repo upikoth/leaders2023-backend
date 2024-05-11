@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/upikoth/leaders2023-backend/internal/app/constants"
 	"github.com/upikoth/leaders2023-backend/internal/app/handler/v1/requests"
 	"github.com/upikoth/leaders2023-backend/internal/app/handler/v1/responses"
@@ -32,9 +33,9 @@ func (h *HandlerV1) GetBookings(c *gin.Context) {
 
 	switch userData.UserRole {
 	case model.RoleTenant:
-		bookingFilter.TenantId = userData.UserId
+		bookingFilter.TenantID = userData.UserID
 	case model.RoleLandlord:
-		bookingFilter.LandlordId = userData.UserId
+		bookingFilter.LandlordID = userData.UserID
 	case model.RoleAdmin:
 	default:
 	}
@@ -69,7 +70,7 @@ func (h *HandlerV1) GetBooking(c *gin.Context) {
 		return
 	}
 
-	booking, err := h.store.GetBookingById(reqData.Id)
+	booking, err := h.store.GetBookingByID(reqData.ID)
 
 	if err != nil {
 		c.Set("responseErrorCode", constants.ErrBookingGetDbError)
@@ -77,13 +78,13 @@ func (h *HandlerV1) GetBooking(c *gin.Context) {
 		return
 	}
 
-	if userData.UserRole == model.RoleLandlord && booking.LandlordId != userData.UserId {
+	if userData.UserRole == model.RoleLandlord && booking.LandlordID != userData.UserID {
 		c.Set("responseCode", http.StatusForbidden)
 		c.Set("responseErrorCode", constants.ErrBookingGetForbidden)
 		return
 	}
 
-	if userData.UserRole == model.RoleTenant && booking.TenantId != userData.UserId {
+	if userData.UserRole == model.RoleTenant && booking.TenantID != userData.UserID {
 		c.Set("responseCode", http.StatusForbidden)
 		c.Set("responseErrorCode", constants.ErrBookingGetForbidden)
 		return
@@ -118,7 +119,7 @@ func (h *HandlerV1) CreateBooking(c *gin.Context) {
 		return
 	}
 
-	creativeSpace, err := h.store.GetCreativeSpaceById(reqData.CreativeSpaceId)
+	creativeSpace, err := h.store.GetCreativeSpaceByID(reqData.CreativeSpaceID)
 
 	if err != nil {
 		c.Set("responseErrorCode", constants.ErrBookingPostDbError)
@@ -130,21 +131,22 @@ func (h *HandlerV1) CreateBooking(c *gin.Context) {
 
 	for _, event := range reqData.CalendarEvents {
 		bookingCalendarEvents = append(bookingCalendarEvents, &store.CalendarEvent{
-			CreativeSpaceId: creativeSpace.Id,
+			CreativeSpaceID: creativeSpace.ID,
 			Date:            event.Date,
 		})
 	}
 
 	booking := store.Booking{
-		TenantId:        userData.UserId,
-		LandlordId:      creativeSpace.LandlordId,
-		CreativeSpaceId: creativeSpace.Id,
-		Status:          model.BookingStatusConfirmationByLandlord,
+		ID:              uuid.New().String(),
+		TenantID:        userData.UserID,
+		LandlordID:      creativeSpace.LandlordID,
+		CreativeSpaceID: creativeSpace.ID,
+		Status:          string(model.BookingStatusConfirmationByLandlord),
 		FullPrice:       creativeSpace.PricePerDay * len(reqData.CalendarEvents),
 		CalendarEvents:  bookingCalendarEvents,
 	}
 
-	bookingId, storeErr := h.store.CreateBooking(booking)
+	bookingID, storeErr := h.store.CreateBooking(booking)
 
 	if storeErr != nil {
 		c.Set("responseCode", http.StatusBadRequest)
@@ -153,7 +155,7 @@ func (h *HandlerV1) CreateBooking(c *gin.Context) {
 		return
 	}
 
-	responseData := responses.CreateBookingResponseFromStoreData(bookingId)
+	responseData := responses.CreateBookingResponseFromStoreData(bookingID)
 	c.Set("responseData", responseData)
 }
 
@@ -176,9 +178,9 @@ func (h *HandlerV1) PatchBooking(c *gin.Context) {
 		return
 	}
 
-	booking, err := h.store.GetBookingById(reqData.Id)
+	booking, err := h.store.GetBookingByID(reqData.ID)
 
-	if userData.UserRole != model.RoleAdmin && booking.LandlordId != userData.UserId {
+	if userData.UserRole != model.RoleAdmin && booking.LandlordID != userData.UserID {
 		c.Set("responseCode", http.StatusForbidden)
 		c.Set("responseErrorCode", constants.ErrBookingPatchForbidden)
 		return
@@ -194,9 +196,9 @@ func (h *HandlerV1) PatchBooking(c *gin.Context) {
 
 	for _, event := range reqData.CalendarEvents {
 		bookingCalendarEvents = append(bookingCalendarEvents, &store.CalendarEvent{
-			BookingId:       reqData.Id,
+			BookingID:       reqData.ID,
 			Date:            event.Date,
-			CreativeSpaceId: booking.CreativeSpaceId,
+			CreativeSpaceID: booking.CreativeSpaceID,
 		})
 	}
 
@@ -205,7 +207,7 @@ func (h *HandlerV1) PatchBooking(c *gin.Context) {
 	}
 
 	if reqData.Status != "" {
-		booking.Status = reqData.Status
+		booking.Status = string(reqData.Status)
 	}
 
 	storeErr := h.store.PatchBooking(booking)
@@ -243,7 +245,7 @@ func (h *HandlerV1) DeleteBooking(c *gin.Context) {
 		return
 	}
 
-	err = h.store.DeleteBooking(reqData.Id)
+	err = h.store.DeleteBooking(reqData.ID)
 
 	if err != nil {
 		c.Set("responseErrorCode", constants.ErrBookingDeleteDbError)

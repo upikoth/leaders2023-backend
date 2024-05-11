@@ -31,7 +31,7 @@ func (h *HandlerV1) CreateSession(c *gin.Context) {
 
 	user, err := h.store.GetUserByPhone(reqData.Phone)
 
-	if err != nil {
+	if user.ID == "" || err != nil {
 		c.Set("responseErrorCode", constants.ErrSessionPostUserNotExist)
 		return
 	}
@@ -44,8 +44,8 @@ func (h *HandlerV1) CreateSession(c *gin.Context) {
 	}
 
 	tokenUserData := model.JwtTokenUserData{
-		UserId:   user.Id,
-		UserRole: user.Role,
+		UserID:   user.ID,
+		UserRole: model.Role(user.Role),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
@@ -78,7 +78,7 @@ func (h *HandlerV1) GetSession(c *gin.Context) {
 		return
 	}
 
-	user, err := h.store.GetUserById(userData.UserId)
+	user, err := h.store.GetUserByID(userData.UserID)
 
 	if err != nil {
 		c.Set("responseErrorCode", constants.ErrUserGetDbError)

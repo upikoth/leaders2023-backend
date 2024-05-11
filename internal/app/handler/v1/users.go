@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/upikoth/leaders2023-backend/internal/app/constants"
 	"github.com/upikoth/leaders2023-backend/internal/app/handler/v1/requests"
 	"github.com/upikoth/leaders2023-backend/internal/app/handler/v1/responses"
@@ -58,13 +59,13 @@ func (h *HandlerV1) GetUser(c *gin.Context) {
 		return
 	}
 
-	if userData.UserRole != model.RoleAdmin && userData.UserId != reqData.Id {
+	if userData.UserRole != model.RoleAdmin && userData.UserID != reqData.ID {
 		c.Set("responseCode", http.StatusForbidden)
 		c.Set("responseErrorCode", constants.ErrUserGetForbidden)
 		return
 	}
 
-	user, err := h.store.GetUserById(reqData.Id)
+	user, err := h.store.GetUserByID(reqData.ID)
 
 	if err != nil {
 		c.Set("responseErrorCode", constants.ErrUserGetDbError)
@@ -111,8 +112,9 @@ func (h *HandlerV1) CreateUser(c *gin.Context) {
 	}
 
 	user := store.User{
+		ID:              uuid.New().String(),
 		Phone:           reqData.Phone,
-		Role:            reqData.Role,
+		Role:            string(reqData.Role),
 		PasswordHash:    string(hashedBytes),
 		Name:            reqData.Name,
 		Surname:         reqData.Surname,
@@ -122,7 +124,7 @@ func (h *HandlerV1) CreateUser(c *gin.Context) {
 		LegalEntityName: reqData.LegalEntityName,
 	}
 
-	createdUserId, err := h.store.CreateUser(user)
+	existingUser, err := h.store.GetUserByPhone(user.Phone)
 
 	if err != nil {
 		c.Set("responseErrorCode", constants.ErrUserPostDbError)
@@ -130,7 +132,21 @@ func (h *HandlerV1) CreateUser(c *gin.Context) {
 		return
 	}
 
-	responseData := responses.CreateUserResponseFromStoreData(createdUserId)
+	if existingUser.ID != "" {
+		c.Set("responseErrorCode", constants.ErrUserPostPhoneExist)
+		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	createdUserID, err := h.store.CreateUser(user)
+
+	if err != nil {
+		c.Set("responseErrorCode", constants.ErrUserPostDbError)
+		c.Set("responseErrorDetails", err)
+		return
+	}
+
+	responseData := responses.CreateUserResponseFromStoreData(createdUserID)
 	c.Set("responseData", responseData)
 }
 
@@ -154,14 +170,14 @@ func (h *HandlerV1) PatchUser(c *gin.Context) {
 		return
 	}
 
-	if userData.UserRole != model.RoleAdmin && userData.UserId != reqData.Id {
+	if userData.UserRole != model.RoleAdmin && userData.UserID != reqData.ID {
 		c.Set("responseCode", http.StatusForbidden)
 		c.Set("responseErrorCode", constants.ErrUserPatchForbidden)
 		return
 	}
 
 	user := store.User{
-		Id:              reqData.Id,
+		ID:              reqData.ID,
 		Phone:           reqData.Phone,
 		Name:            reqData.Name,
 		Surname:         reqData.Surname,
@@ -205,7 +221,7 @@ func (h *HandlerV1) DeleteUser(c *gin.Context) {
 		return
 	}
 
-	err = h.store.DeleteUser(reqData.Id)
+	err = h.store.DeleteUser(reqData.ID)
 
 	if err != nil {
 		c.Set("responseErrorCode", constants.ErrUserDeleteDbError)

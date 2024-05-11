@@ -27,7 +27,7 @@ func (h *HandlerV1) GetAddresses(c *gin.Context) {
 		return
 	}
 
-	addresses, err := h.dadataSuggestApi.Address(context.Background(), &suggest.RequestParams{
+	addresses, err := h.dadataSuggestAPI.Address(context.Background(), &suggest.RequestParams{
 		Query: reqData.Query,
 	})
 

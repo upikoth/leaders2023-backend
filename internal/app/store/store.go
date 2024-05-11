@@ -1,18 +1,20 @@
 package store
 
 import (
-	"context"
+	"os"
 
-	"github.com/go-pg/pg/v10"
+	ydb "github.com/ydb-platform/gorm-driver"
+	yc "github.com/ydb-platform/ydb-go-yc"
+	"gorm.io/gorm"
 )
 
 type Store struct {
-	db     *pg.DB
+	db     *gorm.DB
 	config *Config
 }
 
 func New() *Store {
-	config := NewConfig()
+	config, _ := NewConfig()
 
 	return &Store{
 		config: config,
@@ -20,14 +22,21 @@ func New() *Store {
 }
 
 func (s *Store) Connect() error {
-	db := pg.Connect(&pg.Options{
-		User:     s.config.DatabaseUser,
-		Password: s.config.DatabasePassword,
-		Database: s.config.DatabaseName,
-		Addr:     s.config.DatabaseAddr,
-	})
+	err := os.WriteFile(s.config.YdbAuthFileName, s.config.YdbAuthInfo, 0600)
 
-	err := db.Ping(context.Background())
+	if err != nil {
+		return err
+	}
+
+	os.Setenv("YDB_SERVICE_ACCOUNT_KEY_FILE_CREDENTIALS", s.config.YdbAuthFileName)
+	db, err := gorm.Open(
+		ydb.Open(
+			s.config.YdbDsn,
+			ydb.With(yc.WithInternalCA()),
+		),
+	)
+	os.Remove(s.config.YdbAuthFileName)
+
 	if err != nil {
 		return err
 	}
@@ -37,6 +46,19 @@ func (s *Store) Connect() error {
 	return nil
 }
 
+func (s *Store) AutoMigrate() error {
+	return s.db.AutoMigrate(
+		&User{},
+		&MetroStation{},
+		&CalendarEvent{},
+		&Score{},
+		&CreativeSpaceMetroStation{},
+		&CreativeSpace{},
+		&Booking{},
+	)
+}
+
 func (s *Store) Disconnect() error {
-	return s.db.Close()
+	db, _ := s.db.DB()
+	return db.Close()
 }

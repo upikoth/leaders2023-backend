@@ -15,7 +15,7 @@ import (
 	"github.com/upikoth/leaders2023-backend/internal/app/model"
 )
 
-func (s *ApiServer) initRoutes() {
+func (s *APIServer) initRoutes() {
 	docs.SwaggerInfo.Schemes = []string{}
 	s.router.GET("/api/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
@@ -57,8 +57,8 @@ func (s *ApiServer) initRoutes() {
 	authorized.POST("/api/v1/file", s.handler.V1.CreateFile)
 	authorized.DELETE("/api/v1/files/:fileName", s.handler.V1.DeleteFile)
 
-	authorized.POST("/api/v1/calendar/convert", s.handler.V1.ConverCalendar)
-	authorized.POST("/api/v1/calendar/convertFromLink", s.handler.V1.ConverCalendarFromLink)
+	authorized.POST("/api/v1/calendar/convert", s.handler.V1.ConvertCalendar)
+	authorized.POST("/api/v1/calendar/convertFromLink", s.handler.V1.ConvertCalendarFromLink)
 
 	authorized.GET("/api/v1/bookings", s.handler.V1.GetBookings)
 
@@ -97,15 +97,15 @@ func formatResponse() gin.HandlerFunc {
 
 		code, isCodeExist := c.Get("responseCode")
 		data, isDataExist := c.Get("responseData")
-		errorCode, isErorrCodeExist := c.Get("responseErrorCode")
-		errorDetails, isErorrDetailsExist := c.Get("responseErrorDetails")
+		errorCode, isErrorCodeExist := c.Get("responseErrorCode")
+		errorDetails, isErrorDetailsExist := c.Get("responseErrorDetails")
 		description := ""
 
-		if isErorrCodeExist {
+		if isErrorCodeExist {
 			description = constants.ErrDescriptionByCode[errorCode.(error)]
 		}
 
-		if !isErorrDetailsExist {
+		if !isErrorDetailsExist {
 			errorDetails = ""
 		}
 
@@ -125,7 +125,7 @@ func formatResponse() gin.HandlerFunc {
 			data = map[string]string{}
 		}
 
-		if isErorrCodeExist {
+		if isErrorCodeExist {
 			response := model.ResponseError{}
 			response.Success = false
 			response.Error = &model.ResponseErrorField{

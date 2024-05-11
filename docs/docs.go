@@ -298,7 +298,7 @@ const docTemplate_swagger = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/responses.convertCaledarResponseData"
+                                            "$ref": "#/definitions/responses.convertCalendarResponseData"
                                         }
                                     }
                                 }
@@ -344,7 +344,7 @@ const docTemplate_swagger = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/responses.convertCaledarFromLinkResponseData"
+                                            "$ref": "#/definitions/responses.convertCalendarFromLinkResponseData"
                                         }
                                     }
                                 }
@@ -1476,7 +1476,7 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "responses.convertCaledarFromLinkResponseData": {
+        "responses.convertCalendarFromLinkResponseData": {
             "type": "object",
             "properties": {
                 "events": {
@@ -1495,7 +1495,7 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "responses.convertCaledarResponseData": {
+        "responses.convertCalendarResponseData": {
             "type": "object",
             "properties": {
                 "events": {

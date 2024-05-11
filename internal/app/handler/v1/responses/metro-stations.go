@@ -3,7 +3,7 @@ package responses
 import "github.com/upikoth/leaders2023-backend/internal/app/store"
 
 type getMetroStationsResponseMetroStation struct {
-	Id    int    `json:"id"`
+	ID    string `json:"id"`
 	Name  string `json:"name"`
 	Color string `json:"color"`
 }
@@ -19,7 +19,7 @@ func GetMetroStationsResponseFromStoreData(metroStations []store.MetroStation) g
 
 	for _, station := range metroStations {
 		resStation := getMetroStationsResponseMetroStation{
-			Id:    station.Id,
+			ID:    station.ID,
 			Name:  station.Name,
 			Color: station.Color,
 		}

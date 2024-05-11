@@ -1,20 +1,19 @@
 package responses
 
 import (
-	"github.com/upikoth/leaders2023-backend/internal/app/model"
 	"github.com/upikoth/leaders2023-backend/internal/app/store"
 )
 
 type getUsersResponseUser struct {
-	Id              int        `json:"id"`
-	Phone           string     `json:"phone"`
-	Role            model.Role `json:"role"`
-	Name            string     `json:"name"`
-	Surname         string     `json:"surname"`
-	Patronymic      string     `json:"patronymic"`
-	Email           string     `json:"email"`
-	Inn             string     `json:"inn"`
-	LegalEntityName string     `json:"legalEntityName"`
+	ID              string `json:"id"`
+	Phone           string `json:"phone"`
+	Role            string `json:"role"`
+	Name            string `json:"name"`
+	Surname         string `json:"surname"`
+	Patronymic      string `json:"patronymic"`
+	Email           string `json:"email"`
+	Inn             string `json:"inn"`
+	LegalEntityName string `json:"legalEntityName"`
 }
 
 type getUsersResponseData struct {
@@ -28,7 +27,7 @@ func GetUsersResponseFromStoreData(users []store.User) getUsersResponseData {
 
 	for _, user := range users {
 		resUser := getUsersResponseUser{
-			Id:              user.Id,
+			ID:              user.ID,
 			Phone:           user.Phone,
 			Role:            user.Role,
 			Name:            user.Name,
@@ -46,15 +45,15 @@ func GetUsersResponseFromStoreData(users []store.User) getUsersResponseData {
 }
 
 type getUserResponseUser struct {
-	Id              int        `json:"id"`
-	Phone           string     `json:"phone"`
-	Role            model.Role `json:"role"`
-	Name            string     `json:"name"`
-	Surname         string     `json:"surname"`
-	Patronymic      string     `json:"patronymic"`
-	Email           string     `json:"email"`
-	Inn             string     `json:"inn"`
-	LegalEntityName string     `json:"legalEntityName"`
+	ID              string `json:"id"`
+	Phone           string `json:"phone"`
+	Role            string `json:"role"`
+	Name            string `json:"name"`
+	Surname         string `json:"surname"`
+	Patronymic      string `json:"patronymic"`
+	Email           string `json:"email"`
+	Inn             string `json:"inn"`
+	LegalEntityName string `json:"legalEntityName"`
 }
 
 type getUserResponseData struct {
@@ -65,7 +64,7 @@ func GetUserResponseFromStoreData(user store.User) getUserResponseData {
 	res := getUserResponseData{}
 
 	res.User = getUserResponseUser{
-		Id:              user.Id,
+		ID:              user.ID,
 		Phone:           user.Phone,
 		Role:            user.Role,
 		Name:            user.Name,
@@ -80,18 +79,18 @@ func GetUserResponseFromStoreData(user store.User) getUserResponseData {
 }
 
 type createUserResponseUser struct {
-	Id int `json:"id"`
+	ID string `json:"id"`
 }
 
 type createUserResponseData struct {
 	User createUserResponseUser `json:"user"`
 }
 
-func CreateUserResponseFromStoreData(id int) createUserResponseData {
+func CreateUserResponseFromStoreData(id string) createUserResponseData {
 	res := createUserResponseData{}
 
 	res.User = createUserResponseUser{
-		Id: id,
+		ID: id,
 	}
 
 	return res

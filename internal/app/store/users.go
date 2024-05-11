@@ -2,144 +2,95 @@ package store
 
 import (
 	"github.com/upikoth/leaders2023-backend/internal/app/constants"
-	"github.com/upikoth/leaders2023-backend/internal/app/model"
 )
 
 type User struct {
-	tableName       struct{}   `pg:"users"` //nolint:unused // Имя таблицы
-	Id              int        `pg:"id"`
-	Name            string     `pg:"name"`
-	Surname         string     `pg:"surname"`
-	Patronymic      string     `pg:"patronymic"`
-	Email           string     `pg:"email"`
-	Inn             string     `pg:"inn"`
-	LegalEntityName string     `pg:"legal_entity_name"`
-	Phone           string     `pg:"phone"`
-	Role            model.Role `pg:"role"`
-	PasswordHash    string     `pg:"password_hash"`
+	ID              string `gorm:"primarykey"`
+	Name            string
+	Surname         string
+	Patronymic      string
+	Email           string
+	Inn             string
+	LegalEntityName string
+	Phone           string
+	Role            string
+	PasswordHash    string
 }
 
 func (s *Store) GetUsers() ([]User, error) {
 	users := []User{}
 
-	err := s.db.
-		Model(&users).
-		Select()
+	res := s.db.Find(&users)
 
-	if err != nil {
-		return nil, err
+	if res.Error != nil {
+		return nil, res.Error
 	}
 
 	return users, nil
 }
 
-func (s *Store) GetUserById(id int) (User, error) {
-	user := User{
-		Id: id,
-	}
+func (s *Store) GetUserByID(id string) (User, error) {
+	user := User{ID: id}
 
-	count, err := s.db.
-		Model(&user).
-		WherePK().
-		SelectAndCount()
+	res := s.db.First(&user)
 
-	if err != nil {
-		return User{}, err
-	}
-
-	if count == 0 {
-		return User{}, constants.ErrUserGetNotFoundById
+	if res.Error != nil {
+		return User{}, res.Error
 	}
 
 	return user, nil
 }
 
-func (s *Store) CreateUser(user User) (int, error) {
-	result, err := s.db.
-		Model(&user).
-		OnConflict("DO NOTHING").
-		Insert()
+func (s *Store) CreateUser(user User) (string, error) {
+	res := s.db.Create(&user)
 
-	if err != nil {
-		return 0, err
+	if res.Error != nil {
+		return "", res.Error
 	}
 
-	if result.RowsAffected() == 0 {
-		return 0, constants.ErrUserPostPhoneExist
-	}
-
-	return user.Id, nil
+	return user.ID, nil
 }
 
-func (s *Store) DeleteUser(id int) error {
-	user := User{
-		Id: id,
-	}
+func (s *Store) DeleteUser(id string) error {
+	res := s.db.Delete(&User{ID: id})
 
-	result, err := s.db.
-		Model(&user).
-		WherePK().
-		Delete()
-
-	if err != nil {
-		return err
-	}
-
-	if result.RowsAffected() == 0 {
-		return constants.ErrUserDeleteNotFoundById
+	if res.Error != nil {
+		return res.Error
 	}
 
 	return nil
 }
 
 func (s *Store) PatchUser(user User) error {
-	count, err := s.db.
-		Model(&user).
-		WherePK().
-		Count()
+	_, err := s.GetUserByID(user.ID)
 
 	if err != nil {
 		return err
 	}
 
-	if count == 0 {
-		return constants.ErrUserPatchNotFoundById
-	}
+	res := s.db.Updates(&user)
 
-	result, err := s.db.
-		Model(&user).
-		WherePK().
-		OnConflict("DO NOTHING").
-		UpdateNotZero()
-
-	if err != nil {
-		return err
-	}
-
-	if result == nil {
-		return constants.ErrUserPatchPhoneExist
+	if res.Error != nil {
+		return res.Error
 	}
 
 	return nil
 }
 
 func (s *Store) GetUserByPhone(phone string) (User, error) {
-	user := User{
-		Phone: phone,
+	user := User{}
+
+	res := s.db.
+		Where("phone = ?", phone).
+		First(&user)
+
+	if res.RowsAffected == 0 {
+		return user, nil
 	}
 
-	count, err := s.db.
-		Model(&user).
-		Where("phone = ?", user.Phone).
-		SelectAndCount()
-
-	if err != nil {
-		return User{}, constants.ErrUserGetByPhoneDbError
+	if res.Error != nil {
+		return user, constants.ErrUserGetByPhoneDbError
 	}
 
-	if count == 0 {
-		return User{}, constants.ErrUserGetByPhoneUserNotExist
-	}
-
-	return user, err
+	return user, nil
 }

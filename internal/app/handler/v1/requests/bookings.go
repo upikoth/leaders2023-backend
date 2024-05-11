@@ -6,7 +6,7 @@ import (
 )
 
 type getBookingRequestData struct {
-	Id int `uri:"id" binding:"required"`
+	ID string `uri:"id" binding:"required"`
 }
 
 func GetBookingDataFromRequest(c *gin.Context) (getBookingRequestData, error) {
@@ -26,7 +26,7 @@ type createBookingRequestCalendarEvent struct {
 }
 
 type createBookingRequestData struct {
-	CreativeSpaceId int                                 `json:"creativeSpaceId" binding:"required"`
+	CreativeSpaceID string                              `json:"creativeSpaceId" binding:"required"`
 	CalendarEvents  []createBookingRequestCalendarEvent `json:"calendarEvents" binding:"required"`
 }
 
@@ -42,8 +42,8 @@ func CreateBookingDataFromRequest(c *gin.Context) (createBookingRequestData, err
 	return data, nil
 }
 
-type patchBookingRequestUri struct {
-	Id int `uri:"id" binding:"required"`
+type patchBookingRequestURI struct {
+	ID string `uri:"id" binding:"required"`
 }
 
 type patchBookingRequestCalendarEvent struct {
@@ -56,16 +56,16 @@ type patchBookingRequestDataBody struct {
 }
 
 type patchBookingRequestData struct {
-	Id             int                                `json:"id"`
+	ID             string                             `json:"id"`
 	CalendarEvents []patchBookingRequestCalendarEvent `json:"calendarEvents"`
 	Status         model.BookingStatus                `json:"status"`
 }
 
 func PatchBookingDataFromRequest(c *gin.Context) (patchBookingRequestData, error) {
-	dataFromUri := patchBookingRequestUri{}
+	dataFromURI := patchBookingRequestURI{}
 	dataFromBody := patchBookingRequestDataBody{}
 
-	uriErr := c.BindUri(&dataFromUri)
+	uriErr := c.BindUri(&dataFromURI)
 
 	if uriErr != nil {
 		return patchBookingRequestData{}, uriErr
@@ -78,7 +78,7 @@ func PatchBookingDataFromRequest(c *gin.Context) (patchBookingRequestData, error
 	}
 
 	data := patchBookingRequestData{
-		Id:             dataFromUri.Id,
+		ID:             dataFromURI.ID,
 		CalendarEvents: dataFromBody.CalendarEvents,
 		Status:         dataFromBody.Status,
 	}
@@ -87,7 +87,7 @@ func PatchBookingDataFromRequest(c *gin.Context) (patchBookingRequestData, error
 }
 
 type deleteBookingRequestData struct {
-	Id int `uri:"id" binding:"required"`
+	ID string `uri:"id" binding:"required"`
 }
 
 func DeleteBookingDataFromRequest(c *gin.Context) (deleteBookingRequestData, error) {

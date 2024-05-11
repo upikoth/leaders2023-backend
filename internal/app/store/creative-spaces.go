@@ -1,283 +1,199 @@
 package store
 
 import (
-	"context"
-
-	"github.com/go-pg/pg/v10"
 	"github.com/upikoth/leaders2023-backend/internal/app/constants"
-	"github.com/upikoth/leaders2023-backend/internal/app/model"
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type CreativeSpace struct {
-	tableName              struct{}                     `pg:"creative_spaces"` //nolint:unused // Имя таблицы
-	Id                     int                          `pg:"id"`
-	SpaceType              string                       `pg:"space_type"`
-	Area                   int                          `pg:"area"`
-	Capacity               int                          `pg:"capacity"`
-	Title                  string                       `pg:"title"`
-	Status                 model.CreativeSpaceStatus    `pg:"status"`
-	Address                string                       `pg:"address"`
-	LandlordId             int                          `pg:"landlord_id"`
-	Photos                 []string                     `pg:"photos,array"`
-	PricePerDay            int                          `pg:"price_per_day"`
-	Latitude               float32                      `pg:"latitude"`
-	Longitude              float32                      `pg:"longitude"`
-	Description            string                       `pg:"description"`
-	CalendarLink           string                       `pg:"calendar_link"`
-	CalendarWorkDayIndexes []int                        `pg:"calendar_work_day_indexes,array"`
-	CalendarEvents         []*CalendarEvent             `pg:"rel:has-many"`
-	MetroStations          []*CreativeSpaceMetroStation `pg:"rel:has-many"`
-	LandlordInfo           *User                        `pg:"rel:has-one,fk:landlord_id"`
-	Scores                 []*Score                     `pg:"rel:has-many"`
+	ID                     string `gorm:"primarykey"`
+	SpaceType              string
+	Area                   int
+	Capacity               int
+	Title                  string
+	Status                 string
+	Address                string
+	LandlordID             string
+	PricePerDay            int
+	Latitude               float32
+	Longitude              float32
+	Description            string
+	CalendarLink           string
+	Photos                 string
+	CalendarWorkDayIndexes string
+	LandlordInfo           *User                        `gorm:"foreignKey:ID;references:LandlordID"`
+	MetroStations          []*CreativeSpaceMetroStation `gorm:"foreignKey:CreativeSpaceID;references:ID"`
+	CalendarEvents         []*CalendarEvent             `gorm:"foreignKey:CreativeSpaceID;references:ID"`
+	Scores                 []*Score                     `gorm:"foreignKey:CreativeSpaceID;references:ID"`
 }
 
 func (s *Store) GetCreativeSpaces() ([]CreativeSpace, error) {
 	creativeSpaces := []CreativeSpace{}
 
-	err := s.db.
-		Model(&creativeSpaces).
-		Relation("MetroStations", func(q *pg.Query) (*pg.Query, error) {
-			return q.Relation("MetroStation"), nil
-		}).
-		Relation("CalendarEvents").
-		Relation("Scores", func(q *pg.Query) (*pg.Query, error) {
-			return q.Relation("User"), nil
-		}).
-		Select()
+	res := s.db.
+		Preload(clause.Associations).
+		Preload("Scores.User").
+		Preload("MetroStations.MetroStation").
+		Find(&creativeSpaces)
 
-	if err != nil {
-		return nil, err
+	if res.Error != nil {
+		return nil, res.Error
 	}
 
 	return creativeSpaces, nil
 }
 
-func (s *Store) GetCreativeSpaceById(id int) (CreativeSpace, error) {
-	creativeSpace := CreativeSpace{
-		Id: id,
-	}
+func (s *Store) GetCreativeSpaceByID(id string) (CreativeSpace, error) {
+	creativeSpace := CreativeSpace{ID: id}
 
-	count, err := s.db.
-		Model(&creativeSpace).
-		WherePK().
-		Relation("MetroStations", func(q *pg.Query) (*pg.Query, error) {
-			return q.Relation("MetroStation"), nil
-		}).
-		Relation("CalendarEvents").
-		Relation("LandlordInfo").
-		Relation("Scores", func(q *pg.Query) (*pg.Query, error) {
-			return q.Relation("User"), nil
-		}).
-		SelectAndCount()
+	res := s.db.
+		Preload(clause.Associations).
+		Preload("Scores.User").
+		Preload("MetroStations.MetroStation").
+		First(&creativeSpace)
 
-	if err != nil {
-		return CreativeSpace{}, err
-	}
-
-	if count == 0 {
-		return CreativeSpace{}, constants.ErrCreativeSpaceGetNotFoundById
+	if res.Error != nil {
+		return CreativeSpace{}, res.Error
 	}
 
 	return creativeSpace, nil
 }
 
-//nolint:gocognit // Длина функции. Добавил в игнор, потому что одна транзакция.
 func (s *Store) CreateCreativeSpace(
 	creativeSpace CreativeSpace,
-) (int, error) {
-	storeErr := s.db.RunInTransaction(context.Background(), func(tx *pg.Tx) error {
-		// Записываем в таблицу creative_spaces.
-		result, creativeSpaceErr := tx.
-			Model(&creativeSpace).
-			OnConflict("DO NOTHING").
-			Insert()
+) (string, error) {
+	err := s.db.Transaction(func(tx *gorm.DB) error {
+		res := tx.Create(&creativeSpace)
 
-		if creativeSpaceErr != nil {
-			return creativeSpaceErr
-		}
-
-		if result.RowsAffected() == 0 {
-			return constants.ErrCreativeSpacePostDbError
+		if res.Error != nil {
+			return res.Error
 		}
 
 		if len(creativeSpace.MetroStations) > 0 {
 			for i := range creativeSpace.MetroStations {
-				creativeSpace.MetroStations[i].CreativeSpaceId = creativeSpace.Id
+				creativeSpace.MetroStations[i].CreativeSpaceID = creativeSpace.ID
 			}
 
-			// Записываем в таблицу creative_space_metro_station.
-			creativeSpaceMetroStationResult, creativeSpaceMetroStationErr := tx.
-				Model(&creativeSpace.MetroStations).
-				OnConflict("DO NOTHING").
-				Insert()
+			resMetroStation := tx.Create(&creativeSpace.MetroStations)
 
-			if creativeSpaceMetroStationErr != nil {
-				return creativeSpaceMetroStationErr
-			}
-
-			if creativeSpaceMetroStationResult.RowsAffected() == 0 {
-				return constants.ErrCreativeSpacePostDbError
+			if resMetroStation.Error != nil {
+				return res.Error
 			}
 		}
 
 		if len(creativeSpace.CalendarEvents) > 0 {
 			for i := range creativeSpace.CalendarEvents {
-				creativeSpace.CalendarEvents[i].CreativeSpaceId = creativeSpace.Id
+				creativeSpace.CalendarEvents[i].CreativeSpaceID = creativeSpace.ID
 			}
 
-			// Записываем в таблицу calendar_events.
-			creativeSpaceCalendarEventsResult, creativeSpaceCalendarEventsErr := tx.
-				Model(&creativeSpace.CalendarEvents).
-				OnConflict("DO NOTHING").
-				Insert()
+			resCalendarEvents := tx.
+				Create(&creativeSpace.CalendarEvents)
 
-			if creativeSpaceCalendarEventsErr != nil {
-				return creativeSpaceCalendarEventsErr
-			}
-
-			if creativeSpaceCalendarEventsResult.RowsAffected() == 0 {
-				return constants.ErrCreativeSpacePostDbError
+			if resCalendarEvents.Error != nil {
+				return resCalendarEvents.Error
 			}
 		}
 
 		return nil
 	})
 
-	if storeErr != nil {
-		return 0, storeErr
+	if err != nil {
+		return "", constants.ErrCreativeSpacePostDbError
 	}
 
-	return creativeSpace.Id, nil
+	return creativeSpace.ID, nil
 }
 
 func (s *Store) PatchCreativeSpace(
 	creativeSpace CreativeSpace,
 ) error {
-	count, err := s.db.
-		Model(&creativeSpace).
-		WherePK().
-		Count()
+	_, err := s.GetCreativeSpaceByID(creativeSpace.ID)
 
 	if err != nil {
 		return err
 	}
 
-	if count == 0 {
-		return constants.ErrCreativeSpacePatchNotFoundById
-	}
+	err = s.db.Transaction(func(tx *gorm.DB) error {
+		res := tx.Updates(&creativeSpace)
 
-	storeErr := s.db.RunInTransaction(context.Background(), func(tx *pg.Tx) error {
-		_, creativeSpaceUpdateErr := tx.
-			Model(&creativeSpace).
-			WherePK().
-			OnConflict("DO NOTHING").
-			UpdateNotZero()
-
-		if creativeSpaceUpdateErr != nil {
-			return creativeSpaceUpdateErr
+		if res.Error != nil {
+			return res.Error
 		}
 
-		_, creativeSpaceMetroStationsDeleteErr := tx.
-			Model(&CreativeSpaceMetroStation{}).
-			Where("creative_space_id = ?", creativeSpace.Id).
-			Delete()
+		res = tx.
+			Where("creative_space_id = ?", creativeSpace.ID).
+			Delete(&CreativeSpaceMetroStation{})
 
-		if creativeSpaceMetroStationsDeleteErr != nil {
-			return creativeSpaceMetroStationsDeleteErr
+		if res.Error != nil {
+			return res.Error
 		}
 
 		if len(creativeSpace.MetroStations) > 0 {
-			_, creativeSpaceMetroStationsInsertErr := tx.
-				Model(&creativeSpace.MetroStations).
-				OnConflict("DO NOTHING").
-				Insert()
+			resMetroStation := tx.Create(&creativeSpace.MetroStations)
 
-			if creativeSpaceMetroStationsInsertErr != nil {
-				return creativeSpaceMetroStationsInsertErr
+			if resMetroStation.Error != nil {
+				return res.Error
 			}
 		}
 
-		_, creativeSpaceCalendarEventsDeleteErr := tx.
-			Model(&CalendarEvent{}).
-			Where("creative_space_id = ?", creativeSpace.Id).
-			Delete()
+		res = tx.
+			Where("creative_space_id = ?", creativeSpace.ID).
+			Delete(&CalendarEvent{})
 
-		if creativeSpaceCalendarEventsDeleteErr != nil {
-			return creativeSpaceCalendarEventsDeleteErr
+		if res.Error != nil {
+			return res.Error
 		}
 
 		if len(creativeSpace.CalendarEvents) > 0 {
-			_, creativeSpaceCalendarEventsInsertErr := tx.
-				Model(&creativeSpace.CalendarEvents).
-				OnConflict("DO NOTHING").
-				Insert()
+			resCalendarEvents := tx.
+				Create(&creativeSpace.CalendarEvents)
 
-			if creativeSpaceCalendarEventsInsertErr != nil {
-				return creativeSpaceCalendarEventsInsertErr
+			if resCalendarEvents.Error != nil {
+				return resCalendarEvents.Error
 			}
 		}
 
 		return nil
 	})
 
-	if storeErr != nil {
-		return storeErr
+	if err != nil {
+		return constants.ErrCreativeSpacePatchDbError
 	}
 
 	return nil
 }
 
-func (s *Store) DeleteCreativeSpace(id int) error {
+func (s *Store) DeleteCreativeSpace(id string) error {
 	creativeSpace := CreativeSpace{
-		Id: id,
+		ID: id,
 	}
 
-	creativeSpaceMetroStation := CreativeSpaceMetroStation{
-		CreativeSpaceId: id,
-	}
+	err := s.db.Transaction(func(tx *gorm.DB) error {
+		res := tx.Delete(&creativeSpace)
 
-	creativeSpaceCalendarEvent := CalendarEvent{
-		CreativeSpaceId: id,
-	}
-
-	storeErr := s.db.RunInTransaction(context.Background(), func(tx *pg.Tx) error {
-		_, err := tx.
-			Model(&creativeSpaceMetroStation).
-			Where("creative_space_id = ?", creativeSpaceMetroStation.CreativeSpaceId).
-			Delete()
-
-		if err != nil {
-			return err
+		if res.Error != nil {
+			return res.Error
 		}
 
-		_, calendarEventErr := tx.
-			Model(&creativeSpaceCalendarEvent).
-			Where("creative_space_id = ?", creativeSpaceCalendarEvent.CreativeSpaceId).
-			Delete()
+		res = tx.
+			Where("creative_space_id = ?", creativeSpace.ID).
+			Delete(&CreativeSpaceMetroStation{})
 
-		if calendarEventErr != nil {
-			return calendarEventErr
+		if res.Error != nil {
+			return res.Error
 		}
 
-		result, err := tx.
-			Model(&creativeSpace).
-			WherePK().
-			Delete()
+		res = tx.
+			Where("creative_space_id = ?", creativeSpace.ID).
+			Delete(&CalendarEvent{})
 
-		if err != nil {
-			return err
-		}
-
-		if result.RowsAffected() == 0 {
-			return constants.ErrCreativeSpaceDeleteNotFoundById
+		if res.Error != nil {
+			return res.Error
 		}
 
 		return nil
 	})
 
-	if storeErr != nil {
-		return storeErr
-	}
-
-	return nil
+	return err
 }

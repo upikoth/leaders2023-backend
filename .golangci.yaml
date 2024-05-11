@@ -176,8 +176,6 @@ linters-settings:
     rules:
       - name: var-naming
         disabled: false
-        arguments:
-          - ["ID", "API", "JSON", "URI"]
 
   stylecheck:
     checks: ["all", "-ST1003"]

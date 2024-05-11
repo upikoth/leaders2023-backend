@@ -10,15 +10,15 @@ import (
 	"github.com/upikoth/leaders2023-backend/internal/app/handler/v1/responses"
 )
 
-// ConverCalendar godoc
+// ConvertCalendar godoc
 // @Summary      Возвращает события календаря
 // @Accept       mpfd
 // @Produce      json
 // @Param        Authorization  header  string  true  "Authentication header"
-// @Success      200  {object}  model.ResponseSuccess{data=responses.convertCaledarResponseData}
+// @Success      200  {object}  model.ResponseSuccess{data=responses.convertCalendarResponseData}
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
 // @Router       /api/v1/calendar/convert [post].
-func (h *HandlerV1) ConverCalendar(c *gin.Context) {
+func (h *HandlerV1) ConvertCalendar(c *gin.Context) {
 	reqData, err := requests.ConvertCalendarDataFromRequest(c)
 
 	if err != nil {
@@ -49,15 +49,15 @@ func (h *HandlerV1) ConverCalendar(c *gin.Context) {
 	c.Set("responseData", responseData)
 }
 
-// ConverCalendarFromLink godoc
+// ConvertCalendarFromLink godoc
 // @Summary      Возвращает события календаря
 // @Accept       json
 // @Produce      json
 // @Param        Authorization  header  string  true  "Authentication header"
-// @Success      200  {object}  model.ResponseSuccess{data=responses.convertCaledarFromLinkResponseData}
+// @Success      200  {object}  model.ResponseSuccess{data=responses.convertCalendarFromLinkResponseData}
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
 // @Router       /api/v1/calendar/convertFromLink [post].
-func (h *HandlerV1) ConverCalendarFromLink(c *gin.Context) {
+func (h *HandlerV1) ConvertCalendarFromLink(c *gin.Context) {
 	reqData, err := requests.ConvertCalendarFromLinkDataFromRequest(c)
 
 	if err != nil {

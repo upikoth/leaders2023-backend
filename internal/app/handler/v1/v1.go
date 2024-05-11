@@ -9,20 +9,19 @@ import (
 type HandlerV1 struct {
 	store            *store.Store
 	env              *HandlerV1Env
-	dadataSuggestApi *suggest.Api
+	dadataSuggestAPI *suggest.Api
 	s3               *s3.S3
 }
 
 type HandlerV1Env struct {
-	S3AccessDomainName string `envconfig:"S3_ACCESS_DOMAIN_NAME" required:"true"`
-	JwtSecret          []byte `envconfig:"JWT_SECRET" required:"true"`
+	JwtSecret []byte `envconfig:"JWT_SECRET" required:"true"`
 }
 
-func New(store *store.Store, env *HandlerV1Env, dadataSuggestApi *suggest.Api, s3 *s3.S3) *HandlerV1 {
+func New(store *store.Store, env *HandlerV1Env, dadataSuggestAPI *suggest.Api, s3 *s3.S3) *HandlerV1 {
 	return &HandlerV1{
 		store:            store,
 		env:              env,
-		dadataSuggestApi: dadataSuggestApi,
+		dadataSuggestAPI: dadataSuggestAPI,
 		s3:               s3,
 	}
 }

@@ -9,12 +9,12 @@ type convertCaledarResponseEvent struct {
 	Date string `json:"date"`
 }
 
-type convertCaledarResponseData struct {
+type convertCalendarResponseData struct {
 	Events []convertCaledarResponseEvent `json:"events"`
 }
 
-func ConvertCalendarResponseFromCalendarEvents(events []*ical.VEvent) convertCaledarResponseData {
-	res := convertCaledarResponseData{
+func ConvertCalendarResponseFromCalendarEvents(events []*ical.VEvent) convertCalendarResponseData {
+	res := convertCalendarResponseData{
 		Events: []convertCaledarResponseEvent{},
 	}
 
@@ -38,12 +38,12 @@ type convertCaledarFromLinkResponseEvent struct {
 	Date string `json:"date"`
 }
 
-type convertCaledarFromLinkResponseData struct {
+type convertCalendarFromLinkResponseData struct {
 	Events []convertCaledarFromLinkResponseEvent `json:"events"`
 }
 
-func ConvertCalendarFromLinkResponseFromCalendarEvents(events []*ical.VEvent) convertCaledarFromLinkResponseData {
-	res := convertCaledarFromLinkResponseData{
+func ConvertCalendarFromLinkResponseFromCalendarEvents(events []*ical.VEvent) convertCalendarFromLinkResponseData {
+	res := convertCalendarFromLinkResponseData{
 		Events: []convertCaledarFromLinkResponseEvent{},
 	}
 

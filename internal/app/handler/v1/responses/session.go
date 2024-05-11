@@ -6,7 +6,7 @@ import (
 )
 
 type createSessionResponseUser struct {
-	Id    int        `json:"id"`
+	ID    string     `json:"id"`
 	Phone string     `json:"phone"`
 	Role  model.Role `json:"role"`
 	Token string     `json:"token"`
@@ -20,9 +20,9 @@ func CreateSessionResponseFromStoreData(user store.User, jwtToken string) create
 	res := createSessionResponseData{}
 
 	res.User = createSessionResponseUser{
-		Id:    user.Id,
+		ID:    user.ID,
 		Phone: user.Phone,
-		Role:  user.Role,
+		Role:  model.Role(user.Role),
 		Token: jwtToken,
 	}
 
@@ -30,7 +30,7 @@ func CreateSessionResponseFromStoreData(user store.User, jwtToken string) create
 }
 
 type getSessionResponseUser struct {
-	Id    int        `json:"id"`
+	ID    string     `json:"id"`
 	Phone string     `json:"phone"`
 	Role  model.Role `json:"role"`
 }
@@ -43,9 +43,9 @@ func GetSessionResponseFromStoreData(user store.User) getSessionResponseData {
 	res := getSessionResponseData{}
 
 	res.User = getSessionResponseUser{
-		Id:    user.Id,
+		ID:    user.ID,
 		Phone: user.Phone,
-		Role:  user.Role,
+		Role:  model.Role(user.Role),
 	}
 
 	return res

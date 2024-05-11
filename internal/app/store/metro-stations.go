@@ -1,22 +1,20 @@
 package store
 
 type MetroStation struct {
-	tableName struct{} `pg:"metro_stations"` //nolint:unused // Имя таблицы
-	Id        int      `pg:"id"`
-	Name      string   `pg:"name"`
-	Color     string   `pg:"color"`
+	ID    string `gorm:"primarykey"`
+	Name  string
+	Color string
 }
 
 func (s *Store) GetMetroStations() ([]MetroStation, error) {
 	metroStations := []MetroStation{}
 
-	err := s.db.
-		Model(&metroStations).
-		Order("name").
-		Select()
+	res := s.db.
+		Find(&metroStations).
+		Order("name")
 
-	if err != nil {
-		return nil, err
+	if res.Error != nil {
+		return nil, res.Error
 	}
 
 	return metroStations, nil

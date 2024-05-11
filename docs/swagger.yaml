@@ -284,7 +284,7 @@ definitions:
       surname:
         type: string
     type: object
-  responses.convertCaledarFromLinkResponseData:
+  responses.convertCalendarFromLinkResponseData:
     properties:
       events:
         items:
@@ -296,7 +296,7 @@ definitions:
       date:
         type: string
     type: object
-  responses.convertCaledarResponseData:
+  responses.convertCalendarResponseData:
     properties:
       events:
         items:
@@ -1038,7 +1038,7 @@ paths:
             - $ref: '#/definitions/model.ResponseSuccess'
             - properties:
                 data:
-                  $ref: '#/definitions/responses.convertCaledarResponseData'
+                  $ref: '#/definitions/responses.convertCalendarResponseData'
               type: object
         "403":
           description: 'Коды ошибок: [1100]'
@@ -1065,7 +1065,7 @@ paths:
             - $ref: '#/definitions/model.ResponseSuccess'
             - properties:
                 data:
-                  $ref: '#/definitions/responses.convertCaledarFromLinkResponseData'
+                  $ref: '#/definitions/responses.convertCalendarFromLinkResponseData'
               type: object
         "403":
           description: 'Коды ошибок: [1100]'

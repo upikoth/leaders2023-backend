@@ -6,7 +6,7 @@ import (
 )
 
 type getCreativeSpaceRequestData struct {
-	Id int `json:"id" uri:"id" binding:"required"`
+	ID string `json:"id" uri:"id" binding:"required"`
 }
 
 func GetCreativeSpaceDataFromRequest(c *gin.Context) (getCreativeSpaceRequestData, error) {
@@ -26,7 +26,7 @@ type createCreativeSpaceRequestCalendarEvent struct {
 }
 
 type createCreativeSpaceRequestCalendar struct {
-	WorkDayIndexes []int                                     `json:"workDayIndexes" binding:"required"`
+	WorkDayIndexes string                                    `json:"workDayIndexes" binding:"required"`
 	Events         []createCreativeSpaceRequestCalendarEvent `json:"events" binding:"required"`
 	Link           string                                    `json:"link"`
 }
@@ -37,8 +37,8 @@ type createCreativeSpaceRequestCoordinate struct {
 }
 
 type createCreativeSpaceRequestMetroStation struct {
-	Id                int `json:"id" binding:"required"`
-	DistanceInMinutes int `json:"distanceInMinutes" binding:"required"`
+	ID                string `json:"id" binding:"required"`
+	DistanceInMinutes int    `json:"distanceInMinutes" binding:"required"`
 }
 
 type createCreativeSpaceRequestData struct {
@@ -48,7 +48,7 @@ type createCreativeSpaceRequestData struct {
 	Title         string                                   `json:"title" binding:"required"`
 	Address       string                                   `json:"address" binding:"required"`
 	Description   string                                   `json:"description" binding:"required"`
-	Photos        []string                                 `json:"photos" binding:"required"`
+	Photos        string                                   `json:"photos" binding:"required"`
 	PricePerDay   int                                      `json:"pricePerDay" binding:"required"`
 	MetroStations []createCreativeSpaceRequestMetroStation `json:"metroStations"`
 	Coordinate    createCreativeSpaceRequestCoordinate     `json:"coordinate" binding:"required"`
@@ -72,7 +72,7 @@ type patchCreativeSpaceRequestCalendarEvent struct {
 }
 
 type patchCreativeSpaceRequestCalendar struct {
-	WorkDayIndexes []int                                    `json:"workDayIndexes"`
+	WorkDayIndexes string                                   `json:"workDayIndexes"`
 	Events         []patchCreativeSpaceRequestCalendarEvent `json:"events" default:"nil"`
 	Link           string                                   `json:"link"`
 }
@@ -83,12 +83,12 @@ type patchCreativeSpaceRequestCoordinate struct {
 }
 
 type patchCreativeSpaceRequestMetroStation struct {
-	Id                int `json:"id"`
-	DistanceInMinutes int `json:"distanceInMinutes"`
+	ID                string `json:"id"`
+	DistanceInMinutes int    `json:"distanceInMinutes"`
 }
 
-type patchCreativeSpaceRequestUri struct {
-	Id int `uri:"id" binding:"required"`
+type patchCreativeSpaceRequestURI struct {
+	ID string `uri:"id" binding:"required"`
 }
 
 type patchCreativeSpaceRequestBody struct {
@@ -99,7 +99,7 @@ type patchCreativeSpaceRequestBody struct {
 	Address       string                                  `json:"address"`
 	Status        model.CreativeSpaceStatus               `json:"status"`
 	Description   string                                  `json:"description"`
-	Photos        []string                                `json:"photos"`
+	Photos        string                                  `json:"photos"`
 	PricePerDay   int                                     `json:"pricePerDay"`
 	MetroStations []patchCreativeSpaceRequestMetroStation `json:"metroStations"`
 	Coordinate    patchCreativeSpaceRequestCoordinate     `json:"coordinate"`
@@ -107,7 +107,7 @@ type patchCreativeSpaceRequestBody struct {
 }
 
 type patchCreativeSpaceRequestData struct {
-	Id            int                                     `json:"id"`
+	ID            string                                  `json:"id"`
 	SpaceType     string                                  `json:"spaceType"`
 	Area          int                                     `json:"area"`
 	Capacity      int                                     `json:"capacity"`
@@ -115,7 +115,7 @@ type patchCreativeSpaceRequestData struct {
 	Address       string                                  `json:"address"`
 	Status        model.CreativeSpaceStatus               `json:"status"`
 	Description   string                                  `json:"description"`
-	Photos        []string                                `json:"photos"`
+	Photos        string                                  `json:"photos"`
 	PricePerDay   int                                     `json:"pricePerDay"`
 	MetroStations []patchCreativeSpaceRequestMetroStation `json:"metroStations"`
 	Coordinate    patchCreativeSpaceRequestCoordinate     `json:"coordinate"`
@@ -123,10 +123,10 @@ type patchCreativeSpaceRequestData struct {
 }
 
 func PatchCreativeSpaceDataFromRequest(c *gin.Context) (patchCreativeSpaceRequestData, error) {
-	dataFromUri := patchCreativeSpaceRequestUri{}
+	dataFromURI := patchCreativeSpaceRequestURI{}
 	dataFromBody := patchCreativeSpaceRequestBody{}
 
-	uriErr := c.BindUri(&dataFromUri)
+	uriErr := c.BindUri(&dataFromURI)
 
 	if uriErr != nil {
 		return patchCreativeSpaceRequestData{}, uriErr
@@ -140,7 +140,7 @@ func PatchCreativeSpaceDataFromRequest(c *gin.Context) (patchCreativeSpaceReques
 
 	data := patchCreativeSpaceRequestData{}
 
-	data.Id = dataFromUri.Id
+	data.ID = dataFromURI.ID
 
 	data.SpaceType = dataFromBody.SpaceType
 	data.Area = dataFromBody.Area
@@ -164,7 +164,7 @@ func PatchCreativeSpaceDataFromRequest(c *gin.Context) (patchCreativeSpaceReques
 }
 
 type deleteCreativeSpaceRequestData struct {
-	Id int `uri:"id" binding:"required"`
+	ID string `uri:"id" binding:"required"`
 }
 
 func DeleteCreativeSpaceDataFromRequest(c *gin.Context) (deleteCreativeSpaceRequestData, error) {

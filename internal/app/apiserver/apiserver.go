@@ -14,25 +14,25 @@ import (
 	"github.com/upikoth/leaders2023-backend/internal/app/store"
 )
 
-type ApiServer struct {
+type APIServer struct {
 	config           *Config
 	router           *gin.Engine
 	handler          *handler.Handler
 	store            *store.Store
-	dadataSuggestApi *suggest.Api
+	dadataSuggestAPI *suggest.Api
 	s3               *s3.S3
 }
 
-func New(config *Config) *ApiServer {
+func New(config *Config) *APIServer {
 	store := store.New()
-	dadataSuggestApi := dadata.NewSuggestApi()
+	dadataSuggestAPI := dadata.NewSuggestApi()
 
 	session := session.Must(session.NewSessionWithOptions(session.Options{
 		Config: aws.Config{
 			Region:   aws.String(config.S3Region),
 			Endpoint: aws.String(config.S3Endpoint),
 			Credentials: credentials.NewStaticCredentialsFromCreds(credentials.Value{
-				AccessKeyID:     config.S3AccessKeyId,
+				AccessKeyID:     config.S3AccessKeyID,
 				SecretAccessKey: config.S3SecretAccessKey,
 			}),
 		},
@@ -40,23 +40,22 @@ func New(config *Config) *ApiServer {
 
 	s3 := s3.New(session)
 	handlerEnv := &handler.HandlerEnv{
-		JwtSecret:          config.JwtSecret,
-		S3AccessDomainName: config.S3AccessDomainName,
+		JwtSecret: config.JwtSecret,
 	}
 
-	handler := handler.New(store, handlerEnv, dadataSuggestApi, s3)
+	handler := handler.New(store, handlerEnv, dadataSuggestAPI, s3)
 
-	return &ApiServer{
+	return &APIServer{
 		config:           config,
 		router:           gin.Default(),
 		handler:          handler,
 		store:            store,
-		dadataSuggestApi: dadataSuggestApi,
+		dadataSuggestAPI: dadataSuggestAPI,
 		s3:               s3,
 	}
 }
 
-func (s *ApiServer) Start() error {
+func (s *APIServer) Start() error {
 	s.initRoutes()
 	err := s.store.Connect()
 
@@ -67,6 +66,12 @@ func (s *ApiServer) Start() error {
 			log.Println(disconnectErr)
 		}
 	}()
+
+	if err != nil {
+		return err
+	}
+
+	err = s.store.AutoMigrate()
 
 	if err != nil {
 		return err

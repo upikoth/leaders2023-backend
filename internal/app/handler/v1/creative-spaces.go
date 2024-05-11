@@ -2,10 +2,12 @@ package v1
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/upikoth/leaders2023-backend/internal/app/constants"
 	"github.com/upikoth/leaders2023-backend/internal/app/handler/v1/requests"
 	"github.com/upikoth/leaders2023-backend/internal/app/handler/v1/responses"
@@ -51,7 +53,7 @@ func (h *HandlerV1) GetCreativeSpace(c *gin.Context) {
 		return
 	}
 
-	creativeSpace, err := h.store.GetCreativeSpaceById(reqData.Id)
+	creativeSpace, err := h.store.GetCreativeSpaceByID(reqData.ID)
 
 	if err != nil {
 		c.Set("responseErrorCode", constants.ErrCreativeSpaceGetDbError)
@@ -100,19 +102,20 @@ func (h *HandlerV1) CreateCreativeSpace(c *gin.Context) {
 
 	for _, station := range reqData.MetroStations {
 		creativeSpaceMetroStations = append(creativeSpaceMetroStations, &store.CreativeSpaceMetroStation{
-			MetroStationId:    station.Id,
+			MetroStationID:    station.ID,
 			DistanceInMinutes: station.DistanceInMinutes,
 		})
 	}
 
 	creativeSpace := store.CreativeSpace{
-		LandlordId:             userData.UserId,
+		ID:                     uuid.New().String(),
+		LandlordID:             userData.UserID,
 		Title:                  reqData.Title,
 		SpaceType:              reqData.SpaceType,
 		Area:                   reqData.Area,
 		Capacity:               reqData.Capacity,
 		Address:                reqData.Address,
-		Status:                 model.CreativeSpaceStatusConfirmationByAdmin,
+		Status:                 string(model.CreativeSpaceStatusConfirmationByAdmin),
 		Photos:                 reqData.Photos,
 		PricePerDay:            reqData.PricePerDay,
 		Latitude:               reqData.Coordinate.Latitude,
@@ -124,7 +127,7 @@ func (h *HandlerV1) CreateCreativeSpace(c *gin.Context) {
 		MetroStations:          creativeSpaceMetroStations,
 	}
 
-	creativeSpaceId, storeErr := h.store.CreateCreativeSpace(creativeSpace)
+	creativeSpaceID, storeErr := h.store.CreateCreativeSpace(creativeSpace)
 
 	if storeErr != nil {
 		c.Set("responseCode", http.StatusBadRequest)
@@ -133,7 +136,7 @@ func (h *HandlerV1) CreateCreativeSpace(c *gin.Context) {
 		return
 	}
 
-	responseData := responses.CreateCreativeSpaceResponseFromStoreData(creativeSpaceId)
+	responseData := responses.CreateCreativeSpaceResponseFromStoreData(creativeSpaceID)
 	c.Set("responseData", responseData)
 }
 
@@ -157,7 +160,7 @@ func (h *HandlerV1) PatchCreativeSpace(c *gin.Context) {
 		return
 	}
 
-	creativeSpaceToUpdate, err := h.store.GetCreativeSpaceById(reqData.Id)
+	creativeSpaceToUpdate, err := h.store.GetCreativeSpaceByID(reqData.ID)
 
 	if err != nil {
 		c.Set("responseErrorCode", constants.ErrCreativeSpacePatchDbError)
@@ -165,7 +168,7 @@ func (h *HandlerV1) PatchCreativeSpace(c *gin.Context) {
 		return
 	}
 
-	if userData.UserId != creativeSpaceToUpdate.LandlordId && userData.UserRole != model.RoleAdmin {
+	if userData.UserID != creativeSpaceToUpdate.LandlordID && userData.UserRole != model.RoleAdmin {
 		c.Set("responseCode", http.StatusForbidden)
 		c.Set("responseErrorCode", constants.ErrPatchSpacePostForbidden)
 		return
@@ -176,7 +179,7 @@ func (h *HandlerV1) PatchCreativeSpace(c *gin.Context) {
 	for _, event := range reqData.Calendar.Events {
 		creativeSpaceCalendarEvents = append(creativeSpaceCalendarEvents, &store.CalendarEvent{
 			Date:            event.Date,
-			CreativeSpaceId: reqData.Id,
+			CreativeSpaceID: reqData.ID,
 		})
 	}
 
@@ -184,20 +187,20 @@ func (h *HandlerV1) PatchCreativeSpace(c *gin.Context) {
 
 	for _, station := range reqData.MetroStations {
 		creativeSpaceMetroStations = append(creativeSpaceMetroStations, &store.CreativeSpaceMetroStation{
-			CreativeSpaceId:   reqData.Id,
-			MetroStationId:    station.Id,
+			CreativeSpaceID:   reqData.ID,
+			MetroStationID:    station.ID,
 			DistanceInMinutes: station.DistanceInMinutes,
 		})
 	}
 
 	creativeSpace := store.CreativeSpace{
-		Id:                     reqData.Id,
+		ID:                     reqData.ID,
 		SpaceType:              reqData.SpaceType,
 		Area:                   reqData.Area,
 		Capacity:               reqData.Capacity,
 		Title:                  reqData.Title,
 		Address:                reqData.Address,
-		Status:                 reqData.Status,
+		Status:                 string(reqData.Status),
 		Photos:                 reqData.Photos,
 		PricePerDay:            reqData.PricePerDay,
 		Latitude:               reqData.Coordinate.Latitude,
@@ -242,7 +245,7 @@ func (h *HandlerV1) DeleteCreativeSpace(c *gin.Context) {
 		return
 	}
 
-	creativeSpaceToDelete, err := h.store.GetCreativeSpaceById(reqData.Id)
+	creativeSpaceToDelete, err := h.store.GetCreativeSpaceByID(reqData.ID)
 
 	if err != nil {
 		c.Set("responseErrorCode", constants.ErrCreativeSpaceDeleteDbError)
@@ -250,13 +253,13 @@ func (h *HandlerV1) DeleteCreativeSpace(c *gin.Context) {
 		return
 	}
 
-	if userData.UserId != creativeSpaceToDelete.LandlordId && userData.UserRole != model.RoleAdmin {
+	if userData.UserID != creativeSpaceToDelete.LandlordID && userData.UserRole != model.RoleAdmin {
 		c.Set("responseCode", http.StatusForbidden)
 		c.Set("responseErrorCode", constants.ErrPatchSpacePostForbidden)
 		return
 	}
 
-	err = h.store.DeleteCreativeSpace(reqData.Id)
+	err = h.store.DeleteCreativeSpace(reqData.ID)
 
 	if err != nil {
 		c.Set("responseErrorCode", constants.ErrCreativeSpaceDeleteDbError)
@@ -266,7 +269,7 @@ func (h *HandlerV1) DeleteCreativeSpace(c *gin.Context) {
 
 	photos := []*s3.ObjectIdentifier{}
 
-	for _, photo := range creativeSpaceToDelete.Photos {
+	for _, photo := range strings.Split(creativeSpaceToDelete.Photos, ";") {
 		photos = append(photos, &s3.ObjectIdentifier{
 			Key: aws.String(photo),
 		})
