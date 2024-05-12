@@ -1,4 +1,6 @@
-FROM golang:1.20
+# Stage 1. Build.
+
+FROM golang:1.22 as build
 
 WORKDIR /app
 
@@ -8,6 +10,12 @@ RUN go mod download
 
 RUN make build
 
+# Stage 2.
+
+FROM debian:12-slim
+
+COPY --from=build /app/apiserver /apiserver
+
 EXPOSE 8080
 
-CMD ["./apiserver"]
+CMD ["/apiserver"]
