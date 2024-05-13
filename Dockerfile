@@ -16,6 +16,6 @@ FROM debian:12-slim
 
 COPY --from=build /app/apiserver /apiserver
 
-EXPOSE 8080
+EXPOSE 8888
 
 CMD ["/apiserver"]
