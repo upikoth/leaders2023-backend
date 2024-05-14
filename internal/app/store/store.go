@@ -4,7 +4,6 @@ import (
 	"os"
 
 	ydb "github.com/ydb-platform/gorm-driver"
-	yc "github.com/ydb-platform/ydb-go-yc"
 	"gorm.io/gorm"
 )
 
@@ -22,18 +21,17 @@ func New() *Store {
 }
 
 func (s *Store) Connect() error {
-	err := os.WriteFile(s.config.YdbAuthFileName, s.config.YdbAuthInfo, 0600)
+	if len(s.config.YdbAuthInfo) > 0 {
+		err := os.WriteFile(s.config.YdbAuthFileName, s.config.YdbAuthInfo, 0600)
 
-	if err != nil {
-		return err
+		if err != nil {
+			return err
+		}
 	}
 
 	os.Setenv("YDB_SERVICE_ACCOUNT_KEY_FILE_CREDENTIALS", s.config.YdbAuthFileName)
 	db, err := gorm.Open(
-		ydb.Open(
-			s.config.YdbDsn,
-			ydb.With(yc.WithInternalCA()),
-		),
+		ydb.Open(s.config.YdbDsn),
 	)
 	os.Remove(s.config.YdbAuthFileName)
 

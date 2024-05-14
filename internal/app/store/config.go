@@ -4,8 +4,8 @@ import "github.com/kelseyhightower/envconfig"
 
 type Config struct {
 	YdbDsn          string `envconfig:"YDB_DSN" required:"true"`
-	YdbAuthInfo     []byte `envconfig:"YDB_AUTH_INFO" required:"true"`
 	YdbAuthFileName string `envconfig:"YDB_AUTH_FILE_NAME" required:"true"`
+	YdbAuthInfo     []byte `envconfig:"YDB_AUTH_INFO"`
 }
 
 func NewConfig() (*Config, error) {
