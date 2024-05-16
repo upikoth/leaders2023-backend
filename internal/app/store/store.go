@@ -21,19 +21,28 @@ func New() *Store {
 }
 
 func (s *Store) Connect() error {
+	filePath := s.config.YdbAuthDirName + "/" + s.config.YdbAuthFileName
+
 	if len(s.config.YdbAuthInfo) > 0 {
-		err := os.WriteFile(s.config.YdbAuthFileName, s.config.YdbAuthInfo, 0600)
+		_, err := os.Stat(s.config.YdbAuthDirName)
+
+		if err != nil {
+			mkdirErr := os.Mkdir(s.config.YdbAuthDirName, 0777)
+
+			if mkdirErr != nil {
+				return mkdirErr
+			}
+		}
+
+		err = os.WriteFile(filePath, s.config.YdbAuthInfo, 0600)
 
 		if err != nil {
 			return err
 		}
 	}
 
-	os.Setenv("YDB_SERVICE_ACCOUNT_KEY_FILE_CREDENTIALS", s.config.YdbAuthFileName)
-	db, err := gorm.Open(
-		ydb.Open(s.config.YdbDsn),
-	)
-	os.Remove(s.config.YdbAuthFileName)
+	os.Setenv("YDB_SERVICE_ACCOUNT_KEY_FILE_CREDENTIALS", filePath)
+	db, err := gorm.Open(ydb.Open(s.config.YdbDsn))
 
 	if err != nil {
 		return err

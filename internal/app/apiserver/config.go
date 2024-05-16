@@ -3,7 +3,7 @@ package apiserver
 import "github.com/kelseyhightower/envconfig"
 
 type Config struct {
-	Port              string `envconfig:"APP_PORT" required:"true"`
+	Port              string `envconfig:"PORT" required:"true"`
 	JwtSecret         []byte `envconfig:"JWT_SECRET" required:"true"`
 	S3Region          string `envconfig:"S3_REGION" required:"true"`
 	S3Endpoint        string `envconfig:"S3_ENDPOINT" required:"true"`

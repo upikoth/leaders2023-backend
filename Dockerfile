@@ -14,6 +14,10 @@ RUN make build
 
 FROM debian:12-slim
 
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates
+
+RUN update-ca-certificates
+
 COPY --from=build /app/apiserver /apiserver
 
 EXPOSE 8888

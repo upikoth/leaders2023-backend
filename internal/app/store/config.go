@@ -5,6 +5,7 @@ import "github.com/kelseyhightower/envconfig"
 type Config struct {
 	YdbDsn          string `envconfig:"YDB_DSN" required:"true"`
 	YdbAuthFileName string `envconfig:"YDB_AUTH_FILE_NAME" required:"true"`
+	YdbAuthDirName  string `envconfig:"YDB_AUTH_FILE_DIR_NAME" required:"true"`
 	YdbAuthInfo     []byte `envconfig:"YDB_AUTH_INFO"`
 }
 
