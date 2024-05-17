@@ -2,8 +2,13 @@
 
 ## Как собрать приложение:
 
-docker build --platform=linux/amd64 -t cr.yandex/crpg6rg1bsgvdmff8sm1 .
+cat secrets/authorized_key.json | docker login \
+  --username json_key \
+  --password-stdin \
+  cr.yandex
 
-docker push cr.yandex/crpg6rg1bsgvdmff8sm1
+docker build --platform=linux/amd64 -t cr.yandex/crpo5i4epql8ladb2336 .
+
+docker push cr.yandex/crpo5i4epql8ladb2336
 
 env переменная PORT задается в serverless container автоматически самим сервисом.
