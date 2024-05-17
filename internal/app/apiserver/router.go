@@ -78,7 +78,10 @@ func (s *APIServer) initRoutes() {
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", c.Request.Header.Get("Origin"))
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, Authorization")
+		c.Writer.Header().Set(
+			"Access-Control-Allow-Headers",
+			"Content-Type, Content-Length, Accept-Encoding, MyAuthorization",
+		)
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PATCH")
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
 
@@ -145,7 +148,7 @@ func formatResponse() gin.HandlerFunc {
 
 func checkAuthorization(jwtSecret []byte) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		jwtToken := c.Request.Header.Get("Authorization")
+		jwtToken := c.Request.Header.Get("MyAuthorization")
 
 		if jwtToken == "" {
 			c.Set("responseCode", http.StatusUnauthorized)

@@ -14,7 +14,7 @@ import (
 // @Summary      Возвращает список пользователей
 // @Accept       json
 // @Produce      json
-// @Param        Authorization  header  string  true  "Authentication header"
+// @Param        MyAuthorization  header  string  true  "Authentication header"
 // @Success      200  {object}  model.ResponseSuccess{data=responses.getAddressesResponseData}
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
 // @Router       /api/v1/addresses [get].

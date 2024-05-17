@@ -17,7 +17,7 @@ import (
 // @Summary      Возвращает ссылку на файл
 // @Accept       mpfd
 // @Produce      json
-// @Param        Authorization  header  string  true  "Authentication header"
+// @Param        MyAuthorization  header  string  true  "Authentication header"
 // @Success      200  {object}  model.ResponseSuccess{data=responses.createFileStationsResponseData}
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
 // @Router       /api/v1/file [post].
@@ -64,7 +64,7 @@ func (h *HandlerV1) CreateFile(c *gin.Context) {
 // DeleteFile godoc
 // @Summary      Удаляет файл из s3
 // @Accept       json
-// @Param        Authorization  header  string  true  "Authentication header"
+// @Param        MyAuthorization  header  string  true  "Authentication header"
 // @Param        body body  requests.deleteFileRequestData true "Параметры запроса"
 // @Success      200  {object}  model.ResponseSuccess
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"

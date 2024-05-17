@@ -16,7 +16,7 @@ import (
 // @Summary      Возвращает список бронирований
 // @Accept       json
 // @Produce      json
-// @Param        Authorization  header  string  true  "Authentication header"
+// @Param        MyAuthorization  header  string  true  "Authentication header"
 // @Success      200  {object}  model.ResponseSuccess{data=responses.getBookingsResponseData}
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
 // @Router       /api/v1/bookings [get].
@@ -56,7 +56,7 @@ func (h *HandlerV1) GetBookings(c *gin.Context) {
 // @Summary      Возвращает бронирование по id
 // @Accept       json
 // @Produce      json
-// @Param        Authorization  header  string  true  "Authentication header"
+// @Param        MyAuthorization  header  string  true  "Authentication header"
 // @Success      200  {object}  model.ResponseSuccess{data=responses.getBookingResponseData}
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
 // @Router       /api/v1/bookings/:id [get].

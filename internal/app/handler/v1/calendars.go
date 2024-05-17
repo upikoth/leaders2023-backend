@@ -14,7 +14,7 @@ import (
 // @Summary      Возвращает события календаря
 // @Accept       mpfd
 // @Produce      json
-// @Param        Authorization  header  string  true  "Authentication header"
+// @Param        MyAuthorization  header  string  true  "Authentication header"
 // @Success      200  {object}  model.ResponseSuccess{data=responses.convertCalendarResponseData}
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
 // @Router       /api/v1/calendar/convert [post].
@@ -53,7 +53,7 @@ func (h *HandlerV1) ConvertCalendar(c *gin.Context) {
 // @Summary      Возвращает события календаря
 // @Accept       json
 // @Produce      json
-// @Param        Authorization  header  string  true  "Authentication header"
+// @Param        MyAuthorization  header  string  true  "Authentication header"
 // @Success      200  {object}  model.ResponseSuccess{data=responses.convertCalendarFromLinkResponseData}
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
 // @Router       /api/v1/calendar/convertFromLink [post].

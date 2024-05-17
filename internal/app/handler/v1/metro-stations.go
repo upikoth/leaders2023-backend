@@ -9,7 +9,7 @@ import (
 // GetMetroStations godoc
 // @Summary      Возвращает полный список станций метро
 // @Produce      json
-// @Param        Authorization  header  string  true  "Authentication header"
+// @Param        MyAuthorization  header  string  true  "Authentication header"
 // @Success      200  {object}  model.ResponseSuccess{data=responses.getMetroStationsResponseData}
 // @Failure      403  {object}  model.ResponseError "Коды ошибок: [1100]"
 // @Router       /api/v1/metroStations [get].

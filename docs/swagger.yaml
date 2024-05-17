@@ -1,4 +1,20 @@
 definitions:
+  model.BookingStatus:
+    enum:
+    - confirmation
+    - confirmed
+    type: string
+    x-enum-varnames:
+    - BookingStatusConfirmationByLandlord
+    - BookingStatusConfirmedByLandlord
+  model.CreativeSpaceStatus:
+    enum:
+    - confirmation
+    - confirmed
+    type: string
+    x-enum-varnames:
+    - CreativeSpaceStatusConfirmationByAdmin
+    - CreativeSpaceStatusConfirmedByAdmin
   model.ResponseError:
     properties:
       error:
@@ -23,6 +39,16 @@ definitions:
         default: true
         type: boolean
     type: object
+  model.Role:
+    enum:
+    - admin
+    - tenant
+    - landlord
+    type: string
+    x-enum-varnames:
+    - RoleAdmin
+    - RoleTenant
+    - RoleLandlord
   requests.createBookingRequestCalendarEvent:
     properties:
       date:
@@ -37,7 +63,7 @@ definitions:
           $ref: '#/definitions/requests.createBookingRequestCalendarEvent'
         type: array
       creativeSpaceId:
-        type: integer
+        type: string
     required:
     - calendarEvents
     - creativeSpaceId
@@ -51,9 +77,7 @@ definitions:
       link:
         type: string
       workDayIndexes:
-        items:
-          type: integer
-        type: array
+        type: string
     required:
     - events
     - workDayIndexes
@@ -94,9 +118,7 @@ definitions:
           $ref: '#/definitions/requests.createCreativeSpaceRequestMetroStation'
         type: array
       photos:
-        items:
-          type: string
-        type: array
+        type: string
       pricePerDay:
         type: integer
       spaceType:
@@ -120,7 +142,7 @@ definitions:
       distanceInMinutes:
         type: integer
       id:
-        type: integer
+        type: string
     required:
     - distanceInMinutes
     - id
@@ -128,11 +150,11 @@ definitions:
   requests.createScoreRequestData:
     properties:
       bookingId:
-        type: integer
+        type: string
       comment:
         type: string
       creativeSpaceId:
-        type: integer
+        type: string
       rating:
         type: integer
     required:
@@ -167,7 +189,7 @@ definitions:
       phone:
         type: string
       role:
-        type: string
+        $ref: '#/definitions/model.Role'
       surname:
         type: string
     required:
@@ -196,22 +218,9 @@ definitions:
           $ref: '#/definitions/requests.patchBookingRequestCalendarEvent'
         type: array
       id:
-        type: integer
+        type: string
       status:
-        type: string
-    type: object
-  requests.patchCreativeSpaceRequestCalendar:
-    properties:
-      events:
-        items:
-          $ref: '#/definitions/requests.patchCreativeSpaceRequestCalendarEvent'
-        type: array
-      link:
-        type: string
-      workDayIndexes:
-        items:
-          type: integer
-        type: array
+        $ref: '#/definitions/model.BookingStatus'
     type: object
   requests.patchCreativeSpaceRequestCalendarEvent:
     properties:
@@ -226,51 +235,20 @@ definitions:
         type: number
     type: object
   requests.patchCreativeSpaceRequestData:
-    properties:
-      address:
-        type: string
-      area:
-        type: integer
-      calendar:
-        $ref: '#/definitions/requests.patchCreativeSpaceRequestCalendar'
-      capacity:
-        type: integer
-      coordinate:
-        $ref: '#/definitions/requests.patchCreativeSpaceRequestCoordinate'
-      description:
-        type: string
-      id:
-        type: integer
-      metroStations:
-        items:
-          $ref: '#/definitions/requests.patchCreativeSpaceRequestMetroStation'
-        type: array
-      photos:
-        items:
-          type: string
-        type: array
-      pricePerDay:
-        type: integer
-      spaceType:
-        type: string
-      status:
-        type: string
-      title:
-        type: string
     type: object
   requests.patchCreativeSpaceRequestMetroStation:
     properties:
       distanceInMinutes:
         type: integer
       id:
-        type: integer
+        type: string
     type: object
   requests.patchUserRequestData:
     properties:
       email:
         type: string
       id:
-        type: integer
+        type: string
       inn:
         type: string
       legalEntityName:
@@ -284,17 +262,22 @@ definitions:
       surname:
         type: string
     type: object
+  responses.convertCaledarFromLinkResponseEvent:
+    properties:
+      date:
+        type: string
+    type: object
+  responses.convertCaledarResponseEvent:
+    properties:
+      date:
+        type: string
+    type: object
   responses.convertCalendarFromLinkResponseData:
     properties:
       events:
         items:
           $ref: '#/definitions/responses.convertCaledarFromLinkResponseEvent'
         type: array
-    type: object
-  responses.convertCaledarFromLinkResponseEvent:
-    properties:
-      date:
-        type: string
     type: object
   responses.convertCalendarResponseData:
     properties:
@@ -303,15 +286,10 @@ definitions:
           $ref: '#/definitions/responses.convertCaledarResponseEvent'
         type: array
     type: object
-  responses.convertCaledarResponseEvent:
-    properties:
-      date:
-        type: string
-    type: object
   responses.createBookingResponseBooking:
     properties:
       id:
-        type: integer
+        type: string
     type: object
   responses.createBookingResponseData:
     properties:
@@ -321,7 +299,7 @@ definitions:
   responses.createCreativeSpaceResponseCreativeSpace:
     properties:
       id:
-        type: integer
+        type: string
     type: object
   responses.createCreativeSpaceResponseData:
     properties:
@@ -346,7 +324,7 @@ definitions:
   responses.createScoreResponseScore:
     properties:
       id:
-        type: integer
+        type: string
     type: object
   responses.createSessionResponseData:
     properties:
@@ -356,10 +334,12 @@ definitions:
   responses.createSessionResponseUser:
     properties:
       id:
-        type: integer
+        type: string
       phone:
         type: string
       role:
+        $ref: '#/definitions/model.Role'
+      token:
         type: string
     type: object
   responses.createUserResponseData:
@@ -370,7 +350,7 @@ definitions:
   responses.createUserResponseUser:
     properties:
       id:
-        type: integer
+        type: string
     type: object
   responses.getAddressesResponseData:
     properties:
@@ -399,13 +379,13 @@ definitions:
       fullPrice:
         type: integer
       id:
-        type: integer
+        type: string
       landlordInfo:
         $ref: '#/definitions/responses.getBookingResponseLandlordInfo'
       scoreId:
-        type: integer
-      status:
         type: string
+      status:
+        $ref: '#/definitions/model.BookingStatus'
       tenantInfo:
         $ref: '#/definitions/responses.getBookingResponseTenantInfo'
     type: object
@@ -421,11 +401,9 @@ definitions:
       description:
         type: string
       id:
-        type: integer
+        type: string
       photos:
-        items:
-          type: string
-        type: array
+        type: string
       title:
         type: string
     type: object
@@ -439,7 +417,7 @@ definitions:
       email:
         type: string
       id:
-        type: integer
+        type: string
       inn:
         type: string
       legalEntityName:
@@ -451,7 +429,7 @@ definitions:
       phone:
         type: string
       role:
-        type: string
+        $ref: '#/definitions/model.Role'
       surname:
         type: string
     type: object
@@ -460,7 +438,7 @@ definitions:
       email:
         type: string
       id:
-        type: integer
+        type: string
       name:
         type: string
       patronymic:
@@ -468,7 +446,7 @@ definitions:
       phone:
         type: string
       role:
-        type: string
+        $ref: '#/definitions/model.Role'
       surname:
         type: string
     type: object
@@ -483,13 +461,13 @@ definitions:
       fullPrice:
         type: integer
       id:
-        type: integer
+        type: string
       landlordInfo:
         $ref: '#/definitions/responses.getBookingsResponseLandlordInfo'
       scoreId:
-        type: integer
-      status:
         type: string
+      status:
+        $ref: '#/definitions/model.BookingStatus'
       tenantInfo:
         $ref: '#/definitions/responses.getBookingsResponseTenantInfo'
     type: object
@@ -505,11 +483,9 @@ definitions:
       description:
         type: string
       id:
-        type: integer
+        type: string
       photos:
-        items:
-          type: string
-        type: array
+        type: string
       title:
         type: string
     type: object
@@ -525,7 +501,7 @@ definitions:
       email:
         type: string
       id:
-        type: integer
+        type: string
       inn:
         type: string
       legalEntityName:
@@ -537,7 +513,7 @@ definitions:
       phone:
         type: string
       role:
-        type: string
+        $ref: '#/definitions/model.Role'
       surname:
         type: string
     type: object
@@ -546,7 +522,7 @@ definitions:
       email:
         type: string
       id:
-        type: integer
+        type: string
       name:
         type: string
       patronymic:
@@ -554,7 +530,7 @@ definitions:
       phone:
         type: string
       role:
-        type: string
+        $ref: '#/definitions/model.Role'
       surname:
         type: string
     type: object
@@ -567,14 +543,12 @@ definitions:
       link:
         type: string
       workDayIndexes:
-        items:
-          type: integer
-        type: array
+        type: string
     type: object
   responses.getCreativeSpaceResponseCalendarEvent:
     properties:
       bookingId:
-        type: integer
+        type: string
       date:
         type: string
     type: object
@@ -592,7 +566,7 @@ definitions:
       area:
         type: integer
       averageRating:
-        type: integer
+        type: number
       calendar:
         $ref: '#/definitions/responses.getCreativeSpaceResponseCalendar'
       capacity:
@@ -602,7 +576,7 @@ definitions:
       description:
         type: string
       id:
-        type: integer
+        type: string
       landlordInfo:
         $ref: '#/definitions/responses.getCreativeSpaceResponseLandlordInfo'
       metroStations:
@@ -610,9 +584,7 @@ definitions:
           $ref: '#/definitions/responses.getCreativeSpaceResponseMetroStation'
         type: array
       photos:
-        items:
-          type: string
-        type: array
+        type: string
       pricePerDay:
         type: integer
       scores:
@@ -622,7 +594,7 @@ definitions:
       spaceType:
         type: string
       status:
-        type: string
+        $ref: '#/definitions/model.CreativeSpaceStatus'
       title:
         type: string
     type: object
@@ -636,7 +608,7 @@ definitions:
       email:
         type: string
       id:
-        type: integer
+        type: string
       inn:
         type: string
       legalEntityName:
@@ -648,7 +620,7 @@ definitions:
       phone:
         type: string
       role:
-        type: string
+        $ref: '#/definitions/model.Role'
       surname:
         type: string
     type: object
@@ -659,7 +631,7 @@ definitions:
       distanceInMinutes:
         type: integer
       id:
-        type: integer
+        type: string
       name:
         type: string
     type: object
@@ -668,7 +640,7 @@ definitions:
       comment:
         type: string
       id:
-        type: integer
+        type: string
       rating:
         type: integer
       user:
@@ -677,7 +649,7 @@ definitions:
   responses.getCreativeSpaceResponseScoreUser:
     properties:
       id:
-        type: integer
+        type: string
       name:
         type: string
       patronymic:
@@ -694,9 +666,7 @@ definitions:
       link:
         type: string
       workDayIndexes:
-        items:
-          type: integer
-        type: array
+        type: string
     type: object
   responses.getCreativeSpacesResponseCalendarEvent:
     properties:
@@ -717,7 +687,7 @@ definitions:
       area:
         type: integer
       averageRating:
-        type: integer
+        type: number
       calendar:
         $ref: '#/definitions/responses.getCreativeSpacesResponseCalendar'
       capacity:
@@ -727,17 +697,15 @@ definitions:
       description:
         type: string
       id:
-        type: integer
+        type: string
       landlordId:
-        type: integer
+        type: string
       metroStations:
         items:
           $ref: '#/definitions/responses.getCreativeSpacesResponseMetroStation'
         type: array
       photos:
-        items:
-          type: string
-        type: array
+        type: string
       pricePerDay:
         type: integer
       scores:
@@ -747,7 +715,7 @@ definitions:
       spaceType:
         type: string
       status:
-        type: string
+        $ref: '#/definitions/model.CreativeSpaceStatus'
       title:
         type: string
     type: object
@@ -765,7 +733,7 @@ definitions:
       distanceInMinutes:
         type: integer
       id:
-        type: integer
+        type: string
       name:
         type: string
     type: object
@@ -774,7 +742,7 @@ definitions:
       comment:
         type: string
       id:
-        type: integer
+        type: string
       rating:
         type: integer
       user:
@@ -783,7 +751,7 @@ definitions:
   responses.getCreativeSpacesResponseScoreUser:
     properties:
       id:
-        type: integer
+        type: string
       name:
         type: string
       patronymic:
@@ -803,7 +771,7 @@ definitions:
       color:
         type: string
       id:
-        type: integer
+        type: string
       name:
         type: string
     type: object
@@ -817,7 +785,7 @@ definitions:
       email:
         type: string
       id:
-        type: integer
+        type: string
       inn:
         type: string
       legalEntityName:
@@ -845,7 +813,7 @@ definitions:
       email:
         type: string
       id:
-        type: integer
+        type: string
       inn:
         type: string
       legalEntityName:
@@ -873,7 +841,7 @@ paths:
       parameters:
       - description: Authentication header
         in: header
-        name: Authorization
+        name: MyAuthorization
         required: true
         type: string
       produces:
@@ -928,7 +896,7 @@ paths:
       parameters:
       - description: Authentication header
         in: header
-        name: Authorization
+        name: MyAuthorization
         required: true
         type: string
       produces:
@@ -976,7 +944,7 @@ paths:
       parameters:
       - description: Authentication header
         in: header
-        name: Authorization
+        name: MyAuthorization
         required: true
         type: string
       produces:
@@ -1025,7 +993,7 @@ paths:
       parameters:
       - description: Authentication header
         in: header
-        name: Authorization
+        name: MyAuthorization
         required: true
         type: string
       produces:
@@ -1052,7 +1020,7 @@ paths:
       parameters:
       - description: Authentication header
         in: header
-        name: Authorization
+        name: MyAuthorization
         required: true
         type: string
       produces:
@@ -1107,7 +1075,7 @@ paths:
       parameters:
       - description: Authentication header
         in: header
-        name: Authorization
+        name: MyAuthorization
         required: true
         type: string
       produces:
@@ -1207,7 +1175,7 @@ paths:
       parameters:
       - description: Authentication header
         in: header
-        name: Authorization
+        name: MyAuthorization
         required: true
         type: string
       produces:
@@ -1234,7 +1202,7 @@ paths:
       parameters:
       - description: Authentication header
         in: header
-        name: Authorization
+        name: MyAuthorization
         required: true
         type: string
       - description: Параметры запроса
@@ -1266,7 +1234,7 @@ paths:
       parameters:
       - description: Authentication header
         in: header
-        name: Authorization
+        name: MyAuthorization
         required: true
         type: string
       produces:
@@ -1315,17 +1283,6 @@ paths:
             $ref: '#/definitions/model.ResponseError'
       summary: Бронирование креативной площадки
   /api/v1/session:
-    delete:
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.ResponseSuccess'
-        "403":
-          description: 'Коды ошибок: [1100]'
-          schema:
-            $ref: '#/definitions/model.ResponseError'
-      summary: Удаление сессии
     get:
       responses:
         "200":
@@ -1395,7 +1352,7 @@ paths:
       parameters:
       - description: Authentication header
         in: header
-        name: Authorization
+        name: MyAuthorization
         required: true
         type: string
       produces:
